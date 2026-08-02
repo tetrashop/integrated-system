@@ -2,224 +2,231 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>3D Simple App - نسخه نهایی</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 سرویس تبدیل 3D حرفه‌ای</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        #info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 10px 15px;
-            border-radius: 8px;
-            pointer-events: none;
-            z-index: 10;
-            backdrop-filter: blur(5px);
-            font-size: 14px;
-        }
-        #controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 20px;
-            color: white;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0f0e17 0%, #1a1a2e 100%);
+            color: #fffffe;
+            min-height: 100vh;
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
             justify-content: center;
-            z-index: 20;
-            font-size: 14px;
+            align-items: center;
+            padding: 20px;
         }
-        button, input {
-            padding: 8px 16px;
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(35, 41, 70, 0.8);
+            backdrop-filter: blur(10px);
             border-radius: 30px;
-            border: none;
-            font-size: 14px;
+            padding: 40px;
+            border: 1px solid #2d3a5e;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ff8906;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #a7a9be;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .status {
+            text-align: center;
+            padding: 8px 20px;
+            background: #00b894;
+            color: #fff;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 0 auto 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .plan {
+            background: #232946;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #2d3a5e;
+            transition: 0.3s;
+        }
+        .plan:hover {
+            border-color: #ff8906;
+            transform: translateY(-4px);
+        }
+        .plan h3 { color: #ff8906; font-size: 1.1rem; }
+        .plan .price { font-size: 1.3rem; font-weight: 700; color: #fff; margin: 8px 0; }
+        .plan .time { color: #a7a9be; font-size: 0.85rem; }
+        .upload-area {
+            border: 2px dashed #2d3a5e;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            transition: 0.3s;
             cursor: pointer;
         }
-        button {
-            background: #ff6600;
-            color: white;
+        .upload-area:hover {
+            border-color: #ff8906;
+            background: rgba(255,137,6,0.05);
         }
-        input[type="range"] {
-            width: 150px;
+        .upload-area input[type="file"] {
+            display: none;
         }
-        .help {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #1e1e2f;
-            padding: 20px;
-            border-radius: 20px;
-            width: 80%;
-            max-width: 350px;
-            text-align: center;
-            color: white;
-            z-index: 30;
-            box-shadow: 0 10px 30px black;
-            direction: ltr;
+        .btn {
+            background: #ff8906;
+            color: #0f0e17;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
         }
-        .help button {
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(255,137,6,0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #preview {
             margin-top: 15px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            display: none;
         }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #a7a9be;
+            text-decoration: none;
+        }
+        .back-link:hover { color: #ff8906; }
         @media (max-width: 600px) {
-            #controls { font-size: 12px; padding: 10px; gap: 8px; }
-            button, input { padding: 6px 12px; }
+            .container { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .pricing { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div id="info">
-        🧊 مکعب سه‌بعدی | چرخش خودکار
-    </div>
-    <div id="controls">
-        <div>🎨 رنگ:</div>
-        <input type="color" id="colorPicker" value="#ff6600">
-        <div>🌀 سرعت چرخش:</div>
-        <input type="range" id="speedSlider" min="0" max="0.03" step="0.001" value="0.008">
-        <button id="helpBtn">📘 راهنما</button>
-    </div>
-    <div id="helpModal" class="help" style="display: none;">
-        <h3>راهنما</h3>
-        <p>▪️ با ماوس یا انگشت بکشید تا دوربین بچرخد<br>
-        ▪️ با دو انگشت زوم کنید<br>
-        ▪️ رنگ و سرعت را از پنل پایین تغییر دهید</p>
-        <button id="closeHelp">بستن</button>
+<div class="container">
+    <h1>🚀 سرویس تبدیل 3D حرفه‌ای</h1>
+    <p class="subtitle">تبدیل تصاویر 2D به مدل‌های سه‌بعدی با کیفیت بالا</p>
+    <div style="text-align:center;">
+        <span class="status">✅ فعال و آماده خدمات</span>
     </div>
 
-    <!-- بارگذاری Three.js از CDN -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-            }
-        }
-    </script>
+    <div class="pricing">
+        <div class="plan">
+            <h3>📸 استاندارد</h3>
+            <div class="price">۱,۲۵۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۵ ساعت</div>
+        </div>
+        <div class="plan">
+            <h3>⭐ پریمیوم</h3>
+            <div class="price">۲,۵۰۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۲ ساعت</div>
+        </div>
+        <div class="plan">
+            <h3>⚡ اکسپرس</h3>
+            <div class="price">۳,۷۵۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۱ ساعت</div>
+        </div>
+    </div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    <div class="upload-area" id="dropZone">
+        <p>📤 فایل تصویری خود را اینجا رها کنید</p>
+        <p style="color:#a7a9be; font-size:0.9rem;">یا برای انتخاب فایل کلیک کنید</p>
+        <input type="file" id="fileInput" accept="image/*">
+        <img id="preview" alt="پیش‌نمایش">
+    </div>
 
-        // صحنه، دوربین، رندرر
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x111122);
-        
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(3, 2, 5);
-        camera.lookAt(0, 0, 0);
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
-        
-        // کنترلرهای دوربین (متناسب با لمس)
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.zoomSpeed = 1.2;
-        controls.rotateSpeed = 1.0;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        
-        // نورها
-        const ambientLight = new THREE.AmbientLight(0x404060);
-        scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(2, 5, 3);
-        directionalLight.castShadow = true;
-        scene.add(directionalLight);
-        
-        const backLight = new THREE.PointLight(0x4466cc, 0.5);
-        backLight.position.set(-2, 1, -3);
-        scene.add(backLight);
-        
-        // کمک‌کننده: زمین شطرنجی اختیاری (نظر)
-        const gridHelper = new THREE.GridHelper(10, 20, 0x888888, 0x444444);
-        gridHelper.position.y = -1;
-        scene.add(gridHelper);
-        
-        // مکعب اصلی
-        const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-        const material = new THREE.MeshStandardMaterial({ color: 0xff6600, roughness: 0.3, metalness: 0.7 });
-        const cube = new THREE.Mesh(geometry, material);
-        cube.castShadow = true;
-        cube.receiveShadow = true;
-        scene.add(cube);
-        
-        // متغیرهای کنترل
-        let speed = 0.008;
-        let colorPicker = document.getElementById('colorPicker');
-        let speedSlider = document.getElementById('speedSlider');
-        let helpBtn = document.getElementById('helpBtn');
-        let helpModal = document.getElementById('helpModal');
-        let closeHelp = document.getElementById('closeHelp');
-        
-        colorPicker.addEventListener('input', (e) => {
-            cube.material.color.set(e.target.value);
-        });
-        
-        speedSlider.addEventListener('input', (e) => {
-            speed = parseFloat(e.target.value);
-        });
-        
-        helpBtn.addEventListener('click', () => {
-            helpModal.style.display = 'block';
-        });
-        
-        closeHelp.addEventListener('click', () => {
-            helpModal.style.display = 'none';
-        });
-        
-        // نمایش FPS ساده (اختیاری) - در کنسول
-        let lastTime = performance.now();
-        let frames = 0;
-        
-        // حلقه انیمیشن
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // چرخش مکعب
-            cube.rotation.x += speed;
-            cube.rotation.y += speed * 0.8;
-            
-            // به‌روزرسانی کنترلرها
-            controls.update();
-            
-            // رندر
-            renderer.render(scene, camera);
-            
-            // محاسبه FPS (نمایش در کنسول هر 2 ثانیه)
-            frames++;
-            const now = performance.now();
-            if (now - lastTime >= 2000) {
-                const fps = (frames * 1000) / (now - lastTime);
-                console.log(`FPS: ${fps.toFixed(1)}`);
-                frames = 0;
-                lastTime = now;
-            }
+    <button class="btn" id="convertBtn">💳 پرداخت و آغاز تبدیل</button>
+    <a href="/" class="back-link">← بازگشت به داشبورد</a>
+</div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const convertBtn = document.getElementById('convertBtn');
+
+    // کلیک روی منطقه آپلود
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // انتخاب فایل
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
         }
-        
-        animate();
-        
-        // تنظیم مجدد سایز پنجره
-        window.addEventListener('resize', onWindowResize, false);
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // درگ و دراپ
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#ff8906';
+        dropZone.style.background = 'rgba(255,137,6,0.08)';
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#2d3a5e';
+        dropZone.style.background = 'transparent';
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#2d3a5e';
+        dropZone.style.background = 'transparent';
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            fileInput.files = e.dataTransfer.files;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
         }
-        
-        console.log('3D App loaded successfully!');
-    </script>
+    });
+
+    // دکمه تبدیل
+    convertBtn.addEventListener('click', () => {
+        if (!fileInput.files.length) {
+            alert('⚠️ لطفاً ابتدا یک تصویر انتخاب کنید.');
+            return;
+        }
+        convertBtn.textContent = '⏳ در حال پردازش...';
+        convertBtn.disabled = true;
+        setTimeout(() => {
+            alert('✅ تصویر با موفقیت به مدل 3D تبدیل شد! (شبیه‌سازی)');
+            convertBtn.textContent = '💳 پرداخت و آغاز تبدیل';
+            convertBtn.disabled = false;
+        }, 2000);
+    });
+</script>
 </body>
 </html>

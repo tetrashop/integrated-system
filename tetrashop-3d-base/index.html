@@ -1,27 +1,232 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🚀 Tetrashop100 - فروشگاه آنلاین پیشرفته</title>
-    <meta name="description" content="تجربه خرید آنلاین با Tetrashop100 - امن، سریع و قابل اعتماد">
-</head>
-<body>
-    <div id="root">
-        <div style="min-height: 100vh; background: linear-gradient(to bottom right, #eff6ff, #e0e7ff); display: flex; align-items: center; justify-content: center;">
-            <div style="text-align: center;">
-                <div style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
-                <h2 style="font-size: 1.25rem; font-weight: bold; color: #374151;">در حال بارگذاری Tetrashop100...</h2>
-                <p style="color: #6b7280; margin-top: 0.5rem;">لطفا چند لحظه صبر کنید</p>
-            </div>
-        </div>
-    </div>
-    <script type="module" src="/src/main.jsx"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 سرویس تبدیل 3D حرفه‌ای</title>
     <style>
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0f0e17 0%, #1a1a2e 100%);
+            color: #fffffe;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(35, 41, 70, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid #2d3a5e;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ff8906;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #a7a9be;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .status {
+            text-align: center;
+            padding: 8px 20px;
+            background: #00b894;
+            color: #fff;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 0 auto 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .plan {
+            background: #232946;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #2d3a5e;
+            transition: 0.3s;
+        }
+        .plan:hover {
+            border-color: #ff8906;
+            transform: translateY(-4px);
+        }
+        .plan h3 { color: #ff8906; font-size: 1.1rem; }
+        .plan .price { font-size: 1.3rem; font-weight: 700; color: #fff; margin: 8px 0; }
+        .plan .time { color: #a7a9be; font-size: 0.85rem; }
+        .upload-area {
+            border: 2px dashed #2d3a5e;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #ff8906;
+            background: rgba(255,137,6,0.05);
+        }
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        .btn {
+            background: #ff8906;
+            color: #0f0e17;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(255,137,6,0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #preview {
+            margin-top: 15px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            display: none;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #a7a9be;
+            text-decoration: none;
+        }
+        .back-link:hover { color: #ff8906; }
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .pricing { grid-template-columns: 1fr; }
         }
     </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚀 سرویس تبدیل 3D حرفه‌ای</h1>
+    <p class="subtitle">تبدیل تصاویر 2D به مدل‌های سه‌بعدی با کیفیت بالا</p>
+    <div style="text-align:center;">
+        <span class="status">✅ فعال و آماده خدمات</span>
+    </div>
+
+    <div class="pricing">
+        <div class="plan">
+            <h3>📸 استاندارد</h3>
+            <div class="price">۱,۲۵۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۵ ساعت</div>
+        </div>
+        <div class="plan">
+            <h3>⭐ پریمیوم</h3>
+            <div class="price">۲,۵۰۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۲ ساعت</div>
+        </div>
+        <div class="plan">
+            <h3>⚡ اکسپرس</h3>
+            <div class="price">۳,۷۵۰,۰۰۰ تومان</div>
+            <div class="time">⏱ ۱ ساعت</div>
+        </div>
+    </div>
+
+    <div class="upload-area" id="dropZone">
+        <p>📤 فایل تصویری خود را اینجا رها کنید</p>
+        <p style="color:#a7a9be; font-size:0.9rem;">یا برای انتخاب فایل کلیک کنید</p>
+        <input type="file" id="fileInput" accept="image/*">
+        <img id="preview" alt="پیش‌نمایش">
+    </div>
+
+    <button class="btn" id="convertBtn">💳 پرداخت و آغاز تبدیل</button>
+    <a href="/" class="back-link">← بازگشت به داشبورد</a>
+</div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const convertBtn = document.getElementById('convertBtn');
+
+    // کلیک روی منطقه آپلود
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // انتخاب فایل
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // درگ و دراپ
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#ff8906';
+        dropZone.style.background = 'rgba(255,137,6,0.08)';
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#2d3a5e';
+        dropZone.style.background = 'transparent';
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#2d3a5e';
+        dropZone.style.background = 'transparent';
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            fileInput.files = e.dataTransfer.files;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // دکمه تبدیل
+    convertBtn.addEventListener('click', () => {
+        if (!fileInput.files.length) {
+            alert('⚠️ لطفاً ابتدا یک تصویر انتخاب کنید.');
+            return;
+        }
+        convertBtn.textContent = '⏳ در حال پردازش...';
+        convertBtn.disabled = true;
+        setTimeout(() => {
+            alert('✅ تصویر با موفقیت به مدل 3D تبدیل شد! (شبیه‌سازی)');
+            convertBtn.textContent = '💳 پرداخت و آغاز تبدیل';
+            convertBtn.disabled = false;
+        }, 2000);
+    });
+</script>
 </body>
 </html>
