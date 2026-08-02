@@ -59,15 +59,12 @@
             font-weight: 700;
             margin-top: 8px;
         }
-        .loading, .error, .empty {
+        .counter {
             text-align: center;
-            padding: 80px 20px;
-            font-size: 1.3rem;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #6c7086;
         }
-        .loading { color: #ff8906; }
-        .error { color: #e16162; }
-        .empty { color: #a7a9be; }
-        .counter { text-align: center; margin-top: 25px; font-size: 0.9rem; color: #6c7086; }
         .counter span { color: #ff8906; font-weight: 700; }
         @media (max-width: 600px) {
             h1 { font-size: 2rem; }
@@ -79,52 +76,32 @@
 <div class="container">
     <h1>📦 داشبورد یکپارچه</h1>
     <p class="subtitle">همه پروژه‌های قابل نمایش در یک نگاه — <span>پروژه‌های فعال</span></p>
-    <div id="loading" class="loading">⏳ در حال بارگذاری پروژه‌ها</div>
-    <div id="grid" class="grid" style="display: none;"></div>
-    <div id="error" class="error" style="display: none;"></div>
-    <div id="empty" class="empty" style="display: none;">😕 هیچ پروژه‌ای با فایل index.html یافت نشد</div>
-    <div id="counter" class="counter" style="display: none;">تعداد پروژه‌ها: <span id="count"></span></div>
+    <div class="grid" id="projectGrid"></div>
+    <div class="counter">تعداد پروژه‌ها: <span id="projectCount">0</span></div>
 </div>
 <script>
-    (async function() {
-        const loading = document.getElementById('loading');
-        const grid = document.getElementById('grid');
-        const errorEl = document.getElementById('error');
-        const emptyEl = document.getElementById('empty');
-        const counterEl = document.getElementById('counter');
-        const countSpan = document.getElementById('count');
+    // لیست پروژه‌ها (به‌صورت مستقیم در HTML درج شده)
+    const projects = ["3d-conversion-app", "3d-simple-app", "ProbabilityMach", "admin", "bale_3d_bot_backup", "integrated_system_clean", "integrated_system_final", "natiq-mosatalah-web", "nlp_project_optimized", "public.bak", "public", "static.bak", "static", "tetra-business", "tetra-final-system", "tetra-olympic-system", "tetra-pro", "tetra-ultimate-vercel", "tetrasaas-backup-20251221-111421", "tetrasaas-dashboard", "tetrashop-3d-base", "tetrashop-chess-production", "tetrashop-commercial-platform", "tetrashop-complete-dashboard", "tetrashop-complete-platform", "tetrashop-dashboard", "tetrashop-final-dashboard", "tetrashop-final-fixed", "tetrashop-final-intelligent-dashboard", "tetrashop-final-optimized", "tetrashop-final-perfect", "tetrashop-final-sample", "tetrashop-final-simple", "tetrashop-fixed-platform", "tetrashop-fixed", "tetrashop-github-backup-last", "tetrashop-github", "tetrashop-master-dashboard", "tetrashop-operational-dashboard", "tetrashop-pages", "tetrashop-pro-platform", "tetrashop-projects-backup-20251223_205824", "tetrashop-real-codes", "tetrashop-real-dashboard", "tetrashop-real-platform", "tetrashop-resurrected-20251216_225312", "tetrashop-resurrected-immediate-1765910024", "tetrashop-simple-dashboard", "tetrashop100-complete"];
 
-        try {
-            const res = await fetch('projects.json');
-            if (!res.ok) throw new Error('خطا در دریافت لیست پروژه‌ها (HTTP ' + res.status + ')');
-            const data = await res.json();
+    const grid = document.getElementById('projectGrid');
+    const countSpan = document.getElementById('projectCount');
 
-            loading.style.display = 'none';
-            if (!data || data.length === 0) {
-                emptyEl.style.display = 'block';
-                return;
-            }
-
-            grid.style.display = 'grid';
-            counterEl.style.display = 'block';
-            countSpan.textContent = data.length;
-
-            data.forEach(project => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <a href="/${project}/index.html">${project}</a>
-                    <small>${project}</small>
-                    <span class="badge">✅ قابل نمایش</span>
-                `;
-                grid.appendChild(card);
-            });
-        } catch (err) {
-            loading.style.display = 'none';
-            errorEl.style.display = 'block';
-            errorEl.textContent = '❌ ' + err.message;
-        }
-    })();
+    if (!projects || projects.length === 0 || projects[0] === "هیچ پروژه‌ای یافت نشد") {
+        grid.innerHTML = '<p style="color:#a7a9be;text-align:center;padding:40px;">😕 هیچ پروژه‌ای با فایل index.html یافت نشد</p>';
+        countSpan.textContent = '۰';
+    } else {
+        projects.forEach(project => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <a href="/${project}/index.html">${project}</a>
+                <small>${project}</small>
+                <span class="badge">✅ قابل نمایش</span>
+            `;
+            grid.appendChild(card);
+        });
+        countSpan.textContent = projects.length;
+    }
 </script>
 </body>
 </html>
