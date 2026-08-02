@@ -1,0 +1,6 @@
+# Redirects for better user experience
+/chess-engine    /chess          301
+/dashboard       /admin          301
+/status          /api/health     301
+/performance     /api/performance 301
+/docs            /api            301

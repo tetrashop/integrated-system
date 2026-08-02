@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبدیل 3D - Tetrashop100</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .app-page {
+            padding: 6rem 0 2rem;
+            min-height: 100vh;
+        }
+        
+        .app-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .app-header h2 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .iframe-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        iframe {
+            border: none;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">Tetrashop100</div>
+                <ul class="nav-links">
+                    <li><a href="/">خانه</a></li>
+                    <li><a href="/products">محصولات</a></li>
+                    <li><a href="/3d.html" style="color: #667eea; font-weight: bold;">تبدیل 3D</a></li>
+                    <li><a href="/payment">پرداخت</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="app-page">
+        <div class="container">
+            <div class="app-header">
+                <h2>🔄 سرویس تبدیل 3D تتراشاپ</h2>
+                <p>با موتور تبدیل اختصاصی ما - سریع، امن، اقتصادی</p>
+            </div>
+
+            <div class="iframe-container">
+                <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937;">🎮 اپلیکیشن تبدیل 3D ما</h3>
+                <iframe
+                    src="https://willowy-crumble-b0cc1e.netlify.app"
+                    width="100%"
+                    height="600px"
+                    title="تبدیل 3D تتراشاپ"
+                ></iframe>
+                <p style="text-align: center; margin-top: 1rem; color: #6b7280;">
+                    💡 از اپلیکیشن بالا مستقیماً استفاده کنید - تبدیل فایل‌های 3D در لحظه
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

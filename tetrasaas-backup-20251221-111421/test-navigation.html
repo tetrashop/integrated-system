@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>تست Navigation</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .test { margin: 10px; padding: 15px; border: 1px solid #ddd; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 تست Navigation پروژه‌ها</h1>
+    
+    <div class="test">
+        <h3>تست دستی:</h3>
+        <button onclick="testProject('chess')">تست Chess</button>
+        <button onclick="testProject('writer')">تست Writer</button>
+        <button onclick="testProject('nlp')">تست NLP</button>
+        <button onclick="testProject('quantum')">تست Quantum</button>
+        <button onclick="testProject('gardening')">تست Gardening</button>
+        <button onclick="testProject('voice-recognition')">تست Voice</button>
+        <button onclick="testProject('2d-to-3d')">تست 2D-3D</button>
+    </div>
+    
+    <div id="result" class="test"></div>
+    
+    <script>
+        async function testProject(project) {
+            const result = document.getElementById('result');
+            result.innerHTML = `🔄 تست ${project}...`;
+            result.className = 'test';
+            
+            try {
+                // تست وجود صفحه
+                const response = await fetch(`/${project}/index.html`);
+                if (response.ok) {
+                    // تست navigation
+                    window.location.hash = `#/${project}`;
+                    
+                    // بررسی بعد از 1 ثانیه
+                    setTimeout(() => {
+                        const projectDetail = document.getElementById('project-detail');
+                        if (projectDetail && projectDetail.style.display === 'block') {
+                            result.innerHTML = `✅ ${project}: navigation کار می‌کند`;
+                            result.className = 'test success';
+                        } else {
+                            result.innerHTML = `⚠️ ${project}: navigation کار نمی‌کند (ممکن است صفحه سیاه باشد)`;
+                            result.className = 'test error';
+                        }
+                    }, 1000);
+                } else {
+                    throw new Error(`صفحه یافت نشد: ${response.status}`);
+                }
+            } catch (error) {
+                result.innerHTML = `❌ ${project}: ${error.message}`;
+                result.className = 'test error';
+            }
+        }
+        
+        // مانیتور hash changes
+        window.addEventListener('hashchange', () => {
+            console.log('hash تغییر کرد:', window.location.hash);
+        });
+    </script>
+</body>
+</html>

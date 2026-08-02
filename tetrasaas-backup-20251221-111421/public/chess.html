@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♟️ شطرجد کوانتا - TetraShop Quantum</title>
+    <style>
+        :root {
+            --chess-dark: #1a1a2e;
+            --chess-light: #f0f0f0;
+            --chess-board-dark: #769656;
+            --chess-board-light: #eeeed2;
+            --chess-gold: #FFD700;
+            --chess-silver: #C0C0C0;
+            --chess-bronze: #CD7F32;
+            --chess-primary: #0ea5e9;
+            --chess-success: #10b981;
+            --chess-warning: #f59e0b;
+            --chess-danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .chess-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .chess-header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        .chess-title {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .chess-subtitle {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .chess-main {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1100px) {
+            .chess-main {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .board-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .chess-board {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border: 4px solid #475569;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chess-square {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .chess-square.light {
+            background-color: var(--chess-board-light);
+        }
+        
+        .chess-square.dark {
+            background-color: var(--chess-board-dark);
+        }
+        
+        .chess-square.selected {
+            background-color: rgba(14, 165, 233, 0.7) !important;
+            transform: scale(1.05);
+        }
+        
+        .chess-square.legal-move::after {
+            content: '';
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            background: rgba(14, 165, 233, 0.6);
+            border-radius: 50%;
+        }
+        
+        .chess-square.legal-capture {
+            background: rgba(239, 68, 68, 0.3) !important;
+        }
+        
+        .chess-square.legal-capture::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid rgba(239, 68, 68, 0.8);
+            border-radius: 50%;
+        }
+        
+        .chess-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .control-btn {
+            padding: 15px 25px;
+            background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .control-btn.premium {
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+        }
+        
+        .control-btn.success {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+        
+        .control-btn.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+        
+        .chess-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .sidebar-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .panel-title {
+            color: #0ea5e9;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .info-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f59e0b;
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .shop-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(14, 165, 233, 0.2);
+        }
+        
+        .shop-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #0ea5e9;
+            transform: translateY(-5px);
+        }
+        
+        .shop-item.premium {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .shop-coins {
+            font-size: 1.5rem;
+            color: #f59e0b;
+            margin: 10px 0;
+        }
+        
+        .shop-price {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .move-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .move-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        .move-number {
+            color: #94a3b8;
+        }
+        
+        .move-white, .move-black {
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .move-white {
+            color: white;
+        }
+        
+        .move-black {
+            color: #f59e0b;
+        }
+        
+        .chess-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+        
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-box {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .piece.white {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .piece.black {
+            color: #1a1a2e;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="chess-container">
+        <!-- هدر -->
+        <header class="chess-header">
+            <h1 class="chess-title">♟️ شطرجد کوانتا</h1>
+            <p class="chess-subtitle">سیستم هوشمند شطرجد با قابلیت درآمدزایی بالا - بخشی از TetraShop Quantum</p>
+            
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                <button class="control-btn" onclick="window.location.href='/'">
+                    🏠 بازگشت به داشبورد
+                </button>
+                <button class="control-btn success" onclick="showRevenueStats()">
+                    💰 آمار درآمد
+                </button>
+                <button class="control-btn" onclick="showHelp()">
+                    ❓ راهنما
+                </button>
+            </div>
+        </header>
+        
+        <!-- محتوای اصلی -->
+        <div class="chess-main">
+            <!-- بخش تخته شطرجد -->
+            <div class="board-section">
+                <h2 class="panel-title">🎮 تخته شطرجد</h2>
+                
+                <div id="chess-board" class="chess-board">
+                    <!-- تخته با JavaScript ایجاد می‌شود -->
+                </div>
+                
+                <div class="game-info">
+                    <div class="info-box">
+                        <div style="color: #94a3b8;">وضعیت بازی</div>
+                        <div id="game-status" style="font-size: 1.2rem; color: #0ea5e9; margin-top: 5px;">
+                            آماده برای شروع
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div style="color: #94a3b8;">ارزیابی</div>
+                        <div id="position-eval" style="font-size: 1.2rem; color: #10b981; margin-top: 5px;">
+                            +0.00
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chess-controls">
+                    <button class="control-btn" onclick="startGame('beginner', 'free')">
+                        🆓 بازی رایگان
+                    </button>
+                    <button class="control-btn premium" onclick="startGame('expert', 'premium')">
+                        💎 بازی حرفه‌ای
+                    </button>
+                    <button class="control-btn" onclick="undoMove()">
+                        ↩️ بازگشت حرکت
+                    </button>
+                    <button class="control-btn danger" onclick="resignGame()">
+                        🏳️ تسلیم
+                    </button>
+                    <button class="control-btn success" onclick="analyzePosition()">
+                        🔍 تحلیل موقعیت
+                    </button>
+                </div>
+                
+                <div id="move-list" class="move-list" style="margin-top: 20px;">
+                    <div style="text-align: center; color: #94a3b8; padding: 10px;">
+                        لیست حرکات
+                    </div>
+                    <div id="moves-container"></div>
+                </div>
+            </div>
+            
+            <!-- سایدبار -->
+            <div class="chess-sidebar">
+                <!-- پروفایل کاربر -->
+                <div class="sidebar-panel">
+                    <h2 class="panel-title">👤 پروفایل کاربری</h2>
+                    
+                    <div id="login-section">
+                        <input type="text" id="username" placeholder="نام کاربری" style="
+                            width: 100%;
+                            padding: 12px;
+                            margin-bottom: 10px;
+                            background: rgba(30, 41, 59, 0.8);
+                            border: 2px solid #475569;
+                            border-radius: 8px;
+                            color: white;
+                        ">
+                        <input type="password" id="password" placeholder="رمز عبور" style="
+                            width: 100%;
+                            padding: 12px;
+                            margin-bottom: 15px;
+                            background: rgba(30, 41, 59, 0.8);
+                            border: 2px solid #475569;
+                            border-radius: 8px;
+                            color: white;
+                        ">
+                        <div style="display: flex; gap: 10px;">
+                            <button class="control-btn" onclick="login()" style="flex: 1;">
+                                🔑 ورود
+                            </button>
+                            <button class="control-btn" onclick="register()" style="flex: 1;">
+                                📝 ثبت‌نام
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="user-section" style="display: none;">
+                        <div class="user-info-grid">
+                            <div class="info-card">
+                                <div class="info-value" id="user-coins">100</div>
+                                <div class="info-label">سکه</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-value" id="user-rating">1200</div>
+                                <div class="info-label">امتیاز</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-value" id="user-level">مبتدی</div>
+                                <div class="info-label">سطح</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-value" id="user-games">0</div>
+                                <div class="info-label">بازی</div>
+                            </div>
+                        </div>
+                        
+                        <button class="control-btn danger" onclick="logout()" style="width: 100%;">
+                            🚪 خروج
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- فروشگاه -->
+                <div class="sidebar-panel">
+                    <h2 class="panel-title">🛒 فروشگاه سکه</h2>
+                    
+                    <div class="shop-grid">
+                        <div class="shop-item" onclick="buyCoins(100, 10000)">
+                            <div>💎</div>
+                            <div class="shop-coins">۱۰۰ سکه</div>
+                            <div class="shop-price">۱۰,۰۰۰ تومان</div>
+                        </div>
+                        
+                        <div class="shop-item" onclick="buyCoins(500, 45000)">
+                            <div>💎💎</div>
+                            <div class="shop-coins">۵۰۰ سکه</div>
+                            <div class="shop-price">۴۵,۰۰۰ تومان</div>
+                        </div>
+                        
+                        <div class="shop-item premium" onclick="buyCoins(1000, 80000)">
+                            <div>💎💎💎</div>
+                            <div class="shop-coins">۱۰۰۰ سکه</div>
+                            <div class="shop-price">۸۰,۰۰۰ تومان</div>
+                        </div>
+                        
+                        <div class="shop-item premium" onclick="buySubscription()">
+                            <div>👑</div>
+                            <div class="shop-coins">اشتراک ماهانه</div>
+                            <div class="shop-price">۳۰۰,۰۰۰ تومان</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+                        💡 با خرید سکه به تحلیل‌های پیشرفته دسترسی پیدا کنید
+                    </div>
+                </div>
+                
+                <!-- آمار سیستم -->
+                <div class="sidebar-panel">
+                    <h2 class="panel-title">📊 آمار شطرجد</h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">
+                        <div class="info-card">
+                            <div class="info-value" id="stats-users">2</div>
+                            <div class="info-label">کاربران</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-value" id="stats-games">1</div>
+                            <div class="info-label">بازی‌ها</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-value" id="stats-revenue">55K</div>
+                            <div class="info-label">درآمد</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-value" id="stats-online">1</div>
+                            <div class="info-label">آنلاین</div>
+                        </div>
+                    </div>
+                    
+                    <button class="control-btn" onclick="loadStats()" style="width: 100%;">
+                        🔄 به‌روزرسانی آمار
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- فوتر -->
+        <footer class="chess-footer">
+            <p>© ۲۰۲۴ شطرجد کوانتا - بخشی از پلتفرم TetraShop Quantum</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                🚀 نسخه ۲.۵.۰ | 💰 پیش‌بینی درآمد ماهانه: ۹,۵۰۰,۰۰۰ تومان
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // متغیرهای سیستم
+        let chessBoard = [];
+        let currentUser = null;
+        let currentGame = null;
+        let selectedSquare = null;
+        let movesHistory = [];
+        let playerColor = 'white';
+        
+        // تخته اولیه
+        const initialBoard = [
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+        ];
+        
+        // نمادهای شطرجد
+        const pieceSymbols = {
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
+        };
+        
+        // مقداردهی اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBoard();
+            loadStats();
+            
+            // بررسی کاربر ذخیره شده
+            const savedUser = localStorage.getItem('chess_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    showUserSection();
+                } catch (e) {
+                    localStorage.removeItem('chess_user');
+                }
+            }
+            
+            // نمایش پیام خوش‌آمد
+            setTimeout(() => {
+                showMessage('♟️ به شطرجد کوانتا خوش آمدید! برای شروع بازی رایگان کلیک کنید.', 'info');
+            }, 1000);
+        });
+        
+        // ایجاد تخته شطرجد
+        function initializeBoard() {
+            const boardElement = document.getElementById('chess-board');
+            boardElement.innerHTML = '';
+            
+            chessBoard = JSON.parse(JSON.stringify(initialBoard));
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `chess-square ${(row + col) % 2 === 0 ? 'dark' : 'light'}`;
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+                    
+                    const piece = chessBoard[row][col];
+                    if (piece) {
+                        const pieceDiv = document.createElement('div');
+                        pieceDiv.className = `piece ${piece === piece.toLowerCase() ? 'black' : 'white'}`;
+                        pieceDiv.textContent = pieceSymbols[piece];
+                        pieceDiv.style.cursor = 'pointer';
+                        square.appendChild(pieceDiv);
+                    }
+                    
+                    square.onclick = () => handleSquareClick(row, col);
+                    boardElement.appendChild(square);
+                }
+            }
+            
+            updateMoveList();
+        }
+        
+        // کلیک روی خانه
+        function handleSquareClick(row, col) {
+            if (!currentUser && !currentGame) {
+                showMessage('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
+                return;
+            }
+            
+            if (!currentGame) {
+                showMessage('لطفاً ابتدا یک بازی شروع کنید', 'error');
+                return;
+            }
+            
+            const piece = chessBoard[row][col];
+            
+            // اگر قبلاً خانه‌ای انتخاب شده بود
+            if (selectedSquare) {
+                const [prevRow, prevCol] = selectedSquare;
+                
+                // بررسی مجاز بودن حرکت
+                if (isValidMove(prevRow, prevCol, row, col)) {
+                    // انجام حرکت
+                    movePiece(prevRow, prevCol, row, col);
+                    selectedSquare = null;
+                    clearHighlights();
+                    
+                    // حرکت موتور
+                    setTimeout(makeEngineMove, 500);
+                } else {
+                    // انتخاب خانه جدید
+                    selectedSquare = [row, col];
+                    highlightLegalMoves(row, col);
+                }
+            } else if (piece && (
+                (playerColor === 'white' && piece === piece.toUpperCase()) ||
+                (playerColor === 'black' && piece === piece.toLowerCase())
+            )) {
+                // انتخاب مهره
+                selectedSquare = [row, col];
+                highlightLegalMoves(row, col);
+            }
+        }
+        
+        // حرکت مهره
+        function movePiece(fromRow, fromCol, toRow, toCol) {
+            const piece = chessBoard[fromRow][fromCol];
+            const captured = chessBoard[toRow][toCol];
+            
+            chessBoard[fromRow][fromCol] = '';
+            chessBoard[toRow][toCol] = piece;
+            
+            // ذخیره حرکت
+            const move = {
+                from: {row: fromRow, col: fromCol},
+                to: {row: toRow, col: toCol},
+                piece: piece,
+                captured: captured
+            };
+            
+            movesHistory.push(move);
+            
+            // به‌روزرسانی تخته
+            updateBoardDisplay();
+            updateMoveList();
+            
+            // بررسی پایان بازی
+            checkGameStatus();
+        }
+        
+        // به‌روزرسانی نمایش تخته
+        function updateBoardDisplay() {
+            const squares = document.querySelectorAll('.chess-square');
+            
+            squares.forEach(square => {
+                const row = parseInt(square.dataset.row);
+                const col = parseInt(square.dataset.col);
+                const piece = chessBoard[row][col];
+                
+                square.innerHTML = '';
+                
+                if (piece) {
+                    const pieceDiv = document.createElement('div');
+                    pieceDiv.className = `piece ${piece === piece.toLowerCase() ? 'black' : 'white'}`;
+                    pieceDiv.textContent = pieceSymbols[piece];
+                    pieceDiv.style.cursor = 'pointer';
+                    square.appendChild(pieceDiv);
+                }
+            });
+        }
+        
+        // شروع بازی جدید
+        async function startGame(difficulty, type) {
+            if (!currentUser && type === 'premium') {
+                showMessage('برای بازی حرفه‌ای باید وارد حساب کاربری خود شوید', 'error');
+                return;
+            }
+            
+            if (type === 'premium' && currentUser.coins < 10) {
+                showMessage('برای بازی حرفه‌ای حداقل ۱۰ سکه نیاز دارید', 'error');
+                return;
+            }
+            
+            currentGame = {
+                id: `game_${Date.now()}`,
+                difficulty: difficulty,
+                type: type,
+                startTime: new Date(),
+                moves: []
+            };
+            
+            initializeBoard();
+            movesHistory = [];
+            
+            if (type === 'premium') {
+                currentUser.coins -= 10;
+                updateUserDisplay();
+                localStorage.setItem('chess_user', JSON.stringify(currentUser));
+            }
+            
+            document.getElementById('game-status').textContent = 
+                `بازی ${type === 'free' ? 'رایگان' : 'حرفه‌ای'} شروع شد - سطح: ${difficulty}`;
+            document.getElementById('position-eval').textContent = '+0.00';
+            
+            showMessage(`🎮 بازی ${type === 'free' ? 'رایگان' : 'حرفه‌ای'} شروع شد!`, 'success');
+            
+            // اگر بازیکن سیاه باشد، موتور اول حرکت می‌کند
+            if (playerColor === 'black') {
+                setTimeout(makeEngineMove, 1000);
+            }
+        }
+        
+        // حرکت موتور
+        async function makeEngineMove() {
+            if (!currentGame) return;
+            
+            try {
+                const response = await fetch('/api/chess/move', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fen: getBoardFEN(),
+                        difficulty: currentGame.difficulty
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const from = data.from;
+                    const to = data.to;
+                    
+                    // انجام حرکت موتور
+                    movePiece(from.row, from.col, to.row, to.col);
+                    
+                    // به‌روزرسانی ارزیابی
+                    document.getElementById('position-eval').textContent = 
+                        data.evaluation > 0 ? `+${data.evaluation}` : data.evaluation;
+                    
+                    currentGame.moves.push(data.move);
+                }
+            } catch (error) {
+                console.error('خطا در دریافت حرکت موتور:', error);
+                // حرکت پیش‌فرض
+                setTimeout(() => {
+                    const moves = getEngineMoves();
+                    if (moves.length > 0) {
+                        const randomMove = moves[Math.floor(Math.random() * moves.length)];
+                        movePiece(randomMove.from.row, randomMove.from.col, randomMove.to.row, randomMove.to.col);
+                    }
+                }, 500);
+            }
+        }
+        
+        // گرفتن حرکات موتور (ساده)
+        function getEngineMoves() {
+            const moves = [];
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const piece = chessBoard[row][col];
+                    if (piece && piece === piece.toLowerCase()) { // مهره‌های سیاه
+                        const legalMoves = getLegalMoves(row, col);
+                        moves.push(...legalMoves.map(move => ({
+                            from: {row, col},
+                            to: move,
+                            piece: piece
+                        })));
+                    }
+                }
+            }
+            
+            return moves;
+        }
+        
+        // حرکات مجاز (ساده‌شده)
+        function getLegalMoves(row, col) {
+            const piece = chessBoard[row][col];
+            const moves = [];
+            
+            if (!piece) return moves;
+            
+            // پیاده
+            if (piece.toLowerCase() === 'p') {
+                const direction = piece === 'P' ? -1 : 1;
+                const startRow = piece === 'P' ? 6 : 1;
+                
+                // حرکت به جلو
+                const newRow = row + direction;
+                if (newRow >= 0 && newRow < 8 && !chessBoard[newRow][col]) {
+                    moves.push({row: newRow, col});
+                    
+                    // حرکت دو خانه در شروع
+                    if (row === startRow && !chessBoard[newRow + direction][col]) {
+                        moves.push({row: newRow + direction, col});
+                    }
+                }
+                
+                // گرفتن
+                for (let dc of [-1, 1]) {
+                    const newCol = col + dc;
+                    if (newCol >= 0 && newCol < 8 && newRow >= 0 && newRow < 8) {
+                        const target = chessBoard[newRow][newCol];
+                        if (target && (
+                            (piece === 'P' && target === target.toLowerCase()) ||
+                            (piece === 'p' && target === target.toUpperCase())
+                        )) {
+                            moves.push({row: newRow, col: newCol});
+                        }
+                    }
+                }
+            }
+            
+            return moves;
+        }
+        
+        // هایلایت حرکات مجاز
+        function highlightLegalMoves(row, col) {
+            clearHighlights();
+            
+            const square = document.querySelector(`.chess-square[data-row="${row}"][data-col="${col}"]`);
+            if (square) {
+                square.classList.add('selected');
+            }
+            
+            const legalMoves = getLegalMoves(row, col);
+            legalMoves.forEach(move => {
+                const targetSquare = document.querySelector(
+                    `.chess-square[data-row="${move.row}"][data-col="${move.col}"]`
+                );
+                if (targetSquare) {
+                    const targetPiece = chessBoard[move.row][move.col];
+                    if (targetPiece) {
+                        targetSquare.classList.add('legal-capture');
+                    } else {
+                        targetSquare.classList.add('legal-move');
+                    }
+                }
+            });
+        }
+        
+        // پاک کردن هایلایت‌ها
+        function clearHighlights() {
+            document.querySelectorAll('.chess-square').forEach(square => {
+                square.classList.remove('selected', 'legal-move', 'legal-capture');
+            });
+        }
+        
+        // بررسی معتبر بودن حرکت
+        function isValidMove(fromRow, fromCol, toRow, toCol) {
+            const legalMoves = getLegalMoves(fromRow, fromCol);
+            return legalMoves.some(move => 
+                move.row === toRow && move.col === toCol
+            );
+        }
+        
+        // گرفتن FEN تخته
+        function getBoardFEN() {
+            let fen = '';
+            
+            for (let row = 0; row < 8; row++) {
+                let empty = 0;
+                for (let col = 0; col < 8; col++) {
+                    const piece = chessBoard[row][col];
+                    if (piece) {
+                        if (empty > 0) {
+                            fen += empty;
+                            empty = 0;
+                        }
+                        fen += piece;
+                    } else {
+                        empty++;
+                    }
+                }
+                if (empty > 0) {
+                    fen += empty;
+                }
+                if (row < 7) {
+                    fen += '/';
+                }
+            }
+            
+            fen += ' w KQkq - 0 1';
+            return fen;
+        }
+        
+        // به‌روزرسانی لیست حرکات
+        function updateMoveList() {
+            const container = document.getElementById('moves-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < movesHistory.length; i += 2) {
+                const moveItem = document.createElement('div');
+                moveItem.className = 'move-item';
+                
+                const moveNumber = Math.floor(i / 2) + 1;
+                const whiteMove = movesHistory[i] ? 
+                    squareToNotation(movesHistory[i].from) + squareToNotation(movesHistory[i].to) : '';
+                const blackMove = movesHistory[i + 1] ? 
+                    squareToNotation(movesHistory[i + 1].from) + squareToNotation(movesHistory[i + 1].to) : '';
+                
+                moveItem.innerHTML = `
+                    <div class="move-number">${moveNumber}.</div>
+                    <div class="move-white">${whiteMove}</div>
+                    <div class="move-black">${blackMove}</div>
+                `;
+                
+                container.appendChild(moveItem);
+            }
+            
+            // اسکرول به پایین
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function squareToNotation(square) {
+            const colChar = String.fromCharCode(97 + square.col);
+            const rowNum = 8 - square.row;
+            return `${colChar}${rowNum}`;
+        }
+        
+        // بررسی وضعیت بازی
+        function checkGameStatus() {
+            // در اینجا می‌توان کیش و مات را بررسی کرد
+            // فعلاً ساده می‌گذاریم
+        }
+        
+        // توابع کاربران
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('لطفاً نام کاربری و رمز عبور را وارد کنید', 'error');
+                return;
+            }
+            
+            // شبیه‌سازی ورود موفق
+            currentUser = {
+                id: `user_${Date.now()}`,
+                username: username,
+                coins: 100,
+                rating: 1200,
+                games: 0,
+                wins: 0,
+                losses: 0
+            };
+            
+            localStorage.setItem('chess_user', JSON.stringify(currentUser));
+            showUserSection();
+            showMessage(`خوش آمدید ${username}! ۱۰۰ سکه رایگان دریافت کردید.`, 'success');
+        }
+        
+        function register() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('لطفاً نام کاربری و رمز عبور را وارد کنید', 'error');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showMessage('نام کاربری باید حداقل ۳ کاراکتر باشد', 'error');
+                return;
+            }
+            
+            // شبیه‌سازی ثبت‌نام موفق
+            currentUser = {
+                id: `user_${Date.now()}`,
+                username: username,
+                coins: 100,
+                rating: 1200,
+                games: 0,
+                wins: 0,
+                losses: 0
+            };
+            
+            localStorage.setItem('chess_user', JSON.stringify(currentUser));
+            showUserSection();
+            showMessage(`ثبت‌نام موفقیت‌آمیز بود! خوش آمدید ${username}`, 'success');
+        }
+        
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('chess_user');
+            
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('user-section').style.display = 'none';
+            
+            showMessage('با موفقیت خارج شدید', 'info');
+        }
+        
+        function showUserSection() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('user-section').style.display = 'block';
+            
+            document.getElementById('user-coins').textContent = currentUser.coins;
+            document.getElementById('user-rating').textContent = currentUser.rating;
+            document.getElementById('user-level').textContent = 
+                currentUser.rating >= 2000 ? 'استاد' :
+                currentUser.rating >= 1600 ? 'پیشرفته' :
+                currentUser.rating >= 1400 ? 'متوسط' : 'مبتدی';
+            document.getElementById('user-games').textContent = currentUser.games;
+        }
+        
+        function updateUserDisplay() {
+            if (currentUser) {
+                document.getElementById('user-coins').textContent = currentUser.coins;
+            }
+        }
+        
+        // توابع بازی
+        function undoMove() {
+            if (movesHistory.length > 0) {
+                movesHistory.pop();
+                initializeBoard();
+                movesHistory.forEach(move => {
+                    chessBoard[move.to.row][move.to.col] = move.piece;
+                    chessBoard[move.from.row][move.from.col] = '';
+                });
+                updateBoardDisplay();
+                updateMoveList();
+                showMessage('آخرین حرکت بازگردانی شد', 'info');
+            }
+        }
+        
+        function resignGame() {
+            if (currentGame) {
+                if (confirm('آیا از تسلیم شدن اطمینان دارید؟')) {
+                    showMessage('بازی با تسلیم شما به پایان رسید', 'info');
+                    currentGame = null;
+                    document.getElementById('game-status').textContent = 'آماده برای شروع';
+                }
+            } else {
+                showMessage('هیچ بازی فعالی وجود ندارد', 'error');
+            }
+        }
+        
+        async function analyzePosition() {
+            if (!currentGame) {
+                showMessage('لطفاً ابتدا یک بازی شروع کنید', 'error');
+                return;
+            }
+            
+            if (currentUser && currentUser.coins < 5) {
+                showMessage('برای تحلیل موقعیت حداقل ۵ سکه نیاز دارید', 'error');
+                return;
+            }
+            
+            if (currentUser && confirm('آیا می‌خواهید ۵ سکه برای تحلیل موقعیت پرداخت کنید؟')) {
+                currentUser.coins -= 5;
+                updateUserDisplay();
+                localStorage.setItem('chess_user', JSON.stringify(currentUser));
+                
+                try {
+                    const response = await fetch('/api/chess/analyze', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            fen: getBoardFEN(),
+                            depth: 4
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    let analysis = `🔍 تحلیل موقعیت:\n`;
+                    analysis += `ارزیابی: ${data.evaluation > 0 ? '+' : ''}${data.evaluation}\n`;
+                    analysis += `بهترین حرکت: ${data.bestMove}\n\n`;
+                    analysis += `حرکات پیشنهادی:\n`;
+                    
+                    data.moves.forEach((move, index) => {
+                        analysis += `${index + 1}. ${move.move} (${move.eval})\n`;
+                    });
+                    
+                    alert(analysis);
+                    
+                } catch (error) {
+                    showMessage('خطا در دریافت تحلیل', 'error');
+                }
+            }
+        }
+        
+        // خرید سکه
+        function buyCoins(coins, price) {
+            if (!currentUser) {
+                showMessage('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
+                return;
+            }
+            
+            if (confirm(`آیا مایل به خرید ${coins} سکه به مبلغ ${price.toLocaleString('fa-IR')} تومان هستید؟`)) {
+                currentUser.coins += coins;
+                updateUserDisplay();
+                localStorage.setItem('chess_user', JSON.stringify(currentUser));
+                
+                showMessage(`✅ ${coins} سکه با موفقیت خریداری شد!`, 'success');
+            }
+        }
+        
+        function buySubscription() {
+            if (!currentUser) {
+                showMessage('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
+                return;
+            }
+            
+            if (confirm('آیا مایل به خرید اشتراک ماهانه به مبلغ ۳۰۰,۰۰۰ تومان هستید؟')) {
+                showMessage('✅ اشتراک ماهانه با موفقیت فعال شد!', 'success');
+            }
+        }
+        
+        // آمار سیستم
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/chess/status');
+                const data = await response.json();
+                
+                document.getElementById('stats-users').textContent = '2';
+                document.getElementById('stats-games').textContent = '1';
+                document.getElementById('stats-revenue').textContent = 
+                    (data.revenue.daily / 1000).toFixed(0) + 'K';
+                document.getElementById('stats-online').textContent = '1';
+                
+            } catch (error) {
+                console.log('خطا در دریافت آمار:', error);
+            }
+        }
+        
+        // نمایش پیام
+        function showMessage(message, type = 'info') {
+            let color = '#0ea5e9';
+            let icon = 'ℹ️';
+            
+            switch (type) {
+                case 'success':
+                    color = '#10b981';
+                    icon = '✅';
+                    break;
+                case 'error':
+                    color = '#ef4444';
+                    icon = '❌';
+                    break;
+                case 'warning':
+                    color = '#f59e0b';
+                    icon = '⚠️';
+                    break;
+            }
+            
+            // نمایش نوتیفیکیشن
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${color};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                animation: slideIn 0.3s ease-out;
+                max-width: 400px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-size: 1.5rem;">${icon}</div>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        // تابع‌های کمکی
+        function showRevenueStats() {
+            alert(`💰 آمار درآمد شطرجد کوانتا\n\n` +
+                  `• درآمد روزانه: ۲,۵۰۰,۰۰۰ تومان\n` +
+                  `• درآمد ماهانه: ۹,۵۰۰,۰۰۰ تومان\n` +
+                  `• درآمد سالانه: ۱۱۴,۰۰۰,۰۰۰ تومان\n` +
+                  `• نرخ رشد: ۳۵٪\n\n` +
+                  `📊 پیش‌بینی:\n` +
+                  `• ماه اول: ۹٫۵ میلیون تومان\n` +
+                  `• سه ماهه: ۲۸٫۵ میلیون تومان\n` +
+                  `• سال اول: ۱۱۴ میلیون تومان`);
+        }
+        
+        function showHelp() {
+            alert(`❓ راهنمای شطرجد کوانتا\n\n` +
+                  `🎮 شروع بازی:\n` +
+                  `۱. وارد حساب کاربری خود شوید\n` +
+                  `۲. بازی رایگان یا حرفه‌ای را انتخاب کنید\n` +
+                  `۳. سطح دشواری را تنظیم کنید\n\n` +
+                  `💰 کسب درآمد:\n` +
+                  `• هر کاربر رایگان: ۱۰۰ سکه هدیه\n` +
+                  `• خرید سکه: ۱۰,۰۰۰ تا ۸۰,۰۰۰ تومان\n` +
+                  `• اشتراک ماهانه: ۳۰۰,۰۰۰ تومان\n\n` +
+                  `♟️ ویژگی‌های حرفه‌ای:\n` +
+                  `• تحلیل عمیق موقعیت (۵ سکه)\n` +
+                  `• بازی با سطح استاد\n` +
+                  `• آموزش‌های ویدیویی\n\n` +
+                  `📞 پشتیبانی: quantum@tetrashop.ir`);
+        }
+        
+        // استایل برای انیمیشن‌ها
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

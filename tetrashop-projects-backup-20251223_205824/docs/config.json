@@ -1,0 +1,50 @@
+{
+    "server": {
+        "port": 5000,
+        "host": "localhost",
+        "environment": "development"
+    },
+    "projects": {
+        "chess": {
+            "enabled": true,
+            "max_depth": 15,
+            "difficulty_levels": ["easy", "medium", "hard", "expert"]
+        },
+        "smart_writer": {
+            "enabled": true,
+            "max_length": 5000,
+            "styles": ["formal", "creative", "technical", "casual"]
+        },
+        "quantum_writer": {
+            "enabled": true,
+            "entanglement_level": "medium",
+            "superposition": true
+        },
+        "secret_garden": {
+            "enabled": true,
+            "encryption_algorithms": ["AES-256", "RSA-4096", "ChaCha20"],
+            "security_level": "high"
+        },
+        "speech_recognition": {
+            "enabled": true,
+            "languages": ["fa", "en", "ar", "tr"],
+            "max_duration": 300
+        }
+    },
+    "monetization": {
+        "enabled": true,
+        "currency": "IRR",
+        "payment_methods": ["zarinpal", "nextpay", "manual"],
+        "subscription_plans": {
+            "basic": 99000,
+            "pro": 199000,
+            "enterprise": 999000
+        }
+    },
+    "analytics": {
+        "enabled": true,
+        "track_requests": true,
+        "save_logs": true,
+        "generate_reports": true
+    }
+}

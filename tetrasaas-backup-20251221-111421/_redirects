@@ -1,0 +1,9 @@
+# Netlify Redirects
+/chess/* /chess/index.html 200
+/writer/* /writer/index.html 200
+/nlp/* /nlp/index.html 200
+/quantum/* /quantum/index.html 200
+/gardening/* /gardening/index.html 200
+/voice-recognition/* /voice-recognition/index.html 200
+/2d-to-3d/* /2d-to-3d/index.html 200
+/* /index.html 200

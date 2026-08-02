@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/chess", "destination": "/chess/index.html" },
+    { "source": "/writer", "destination": "/writer/index.html" },
+    { "source": "/nlp", "destination": "/nlp/index.html" },
+    { "source": "/quantum", "destination": "/quantum/index.html" },
+    { "source": "/gardening", "destination": "/gardening/index.html" },
+    { "source": "/voice-recognition", "destination": "/voice-recognition/index.html" },
+    { "source": "/2d-to-3d", "destination": "/2d-to-3d/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

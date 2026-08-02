@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+<link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتراشاپ - مدیریت پیشرفته الگوریتم‌ها</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body style="margin:0;padding:0;min-height:100vh;">
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loader">
+            <div class="quantum-loader"></div>
+            <p>در حال بارگذاری سیستم تتراشاپ...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Enhanced Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h2>تتراشاپ AI</h2>
+                <small>پلتفرم مدیریت الگوریتم‌های پیشرفته</small>
+            </div>
+
+            <div class="search-sidebar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="جستجوی سریع..." id="global-search">
+            </div>
+
+            <ul class="nav-menu">
+                <li class="active" data-section="dashboard">
+                    <a href="#">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>داشبورد اصلی</span>
+                        <span class="badge">Live</span>
+                    </a>
+                </li>
+                
+                <li class="category">پردازش زبان طبیعی</li>
+                <li data-section="nlp-overview">
+                    <a href="#">
+                        <i class="fas fa-language"></i>
+                        <span>مرور NLP</span>
+                        <span class="badge" id="nlp-count">219</span>
+                    </a>
+                </li>
+                <li data-section="nlp-algorithms">
+                    <a href="#">
+                        <i class="fas fa-code"></i>
+                        <span>الگوریتم‌های NLP</span>
+                    </a>
+                </li>
+
+                <li class="category">سیستم‌های پیشرفته</li>
+                <li data-section="quantum-writer">
+                    <a href="#">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>Quantum Writer</span>
+                        <span class="badge new">جدید</span>
+                    </a>
+                </li>
+                <li data-section="secret-garden">
+                    <a href="#">
+                        <i class="fas fa-lock"></i>
+                        <span>Secret Garden</span>
+                    </a>
+                </li>
+                <li data-section="speech-recognition">
+                    <a href="#">
+                        <i class="fas fa-microphone"></i>
+                        <span>Speech Recognition</span>
+                    </a>
+                </li>
+
+                <li data-section="all-algorithms">
+                    <a href="#">
+                        <i class="fas fa-boxes"></i>
+                        <span>همه الگوریتم‌ها</span>
+                        <span class="badge" id="total-algos">0</span>
+                    </a>
+                </li>
+                
+                <li data-section="code-output">
+                    <a href="#">
+                        <i class="fas fa-terminal"></i>
+                        <span>خروجی کد</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="system-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-server"></i>
+                        <div>
+                            <span class="stat-value" id="cpu-usage">12%</span>
+                            <span class="stat-label">CPU</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-memory"></i>
+                        <div>
+                            <span class="stat-value" id="memory-usage">64%</span>
+                            <span class="stat-label">RAM</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-export" onclick="exportEverything()">
+                    <i class="fas fa-file-export"></i>
+                    خروجی کامل
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Enhanced Header -->
+            <header class="header">
+                <div class="breadcrumb">
+                    <span id="current-section">داشبورد اصلی</span>
+                    <i class="fas fa-chevron-left"></i>
+                    <span id="current-subsection">آمار کلی</span>
+                </div>
+
+                <div class="header-actions">
+                    <div class="quick-actions">
+                        <button class="btn-icon" title="بروزرسانی" onclick="refreshAll()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="btn-icon" title="خروجی فوری" onclick="quickExport()">
+                            <i class="fas fa-bolt"></i>
+                        </button>
+                        <button class="btn-icon" title="تنظیمات" onclick="showSettings()">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="username">مدیر سیستم</span>
+                            <span class="user-role">سطح دسترسی: ادمین</span>
+                        </div>
+                        <div class="user-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h1><i class="fas fa-tachometer-alt"></i> داشبورد مدیریت تتراشاپ</h1>
+                    <div class="header-badges">
+                        <span class="badge success"><i class="fas fa-check"></i> فعال</span>
+                        <span class="badge info" id="last-update">آخرین بروزرسانی: در حال بارگذاری...</span>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>کل الگوریتم‌ها</h3>
+                            <p class="stat-number" id="total-algorithms">0</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12% نسبت به ماه قبل</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>الگوریتم‌های NLP</h3>
+                            <p class="stat-number">219</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-check-circle"></i>
+                                <span>کامل - آخرین پست</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Quantum Writer</h3>
+                            <p class="stat-number" id="quantum-count">0</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-bolt"></i>
+                                <span>در حال توسعه</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Secret Garden</h3>
+                            <p class="stat-number" id="secret-count">0</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>امنیت بالا</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card info">
+                        <div class="stat-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Speech Recognition</h3>
+                            <p class="stat-number" id="speech-count">0</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-wave-square"></i>
+                                <span>پردازش صدا</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card dark">
+                        <div class="stat-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>خطوط کد</h3>
+                            <p class="stat-number" id="total-lines">0</p>
+                            <div class="stat-trend">
+                                <i class="fas fa-chart-line"></i>
+                                <span>توسعه مستمر</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-row">
+                    <div class="activity-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-history"></i> فعالیت‌های اخیر</h3>
+                            <button class="btn-link" onclick="loadActivityLog()">مشاهده همه</button>
+                        </div>
+                        <div class="activity-list" id="activity-list">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="quick-export-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-rocket"></i> خروجی سریع</h3>
+                        </div>
+                        <div class="export-options">
+                            <button class="export-option" onclick="exportSection('nlp')">
+                                <i class="fas fa-language"></i>
+                                <span>NLP کامل</span>
+                                <small>219 الگوریتم</small>
+                            </button>
+                            <button class="export-option" onclick="exportSection('quantum')">
+                                <i class="fas fa-pen-fancy"></i>
+                                <span>Quantum Writer</span>
+                            </button>
+                            <button class="export-option" onclick="exportSection('secret')">
+                                <i class="fas fa-lock"></i>
+                                <span>Secret Garden</span>
+                            </button>
+                            <button class="export-option" onclick="exportSection('speech')">
+                                <i class="fas fa-microphone"></i>
+                                <span>Speech Recognition</span>
+                            </button>
+                            <button class="export-option danger" onclick="exportEverything()">
+                                <i class="fas fa-file-export"></i>
+                                <span>همه چیز</span>
+                                <small>خروجی کامل</small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NLP Overview Section -->
+            <section id="nlp-overview" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-language"></i> پردازش زبان طبیعی - مرور کلی</h1>
+                    <div class="section-badges">
+                        <span class="badge success">کامل شده</span>
+                        <span class="badge">219 پست</span>
+                        <span class="badge info">آخرین به‌روزرسانی: امروز</span>
+                    </div>
+                </div>
+
+                <div class="nlp-stats">
+                    <div class="nlp-stat-card">
+                        <div class="nlp-stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="nlp-stat-content">
+                            <h3>وضعیت پروژه</h3>
+                            <p class="nlp-stat-value">کامل شده</p>
+                            <p class="nlp-stat-desc">آخرین پست: #219</p>
+                        </div>
+                    </div>
+
+                    <div class="nlp-stat-card">
+                        <div class="nlp-stat-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="nlp-stat-content">
+                            <h3>دسته‌بندی‌ها</h3>
+                            <p class="nlp-stat-value">12 دسته</p>
+                            <p class="nlp-stat-desc">طبقه‌بندی شده</p>
+                        </div>
+                    </div>
+
+                    <div class="nlp-stat-card">
+                        <div class="nlp-stat-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="nlp-stat-content">
+                            <h3>الگوریتم‌ها</h3>
+                            <p class="nlp-stat-value">85+</p>
+                            <p class="nlp-stat-desc">پیاده‌سازی</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nlp-content">
+                    <h3><i class="fas fa-list"></i> دسته‌بندی‌های NLP</h3>
+                    <div class="category-grid" id="nlp-categories">
+                        <!-- Categories loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quantum Writer Section -->
+            <section id="quantum-writer" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-pen-fancy"></i> Quantum Writer</h1>
+                    <div class="section-badges">
+                        <span class="badge warning">در حال توسعه</span>
+                        <span class="badge">نسخه 1.0.0</span>
+                    </div>
+                </div>
+
+                <div class="quantum-description">
+                    <p>سیستم تولید محتوای کوانتومی با قابلیت‌های پیشرفته</p>
+                </div>
+
+                <div class="quantum-features">
+                    <h3><i class="fas fa-star"></i> ویژگی‌های اصلی</h3>
+                    <div class="features-grid" id="quantum-features">
+                        <!-- Features loaded dynamically -->
+                    </div>
+                </div>
+
+                <div class="quantum-algorithms">
+                    <h3><i class="fas fa-code"></i> الگوریتم‌های Quantum Writer</h3>
+                    <div class="algorithms-grid" id="quantum-algorithms">
+                        <!-- Algorithms loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Secret Garden Section -->
+            <section id="secret-garden" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-lock"></i> Secret Garden</h1>
+                    <div class="section-badges">
+                        <span class="badge danger">امنیتی</span>
+                        <span class="badge">رمزنگاری شده</span>
+                    </div>
+                </div>
+
+                <div class="secret-description">
+                    <p>سیستم امنیتی پیشرفته برای مدیریت محرمانه‌ترین الگوریتم‌ها</p>
+                </div>
+
+                <div class="security-levels">
+                    <h3><i class="fas fa-shield-alt"></i> سطوح امنیتی</h3>
+                    <div class="levels-grid" id="security-levels">
+                        <!-- Security levels loaded dynamically -->
+                    </div>
+                </div>
+
+                <div class="secret-algorithms">
+                    <h3><i class="fas fa-code"></i> الگوریتم‌های محرمانه</h3>
+                    <div class="algorithms-grid" id="secret-algorithms">
+                        <!-- Algorithms loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Speech Recognition Section -->
+            <section id="speech-recognition" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-microphone"></i> Speech Recognition</h1>
+                    <div class="section-badges">
+                        <span class="badge info">پردازش صدا</span>
+                        <span class="badge">Real-time</span>
+                    </div>
+                </div>
+
+                <div class="speech-description">
+                    <p>سیستم تشخیص گفتار پیشرفته با دقت بالا</p>
+                </div>
+
+                <div class="speech-features">
+                    <h3><i class="fas fa-bolt"></i> قابلیت‌ها</h3>
+                    <div class="features-grid" id="speech-features">
+                        <!-- Features loaded dynamically -->
+                    </div>
+                </div>
+
+                <div class="speech-algorithms">
+                    <h3><i class="fas fa-code"></i> الگوریتم‌های تشخیص گفتار</h3>
+                    <div class="algorithms-grid" id="speech-algorithms">
+                        <!-- Algorithms loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Code Output Section -->
+            <section id="code-output" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-terminal"></i> خروجی کد برای کپی</h1>
+                    <div class="section-badges">
+                        <span class="badge success">آماده</span>
+                    </div>
+                </div>
+
+                <div class="output-controls">
+                    <div class="control-group">
+                        <button class="btn btn-success" onclick="copyAllCode()">
+                            <i class="fas fa-copy"></i>
+                            کپی همه
+                        </button>
+                        <button class="btn btn-info" onclick="downloadCode()">
+                            <i class="fas fa-download"></i>
+                            دانلود فایل
+                        </button>
+                        <button class="btn btn-warning" onclick="clearOutput()">
+                            <i class="fas fa-trash"></i>
+                            پاک کردن
+                        </button>
+                    </div>
+
+                    <div class="format-selector">
+                        <select id="output-format">
+                            <option value="cat">فرمت Cat (برای ترمینال)</option>
+                            <option value="json">JSON</option>
+                            <option value="markdown">Markdown</option>
+                            <option value="zip">فایل ZIP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="code-output-area">
+                    <div class="output-header">
+                        <span>محتوای خروجی</span>
+                        <span class="output-size" id="output-size">0 کیلوبایت</span>
+                    </div>
+                    <pre id="code-output-content"><code id="code-content">
+// خروجی کدها در این قسمت نمایش داده می‌شود
+// برای کپی از دکمه‌های بالا استفاده کنید
+                    </code></pre>
+                </div>
+
+                <div class="quick-copy-commands">
+                    <h4><i class="fas fa-terminal"></i> دستورات سریع برای ترمینال</h4>
+                    <div class="commands-grid">
+                        <div class="command-card">
+                            <code>cat output.sh | bash</code>
+                            <small>اجرای خودکار</small>
+                        </div>
+                        <div class="command-card">
+                            <code>./deploy-all.sh</code>
+                            <small>استقرار کامل</small>
+                        </div>
+                        <div class="command-card">
+                            <code>npm run build:all</code>
+                            <small>ساخت پروژه</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Algorithms Section -->
+            <section id="all-algorithms" class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-boxes"></i> همه الگوریتم‌ها</h1>
+                    <div class="section-badges">
+                        <span class="badge" id="filter-count">0 مورد</span>
+                    </div>
+                </div>
+
+                <div class="filter-controls">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">همه</button>
+                        <button class="filter-tab" data-filter="nlp">NLP</button>
+                        <button class="filter-tab" data-filter="quantum">Quantum Writer</button>
+                        <button class="filter-tab" data-filter="secret">Secret Garden</button>
+                        <button class="filter-tab" data-filter="speech">Speech</button>
+                    </div>
+
+                    <div class="sort-controls">
+                        <select id="sort-by">
+                            <option value="name">مرتب سازی بر اساس نام</option>
+                            <option value="size">مرتب سازی بر اساس حجم</option>
+                            <option value="date">مرتب سازی بر اساس تاریخ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="algorithms-table-container">
+                    <table class="algorithms-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>نام الگوریتم</th>
+                                <th>دسته‌بندی</th>
+                                <th>زبان</th>
+                                <th>حجم</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-algorithms-table">
+                            <!-- Algorithms loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="../utils/api.js"></script>
+    <script src="../utils/helpers.js"></script>
+    <script src="../components/nlp-component.js"></script>
+    <script src="../components/quantum-component.js"></script>
+    <script src="../components/secret-component.js"></script>
+    <script src="../components/speech-component.js"></script>
+    <script src="../assets/main.js"></script>
+</body>
+</html>

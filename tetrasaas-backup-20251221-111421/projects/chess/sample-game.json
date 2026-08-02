@@ -1,0 +1,15 @@
+{
+    "games": [
+        {
+            "id": 1,
+            "players": ["کارلزن", "هوش مصنوعی"],
+            "result": "1-0",
+            "moves": ["e4", "e5", "Nf3", "Nc6", "Bb5"],
+            "analysis": {
+                "accuracy": 92.5,
+                "best_move": "Nf3",
+                "evaluation": "+0.8"
+            }
+        }
+    ]
+}

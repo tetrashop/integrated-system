@@ -1,0 +1,11 @@
+/data/data/com.termux/files/home/tetrashop-github/index.html
+/data/data/com.termux/files/home/tetrashop-github/package.json
+/data/data/com.termux/files/home/tetrashop-github/server.js
+/data/data/com.termux/files/home/tetrashop-final-sample/projects/dashboard/index.html
+/data/data/com.termux/files/home/tetrashop-final-sample/projects/store/index.html
+/data/data/com.termux/files/home/tetrashop-final-sample/projects/analytics/index.html
+/data/data/com.termux/files/home/tetrashop-final-sample/index.html
+/data/data/com.termux/files/home/tetrashop-final-sample/server.js
+/data/data/com.termux/files/home/tetrashop-final-sample/package.json
+/data/data/com.termux/files/home/tetrashop-final-sample/package-lock.json
+/data/data/com.termux/files/home/tetrashop-final-sample/README.md

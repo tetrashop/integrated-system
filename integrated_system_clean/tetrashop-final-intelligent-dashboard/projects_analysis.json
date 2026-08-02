@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-12-17T09:56:14.444Z",
+  "totalProjects": 3,
+  "projects": [
+    {
+      "name": "api-service",
+      "path": "/data/data/com.termux/files/home/tetrashop-projects/api-service",
+      "type": "node",
+      "files": [
+        "package.json",
+        "server.js"
+      ],
+      "hasPackageJson": true,
+      "hasIndexHtml": false,
+      "hasServerJs": true,
+      "lineCount": 4,
+      "sizeKB": 0
+    },
+    {
+      "name": "node_modules",
+      "path": "/data/data/com.termux/files/home/tetrashop-projects/node_modules",
+      "type": "unknown",
+      "files": [
+        ".package-lock.json"
+      ],
+      "hasPackageJson": false,
+      "hasIndexHtml": false,
+      "hasServerJs": false,
+      "lineCount": 821,
+      "sizeKB": 29
+    },
+    {
+      "name": "web-store",
+      "path": "/data/data/com.termux/files/home/tetrashop-projects/web-store",
+      "type": "web",
+      "files": [
+        "index.html"
+      ],
+      "hasPackageJson": false,
+      "hasIndexHtml": true,
+      "hasServerJs": false,
+      "lineCount": 4,
+      "sizeKB": 0
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد نهایی Tetrashop</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f0f2f5; padding: 20px; }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 30px; border-radius: 10px; 
+            text-align: center; margin-bottom: 20px;
+        }
+        .file-item { 
+            background: white; padding: 15px; margin: 10px 0; 
+            border-radius: 5px; border-left: 4px solid #4361ee;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .file-item:hover { background: #e9ecef; transform: translateX(5px); }
+        .file-content { 
+            background: #1e1e1e; color: #fff; padding: 20px; 
+            margin: 10px 0; border-radius: 5px; 
+            overflow-x: auto; font-family: monospace;
+            display: none;
+        }
+        .file-path { color: #666; font-size: 14px; margin-top: 5px; }
+        .copy-btn { 
+            background: #28a745; color: white; border: none; 
+            padding: 5px 15px; border-radius: 3px; cursor: pointer;
+            margin-top: 10px;
+        }
+        .stats { 
+            background: white; padding: 20px; border-radius: 10px;
+            margin-bottom: 20px; text-align: center;
+        }
+        .stat-number { font-size: 2rem; color: #4361ee; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 داشبورد واقعی Tetrashop</h1>
+        <p>نمایش کامل کدها و الگوریتم‌های پروژه</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-number" id="totalFiles">0</div>
+        <p>تعداد فایل‌های کد</p>
+    </div>
+    
+    <div id="filesList">
+        <!-- فایل‌ها اینجا نمایش داده می‌شوند -->
+    </div>
+    
+    <script>
+        // داده‌های فایل‌ها
+        const files = [

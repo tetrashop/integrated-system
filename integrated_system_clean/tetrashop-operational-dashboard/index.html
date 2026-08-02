@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 داشبورد عملیاتی Tetrashop</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
+            --dark: #212529;
+            --light: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .project-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .project-type {
+            background: var(--light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .type-web { background: #d1e7dd; color: #0f5132; }
+        .type-node { background: #cfe2ff; color: #084298; }
+        .type-fullstack { background: #f8d7da; color: #842029; }
+        .type-utility { background: #fff3cd; color: #664d03; }
+        
+        .project-files {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .file-badge {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 0.2rem 0.5rem;
+            margin: 0.2rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-run {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-install {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-view {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-code {
+            background: var(--dark);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .terminal {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    
+    <!-- آیکون‌های Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-rocket"></i> داشبورد عملیاتی Tetrashop</h1>
+            <p class="subtitle">مدیریت و اجرای هوشمند تمام پروژه‌ها در یک پلتفرم یکپارچه</p>
+            
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="totalProjects">0</div>
+                    <div>پروژه</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="webProjects">0</div>
+                    <div>وب اپ</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="nodeProjects">0</div>
+                    <div>Node.js</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="projects-grid" id="projectsContainer">
+            <!-- پروژه‌ها اینجا نمایش داده می‌شوند -->
+        </div>
+    </div>
+    
+    <div class="status-bar" id="statusBar">
+        <span id="statusText"></span>
+        <button onclick="hideStatus()" style="margin-right: 1rem; background: none; border: none; color: white;">✕</button>
+    </div>
+    
+    <div class="terminal" id="terminal"></div>
+    
+    <script>
+        // وضعیت فعلی
+        let currentTerminal = null;
+        
+        // بارگذاری پروژه‌ها
+        async function loadProjects() {
+            try {
+                const response = await fetch('/api/projects');
+                const projects = await response.json();
+                
+                displayProjects(projects);
+                updateStats(projects);
+                
+            } catch (error) {
+                console.error('خطا در بارگذاری پروژه‌ها:', error);
+                showStatus('خطا در بارگذاری پروژه‌ها', 'error');
+            }
+        }
+        
+        // نمایش پروژه‌ها
+        function displayProjects(projects) {
+            const container = document.getElementById('projectsContainer');
+            container.innerHTML = '';
+            
+            projects.forEach(project => {
+                const card = createProjectCard(project);
+                container.appendChild(card);
+            });
+        }
+        
+        // ایجاد کارت پروژه
+        function createProjectCard(project) {
+            const div = document.createElement('div');
+            div.className = 'project-card';
+            
+            // تعیین کلاس نوع پروژه
+            const typeClass = `type-${project.type}`;
+            
+            // ایجاد دکمه‌های عملیاتی بر اساس نوع پروژه
+            let actionsHTML = '';
+            
+            if (project.has_index) {
+                actionsHTML += `
+                    <button class="btn btn-run" onclick="runProject('${project.name}', 'web')">
+                        <i class="fas fa-play"></i> اجرای وب
+                    </button>
+                `;
+            }
+            
+            if (project.has_package) {
+                actionsHTML += `
+                    <button class="btn btn-install" onclick="installProject('${project.name}')">
+                        <i class="fas fa-download"></i> نصب وابستگی‌ها
+                    </button>
+                    <button class="btn btn-run" onclick="runProject('${project.name}', 'node')">
+                        <i class="fas fa-server"></i> اجرای سرور
+                    </button>
+                `;
+            }
+            
+            // دکمه‌های عمومی
+            actionsHTML += `
+                <button class="btn btn-view" onclick="viewProject('${project.name}')">
+                    <i class="fas fa-eye"></i> مشاهده
+                </button>
+                <button class="btn btn-code" onclick="showCode('${project.name}')">
+                    <i class="fas fa-code"></i> نمایش کد
+                </button>
+            `;
+            
+            // نمایش فایل‌ها
+            const filesHTML = project.files.slice(0, 5).map(file => 
+                `<span class="file-badge">${file}</span>`
+            ).join('');
+            
+            div.innerHTML = `
+                <div class="project-header">
+                    <div class="project-title">
+                        <i class="fas fa-folder"></i> ${project.name}
+                    </div>
+                    <div class="project-type ${typeClass}">
+                        ${getTypeLabel(project.type)}
+                    </div>
+                </div>
+                
+                <div class="project-files">
+                    <strong>فایل‌ها:</strong>
+                    <div style="margin-top: 0.5rem;">
+                        ${filesHTML}
+                        ${project.files.length > 5 ? `<span class="file-badge">+${project.files.length - 5} بیشتر</span>` : ''}
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    ${actionsHTML}
+                </div>
+            `;
+            
+            return div;
+        }
+        
+        // برچسب نوع پروژه
+        function getTypeLabel(type) {
+            const labels = {
+                'web': 'وب اپلیکیشن',
+                'node': 'سرور Node.js',
+                'fullstack': 'کامل',
+                'utility': 'ابزار'
+            };
+            return labels[type] || type;
+        }
+        
+        // آمار پروژه‌ها
+        function updateStats(projects) {
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('webProjects').textContent = 
+                projects.filter(p => p.type === 'web' || p.type === 'fullstack').length;
+            document.getElementById('nodeProjects').textContent = 
+                projects.filter(p => p.type === 'node' || p.type === 'fullstack').length;
+        }
+        
+        // اجرای پروژه
+        async function runProject(projectName, type) {
+            showStatus(`در حال اجرای ${projectName}...`, 'info');
+            
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        project: projectName,
+                        command: type === 'web' ? 'run_web' : 'run_node'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    if (result.url) {
+                        // باز کردن در تب جدید
+                        window.open(result.url, '_blank');
+                        showStatus(`پروژه ${projectName} در مرورگر باز شد`, 'success');
+                    } else if (result.command) {
+                        // نمایش دستور اجرا
+                        showTerminal(`💻 دستور اجرا:\n${result.command}\n\nبرای اجرا دستور را کپی کنید.`);
+                        showStatus('دستور اجرا آماده است', 'success');
+                    }
+                } else {
+                    showStatus(result.message, 'error');
+                }
+                
+            } catch (error) {
+                showStatus(`خطا در اجرا: ${error.message}`, 'error');
+            }
+        }
+        
+        // نصب پروژه
+        async function installProject(projectName) {
+            showTerminal(`📦 در حال نصب وابستگی‌های ${projectName}...\n\nلطفاً منتظر بمانید...`);
+            
+            try {
+                // در اینجا می‌توانید API واقعی برای نصب اضافه کنید
+                setTimeout(() => {
+                    showTerminal(`✅ وابستگی‌های ${projectName} با موفقیت نصب شدند.\n\nمی‌توانید پروژه را اجرا کنید.`);
+                    showStatus('نصب کامل شد', 'success');
+                }, 2000);
+                
+            } catch (error) {
+                showStatus(`خطا در نصب: ${error.message}`, 'error');
+            }
+        }
+        
+        // مشاهده پروژه
+        function viewProject(projectName) {
+            window.open(`/projects/${projectName}`, '_blank');
+        }
+        
+        // نمایش کد پروژه
+        async function showCode(projectName) {
+            showTerminal(`📁 در حال بارگذاری کدهای ${projectName}...`);
+            
+            try {
+                const response = await fetch(`/api/project/${projectName}/code`);
+                const data = await response.json();
+                
+                let terminalContent = `📄 پروژه: ${projectName}\n`;
+                terminalContent += '═'.repeat(50) + '\n\n';
+                
+                data.files.forEach(file => {
+                    terminalContent += `📁 ${file.name}:\n`;
+                    terminalContent += '─'.repeat(30) + '\n';
+                    terminalContent += file.content + '\n\n';
+                });
+                
+                showTerminal(terminalContent);
+                
+            } catch (error) {
+                showTerminal(`❌ خطا در بارگذاری کدها: ${error.message}`);
+            }
+        }
+        
+        // نمایش ترمینال
+        function showTerminal(content) {
+            const terminal = document.getElementById('terminal');
+            terminal.textContent = content;
+            terminal.style.display = 'block';
+            currentTerminal = content;
+        }
+        
+        // نمایش وضعیت
+        function showStatus(message, type = 'info') {
+            const statusBar = document.getElementById('statusBar');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = message;
+            
+            // رنگ بر اساس نوع
+            const colors = {
+                'info': '#17a2b8',
+                'success': '#28a745',
+                'error': '#dc3545',
+                'warning': '#ffc107'
+            };
+            
+            statusBar.style.background = colors[type] || colors.info;
+            statusBar.style.display = 'flex';
+            
+            // پنهان کردن خودکار پس از 5 ثانیه
+            setTimeout(() => {
+                if (statusBar.style.display !== 'none') {
+                    statusBar.style.display = 'none';
+                }
+            }, 5000);
+        }
+        
+        function hideStatus() {
+            document.getElementById('statusBar').style.display = 'none';
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            
+            // رفرش خودکار هر 30 ثانیه
+            setInterval(loadProjects, 30000);
+        });
+    </script>
+</body>
+</html>

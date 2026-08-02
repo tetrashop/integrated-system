@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نویسنده هوشمند | تتراشاپ</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .toolbar {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .toolbar-btn {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Vazirmatn';
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toolbar-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .toolbar-btn.active {
+            background: #4776E6;
+            color: white;
+            border-color: #4776E6;
+        }
+        
+        .editor-container {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+            }
+        }
+        
+        .editor-area {
+            flex: 2;
+            padding: 25px;
+            border-right: 1px solid #eee;
+        }
+        
+        .sidebar {
+            flex: 1;
+            padding: 25px;
+            background: #f9f9f9;
+            min-width: 300px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 450px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            resize: vertical;
+            transition: border 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #4776E6;
+            box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+        }
+        
+        .suggestions-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #dee2e6;
+            min-height: 150px;
+        }
+        
+        .stats-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .monetization-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-family: 'Vazirmatn';
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(71, 118, 230, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(to right, #f7971e, #ffd200);
+            color: #333;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        
+        .formatting-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .format-btn {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .ai-suggestion {
+            background: #e8f4fd;
+            border-right: 4px solid #4776E6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-suggestion:hover {
+            background: #d4e7f8;
+            transform: translateX(-5px);
+        }
+        
+        .recent-docs {
+            margin-top: 20px;
+        }
+        
+        .doc-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .doc-item:hover {
+            background: #f8f9fa;
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✍️ نویسنده هوشمند تتراشاپ</h1>
+            <p>ابزار نوشتن پیشرفته با قابلیت‌های هوشمند و سیستم درآمدزایی</p>
+        </div>
+        
+        <div class="toolbar">
+            <div class="formatting-buttons">
+                <button class="toolbar-btn" onclick="formatText('bold')">
+                    <strong>B</strong> پررنگ
+                </button>
+                <button class="toolbar-btn" onclick="formatText('italic')">
+                    <em>I</em> ایتالیک
+                </button>
+                <button class="toolbar-btn" onclick="formatText('heading')">
+                    H1 عنوان
+                </button>
+                <button class="toolbar-btn" onclick="formatText('list')">
+                    • لیست
+                </button>
+                <button class="toolbar-btn" onclick="formatText('link')">
+                    🔗 لینک
+                </button>
+                <button class="toolbar-btn" onclick="formatText('quote')">
+                    ❝ نقل قول
+                </button>
+            </div>
+            
+            <div style="margin-right: auto; display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="saveDocument()">
+                    💾 ذخیره
+                </button>
+                <button class="btn-primary btn-success" onclick="exportDocument()">
+                    📄 خروجی PDF
+                </button>
+                <button class="btn-primary btn-warning" onclick="getAISuggestions()">
+                    🤖 پیشنهاد هوشمند
+                </button>
+            </div>
+        </div>
+        
+        <div class="editor-container">
+            <div class="editor-area">
+                <h3 style="color: #333; margin-bottom: 20px;">ویرایشگر متن</h3>
+                
+                <textarea id="editor" placeholder="متن خود را اینجا بنویسید..."># پروژه نویسنده هوشمند
+
+این یک ویرایشگر متن پیشرفته با قابلیت‌های زیر است:
+
+## ✨ ویژگی‌های اصلی
+- **نوشتن با قالب‌بندی Markdown**
+- *پیشنهادات هوشمند برای ادامه متن*
+- 📊 آمار نوشتن زنده
+- 💾 ذخیره‌سازی خودکار
+- 📤 خروجی در قالب‌های مختلف
+
+## 🎯 نحوه استفاده
+۱. متن خود را بنویسید
+۲. از دکمه‌های فرمت استفاده کنید
+۳. پیشنهادات هوشمند را بررسی کنید
+۴. کار خود را ذخیره یا منتشر کنید
+
+## 💰 سیستم درآمدزایی
+این پروژه ماهانه **۲۹,۰۰۰ تومان** از طریق اشتراک پریمیوم درآمد دارد.</textarea>
+                
+                <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div id="charCount" style="color: #666; font-size: 14px;">
+                        کاراکترها: <span id="charNum">0</span> | کلمات: <span id="wordNum">0</span>
+                    </div>
+                    <button class="btn-primary" onclick="clearText()" style="background: #e74c3c;">
+                        🗑️ پاک کردن
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <h3 style="color: #333; margin-bottom: 20px;">🤖 پیشنهادات هوشمند</h3>
+                
+                <div class="suggestions-box" id="suggestionsBox">
+                    <p id="suggestionsText">پیشنهادات بر اساس متن شما اینجا ظاهر می‌شود...</p>
+                    <div id="suggestionsList"></div>
+                </div>
+                
+                <div class="stats-box">
+                    <h4 style="color: #333; margin-bottom: 15px;">📊 آمار نوشتن</h4>
+                    
+                    <div class="stats-row">
+                        <span>زمان نوشتن:</span>
+                        <span id="writingTime">00:00</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>سرعت نوشتن:</span>
+                        <span id="writingSpeed">0 کلمه/دقیقه</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>بهره‌وری:</span>
+                        <span id="productivity">0%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>هدف روزانه:</span>
+                        <span>۵۰۰ کلمه</span>
+                    </div>
+                </div>
+                
+                <div class="recent-docs">
+                    <h4 style="color: #333; margin-bottom: 15px;">📂 اسناد اخیر</h4>
+                    
+                    <div class="doc-item" onclick="loadDocument('article')">
+                        📄 مقاله پژوهشی
+                    </div>
+                    <div class="doc-item" onclick="loadDocument('notes')">
+                        📝 یادداشت‌های جلسه
+                    </div>
+                    <div class="doc-item" onclick="loadDocument('story')">
+                        📖 داستان کوتاه
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="monetization-section">
+            <h2 style="margin-bottom: 20px;">💰 درآمدزایی از نویسندگی</h2>
+            <p style="margin-bottom: 25px; opacity: 0.9;">
+                این ویرایشگر ماهانه <strong>۲۹,۰۰۰ تومان</strong> درآمد ایجاد می‌کند!
+            </p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="showPremiumFeatures()" style="background: #FFD700; color: #333;">
+                    👑 ویژگی‌های پریمیوم
+                </button>
+                <button class="btn-primary" onclick="showAdsInfo()" style="background: #4CAF50;">
+                    📢 اطلاعات تبلیغات
+                </button>
+                <button class="btn-primary" onclick="showSourceCode()" style="background: #2196F3;">
+                    💻 خرید کد منبع
+                </button>
+            </div>
+            
+            <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                    <div style="font-size: 1.5rem;">۲۹,۰۰۰</div>
+                    <div style="font-size: 0.9rem;">اشتراک پریمیوم</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                    <div style="font-size: 1.5rem;">۱۵۰,۰۰۰</div>
+                    <div style="font-size: 0.9rem;">تبلیغات</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                    <div style="font-size: 1.5rem;">۴۹,۰۰۰</div>
+                    <div style="font-size: 0.9rem;">فروش سورس</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 30px;">
+            <a href="/" class="back-btn">🏠 بازگشت به صفحه اصلی</a>
+        </div>
+    </div>
+    
+    <script>
+        // متغیرهای ویرایشگر
+        const editor = document.getElementById('editor');
+        const suggestionsBox = document.getElementById('suggestionsBox');
+        const suggestionsList = document.getElementById('suggestionsList');
+        const charNum = document.getElementById('charNum');
+        const wordNum = document.getElementById('wordNum');
+        const writingTime = document.getElementById('writingTime');
+        const writingSpeed = document.getElementById('writingSpeed');
+        const productivity = document.getElementById('productivity');
+        
+        let startTime = Date.now();
+        let timerInterval = null;
+        let wordCount = 0;
+        let lastText = '';
+        
+        // الگوهای متن برای پیشنهادات
+        const textPatterns = {
+            article: [
+                "در این مقاله به بررسی... می‌پردازیم.",
+                "نتایج تحقیق نشان می‌دهد که...",
+                "با توجه به یافته‌های پژوهش...",
+                "این موضوع از چند جهت حائز اهمیت است..."
+            ],
+            story: [
+                "هوا آرام آرام تاریک می‌شد...",
+                "صدای قدم‌ها به گوش می‌رسید...",
+                "ناگهان چیزی توجهش را جلب کرد...",
+                "دلش می‌خواست برگردد اما..."
+            ],
+            business: [
+                "با توجه به تحلیل بازار...",
+                "برای بهبود عملکرد پیشنهاد می‌کنیم...",
+                "این استراتژی می‌تواند منجر به...",
+                "بر اساس آمارهای موجود..."
+            ]
+        };
+        
+        // شروع تایمر
+        function startTimer() {
+            if(timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const minutes = Math.floor(elapsed / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                
+                writingTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // محاسبه سرعت نوشتن
+                if(minutes > 0) {
+                    const speed = Math.round((wordCount / minutes) * 10) / 10;
+                    writingSpeed.textContent = `${speed} کلمه/دقیقه`;
+                    
+                    // محاسبه بهره‌وری
+                    const prod = Math.min(100, Math.round((wordCount / 50) * 100));
+                    productivity.textContent = `${prod}%`;
+                }
+            }, 1000);
+        }
+        
+        // به‌روزرسانی آمار
+        function updateStats() {
+            const text = editor.value;
+            const chars = text.length;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            
+            charNum.textContent = chars.toLocaleString();
+            wordNum.textContent = words.toLocaleString();
+            
+            // محاسبه تعداد کلمات جدید
+            const newWords = text.trim().split(/\s+/).length;
+            wordCount = newWords;
+            
+            // تولید پیشنهادات هوشمند
+            if(chars > 100 && chars % 50 === 0) {
+                generateSuggestions(text);
+            }
+        }
+        
+        // تولید پیشنهادات
+        function generateSuggestions(text) {
+            suggestionsList.innerHTML = '';
+            
+            // تشخیص نوع متن
+            let patternType = 'article';
+            if(text.includes('داستان') || text.includes('رمان') || text.includes('قصه')) {
+                patternType = 'story';
+            } else if(text.includes('کسب') || text.includes('تجارت') || text.includes('بازار')) {
+                patternType = 'business';
+            }
+            
+            // ایجاد ۳ پیشنهاد
+            const patterns = textPatterns[patternType];
+            for(let i = 0; i < Math.min(3, patterns.length); i++) {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'ai-suggestion';
+                suggestion.textContent = patterns[i];
+                suggestion.onclick = () => applySuggestion(patterns[i]);
+                suggestionsList.appendChild(suggestion);
+            }
+            
+            suggestionsText.textContent = 'پیشنهادات هوشمند:';
+        }
+        
+        // اعمال پیشنهاد
+        function applySuggestion(text) {
+            editor.value += '\n\n' + text;
+            updateStats();
+            editor.focus();
+            
+            // نمایش تأیید
+            const originalText = suggestionsText.textContent;
+            suggestionsText.textContent = '✓ پیشنهاد اعمال شد!';
+            setTimeout(() => {
+                suggestionsText.textContent = originalText;
+            }, 2000);
+        }
+        
+        // فرمت‌دهی متن
+        function formatText(type) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selectedText = editor.value.substring(start, end);
+            
+            let formatted = '';
+            switch(type) {
+                case 'bold':
+                    formatted = `**${selectedText || 'متن پررنگ'}**`;
+                    break;
+                case 'italic':
+                    formatted = `*${selectedText || 'متن ایتالیک'}*`;
+                    break;
+                case 'heading':
+                    formatted = `# ${selectedText || 'عنوان'}`;
+                    break;
+                case 'list':
+                    formatted = `- ${selectedText || 'آیتم لیست'}`;
+                    break;
+                case 'link':
+                    formatted = `[${selectedText || 'متن لینک'}](https://example.com)`;
+                    break;
+                case 'quote':
+                    formatted = `> ${selectedText || 'متن نقل قول'}`;
+                    break;
+            }
+            
+            editor.value = editor.value.substring(0, start) + formatted + editor.value.substring(end);
+            editor.focus();
+            updateStats();
+        }
+        
+        // ذخیره سند
+        function saveDocument() {
+            const text = editor.value;
+            localStorage.setItem('writerDocument', text);
+            
+            alert('✅ سند با موفقیت ذخیره شد!');
+            
+            // نمایش درآمدزایی
+            showMessage('💾 ذخیره ابری در نسخه پریمیوم فعال است!');
+        }
+        
+        // بارگذاری سند ذخیره شده
+        function loadDocument(type) {
+            const documents = {
+                article: "# مقاله نمونه\n\nاین یک مقاله نمونه است که می‌توانید ویرایش کنید.",
+                notes: "## یادداشت‌های جلسه\n\n- موضوع اول\n- موضوع دوم\n- تصمیم‌گیری‌ها",
+                story: "# داستان کوتاه\n\nروزی روزگاری در سرزمینی دور..."
+            };
+            
+            if(documents[type]) {
+                editor.value = documents[type];
+                updateStats();
+                alert('📄 سند بارگذاری شد!');
+            }
+        }
+        
+        // خروجی PDF
+        function exportDocument() {
+            const text = editor.value;
+            if(text.length < 10) {
+                alert('متن کافی برای خروجی وجود ندارد!');
+                return;
+            }
+            
+            alert('📤 در حال تولید PDF...\n\n(در نسخه کامل، PDF تولید و دانلود می‌شود)');
+            showPremiumFeatures();
+        }
+        
+        // دریافت پیشنهادات هوشمند
+        function getAISuggestions() {
+            if(editor.value.length < 20) {
+                alert('لطفاً متن بیشتری بنویسید تا پیشنهادات هوشمند تولید شوند.');
+                return;
+            }
+            
+            generateSuggestions(editor.value);
+            alert('🤖 پیشنهادات هوشمند تولید شدند!');
+        }
+        
+        // پاک کردن متن
+        function clearText() {
+            if(confirm('آیا از پاک کردن متن مطمئن هستید؟')) {
+                editor.value = '';
+                updateStats();
+                alert('متن پاک شد!');
+            }
+        }
+        
+        // ویژگی‌های پریمیوم
+        function showPremiumFeatures() {
+            const features = [
+                '✍️ ویرایشگر پیشرفته با قالب‌های آماده',
+                '🤖 هوش مصنوعی با قابلیت تولید متن',
+                '📊 تحلیل حرفه‌ای سبک نوشتار',
+                '☁️ ذخیره ابری نامحدود',
+                '📤 خروجی در فرمت‌های مختلف',
+                '🛡️ پشتیبانی اختصاصی'
+            ];
+            
+            alert(`✨ نسخه پریمیوم نویسنده هوشمند:\n\n${features.join('\n')}\n\n💎 قیمت: ۲۹,۰۰۰ تومان در ماه`);
+        }
+        
+        // اطلاعات تبلیغات
+        function showAdsInfo() {
+            alert('📢 سیستم تبلیغات:\n\n• هر کلیک: ۵۰۰ تومان درآمد\n• ماهانه: ۱۵۰,۰۰۰ تومان\n• برای تبلیغ: ads@tetrashop.ir');
+        }
+        
+        // خرید کد منبع
+        function showSourceCode() {
+            alert('💻 کد منبع پروژه:\n\n• قیمت: ۴۹,۰۰۰ تومان\n• شامل کد کامل Frontend و Backend\n• مستندات کامل\n• پشتیبانی ۶ ماهه');
+        }
+        
+        // نمایش پیام
+        function showMessage(message) {
+            suggestionsText.textContent = message;
+            setTimeout(() => {
+                suggestionsText.textContent = 'پیشنهادات بر اساس متن شما اینجا ظاهر می‌شود...';
+            }, 3000);
+        }
+        
+        // رویدادهای صفحه
+        editor.addEventListener('input', updateStats);
+        
+        // بارگذاری سند ذخیره شده
+        window.onload = function() {
+            const saved = localStorage.getItem('writerDocument');
+            if(saved) {
+                editor.value = saved;
+            }
+            
+            updateStats();
+            startTimer();
+            startTime = Date.now();
+            
+            // بارگذاری خودکار پیشنهادات
+            setTimeout(() => {
+                if(editor.value.length > 50) {
+                    generateSuggestions(editor.value);
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

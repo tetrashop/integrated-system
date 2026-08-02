@@ -1,0 +1,13 @@
+[
+  {
+    "id": "chess_game_001",
+    "username": "test_user",
+    "difficulty": "intermediate",
+    "gameType": "free",
+    "result": "win",
+    "moves": ["e2e4", "e7e5", "g1f3", "b8c6"],
+    "status": "completed",
+    "createdAt": "2024-01-15T14:00:00.000Z",
+    "completedAt": "2024-01-15T14:30:00.000Z"
+  }
+]

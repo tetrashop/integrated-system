@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتراشاپ - فروشگاه تعاملی</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🛍️ تتورشاپ تعاملی</h1>
+        <p class="subtitle">هر کلیک یک تجربه لذتبخش!</p>
+        <div id="score-board">
+            <span id="score">۰</span> امتیاز
+        </div>
+    </header>
+
+    <main class="products-container" id="products-container">
+        <!-- محصولات توسط JS رندر می‌شوند -->
+    </main>
+
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <h2>🛒 سبد خرید</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total">
+            <span>مجموع:</span>
+            <span id="cart-total-price">۰ تومان</span>
+        </div>
+        <button id="checkout-btn" disabled>نهایی کردن خرید</button>
+    </aside>
+
+    <footer>
+        <p>با هر تعامل امتیاز بگیر و از تجربه لذت ببر!</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

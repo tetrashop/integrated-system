@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Tetra Ecosystem - Complete System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .module {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .module-icon {
+            font-size: 2rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+        
+        .output {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+            direction: ltr;
+        }
+        
+        .log-entry {
+            padding: 0.2rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+        .warning { color: #F59E0B; }
+        .info { color: #3B82F6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Tetra Ecosystem - Complete System</h1>
+            <p>سیستم کامل Full-Stack با تمام ماژول‌ها - نسخه ۳.۰</p>
+            <div class="status-bar">
+                <div class="status-item" id="server-status">🔍 بررسی سرور...</div>
+                <div class="status-item" id="block-height">📦 بلوک: #156</div>
+                <div class="status-item" id="active-modules">🎯 ماژول‌ها: ۴ فعال</div>
+                <div class="status-item" id="response-time">⚡ پاسخ: --</div>
+            </div>
+        </div>
+        
+        <div class="modules">
+            <!-- ماژول NLP -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">🧠</div>
+                    <div>
+                        <h3>پردازش زبان طبیعی</h3>
+                        <p>تحلیل متن، احساسات و خلاصه‌سازی</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="analyzeText()">تحلیل متن</button>
+                <button class="btn btn-success" onclick="testSentiment()">تحلیل احساسات</button>
+                <div class="output" id="nlp-output">نتایج اینجا نمایش داده می‌شود...</div>
+            </div>
+            
+            <!-- ماژول بلاکچین -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">⛓️</div>
+                    <div>
+                        <h3>شبکه بلاکچین</h3>
+                        <p>مدیریت شبکه غیرمتمرکز</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="getBlockchainStatus()">وضعیت شبکه</button>
+                <button class="btn btn-warning" onclick="getNetworkInfo()">اطلاعات شبکه</button>
+                <div class="output" id="blockchain-output">نتایج اینجا نمایش داده می‌شود...</div>
+            </div>
+            
+            <!-- ماژول هوش مصنوعی -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">🤖</div>
+                    <div>
+                        <h3>هوش مصنوعی</h3>
+                        <p>مدل‌های پیشرفته AI و ML</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="getAIModels()">مشاهده مدل‌ها</button>
+                <button class="btn btn-success" onclick="trainModel()">آموزش مدل</button>
+                <div class="output" id="ai-output">نتایج اینجا نمایش داده می‌شود...</div>
+            </div>
+            
+            <!-- ماژول امنیت -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">🔐</div>
+                    <div>
+                        <h3>امنیت سایبری</h3>
+                        <p>نظارت و حفاظت پیشرفته</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="getSecurityStatus()">وضعیت امنیتی</button>
+                <button class="btn btn-warning" onclick="scanSystem()">اسکن سیستم</button>
+                <div class="output" id="security-output">نتایج اینجا نمایش داده می‌شود...</div>
+            </div>
+        </div>
+        
+        <!-- بخش لاگ -->
+        <div class="module">
+            <h3>📊 لاگ سیستم زنده</h3>
+            <div class="log" id="system-log">
+                <div class="log-entry info">[سیستم] راه‌اندازی رابط کاربری...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:5000';
+        
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('system-log');
+            const timestamp = new Date().toLocaleTimeString('fa-IR');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        async function checkServer() {
+            const startTime = performance.now();
+            try {
+                const response = await fetch(BASE_URL + '/api/status');
+                const data = await response.json();
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+                
+                document.getElementById('server-status').innerHTML = '✅ سرور فعال';
+                document.getElementById('response-time').textContent = `⚡ پاسخ: ${responseTime}ms`;
+                document.getElementById('block-height').textContent = `📦 بلوک: #${data.blockHeight || 156}`;
+                
+                log('بررسی سرور: موفق', 'success');
+                return true;
+            } catch (error) {
+                document.getElementById('server-status').innerHTML = '❌ سرور قطع';
+                document.getElementById('response-time').textContent = '⚡ پاسخ: --';
+                log('خطا در اتصال به سرور', 'error');
+                return false;
+            }
+        }
+        
+        // توابع ماژول NLP
+        async function analyzeText() {
+            log('درخواست تحلیل متن ارسال شد...', 'info');
+            try {
+                const response = await fetch(BASE_URL + '/api/nlp/analyze?text=این یک متن نمونه برای تست سیستم پردازش زبان طبیعی است که قابلیت‌های مختلف را بررسی می‌کند');
+                const data = await response.json();
+                document.getElementById('nlp-output').textContent = JSON.stringify(data, null, 2);
+                log('تحلیل متن با موفقیت انجام شد', 'success');
+            } catch (error) {
+                document.getElementById('nlp-output').textContent = 'خطا: ' + error.message;
+                log('خطا در تحلیل متن', 'error');
+            }
+        }
+        
+        async function testSentiment() {
+            log('تحلیل احساسات در حال انجام...', 'info');
+            // شبیه‌سازی تحلیل احساسات
+            const result = {
+                sentiment: 'مثبت',
+                confidence: 0.87,
+                score: 0.75,
+                keywords: ['تست', 'سیستم', 'موفق']
+            };
+            document.getElementById('nlp-output').textContent = JSON.stringify(result, null, 2);
+            log('تحلیل احساسات تکمیل شد', 'success');
+        }
+        
+        // توابع ماژول بلاکچین
+        async function getBlockchainStatus() {
+            log('دریافت وضعیت بلاکچین...', 'info');
+            try {
+                const response = await fetch(BASE_URL + '/api/blockchain/status');
+                const data = await response.json();
+                document.getElementById('blockchain-output').textContent = JSON.stringify(data, null, 2);
+                log('وضعیت بلاکچین دریافت شد', 'success');
+            } catch (error) {
+                document.getElementById('blockchain-output').textContent = 'خطا: ' + error.message;
+                log('خطا در دریافت وضعیت بلاکچین', 'error');
+            }
+        }
+        
+        async function getNetworkInfo() {
+            log('دریافت اطلاعات شبکه...', 'info');
+            // شبیه‌سازی اطلاعات شبکه
+            const networkInfo = {
+                nodes: [
+                    { id: 1, location: 'تهران', status: 'online', latency: '45ms' },
+                    { id: 2, location: 'دبی', status: 'online', latency: '78ms' },
+                    { id: 3, location: 'فرانکفورت', status: 'online', latency: '120ms' }
+                ],
+                consensus: 'Proof of Stake',
+                version: 'TETRA v3.0'
+            };
+            document.getElementById('blockchain-output').textContent = JSON.stringify(networkInfo, null, 2);
+            log('اطلاعات شبکه دریافت شد', 'success');
+        }
+        
+        // توابع ماژول هوش مصنوعی
+        async function getAIModels() {
+            log('دریافت لیست مدل‌های AI...', 'info');
+            try {
+                const response = await fetch(BASE_URL + '/api/ai/models');
+                const data = await response.json();
+                document.getElementById('ai-output').textContent = JSON.stringify(data, null, 2);
+                log('مدل‌های AI دریافت شد', 'success');
+            } catch (error) {
+                document.getElementById('ai-output').textContent = 'خطا: ' + error.message;
+                log('خطا در دریافت مدل‌های AI', 'error');
+            }
+        }
+        
+        async function trainModel() {
+            log('شروع آموزش مدل...', 'warning');
+            // شبیه‌سازی آموزش
+            setTimeout(() => {
+                const trainingResult = {
+                    status: 'completed',
+                    accuracy: 0.94,
+                    loss: 0.08,
+                    epochs: 50,
+                    trainingTime: '2 دقیقه'
+                };
+                document.getElementById('ai-output').textContent = JSON.stringify(trainingResult, null, 2);
+                log('آموزش مدل تکمیل شد', 'success');
+            }, 2000);
+        }
+        
+        // توابع ماژول امنیت
+        async function getSecurityStatus() {
+            log('بررسی وضعیت امنیتی...', 'info');
+            try {
+                const response = await fetch(BASE_URL + '/api/security/status');
+                const data = await response.json();
+                document.getElementById('security-output').textContent = JSON.stringify(data, null, 2);
+                log('وضعیت امنیتی دریافت شد', 'success');
+            } catch (error) {
+                document.getElementById('security-output').textContent = 'خطا: ' + error.message;
+                log('خطا در دریافت وضعیت امنیتی', 'error');
+            }
+        }
+        
+        async function scanSystem() {
+            log('شروع اسکن امنیتی...', 'warning');
+            // شبیه‌سازی اسکن
+            setTimeout(() => {
+                const scanResult = {
+                    status: 'completed',
+                    vulnerabilities: 2,
+                    threats: 0,
+                    recommendations: [
+                        'بروزرسانی سیستم',
+                        'تغییر رمز عبور',
+                        'فعال‌سازی فایروال'
+                    ]
+                };
+                document.getElementById('security-output').textContent = JSON.stringify(scanResult, null, 2);
+                log('اسکن امنیتی تکمیل شد', 'success');
+            }, 3000);
+        }
+        
+        // راه‌اندازی اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            log('سیستم Tetra راه‌اندازی شد', 'success');
+            checkServer();
+            setInterval(checkServer, 15000); // هر 15 ثانیه چک کن
+        });
+    </script>
+</body>
+</html>

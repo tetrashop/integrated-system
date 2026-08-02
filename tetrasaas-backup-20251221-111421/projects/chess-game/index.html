@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شطرنج هوشمند - تتراشاپ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vazirmatn/math@latest/dist/font-face.css">
+    <style>
+        /* استایل‌های اضافی */
+        .captured-pieces {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            min-height: 40px;
+        }
+        
+        .captured-piece {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .captured-piece:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sound-on {
+            background: linear-gradient(135deg, #1abc9c, #16a085) !important;
+        }
+        
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .loading-spinner h2 {
+            color: #ffd700;
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <!-- اسپینر بارگذاری -->
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <h2>در حال بارگذاری شطرنج هوشمند...</h2>
+    </div>
+    
+    <div class="chess-container">
+        <!-- ناوبری -->
+        <div class="nav-back">
+            <a href="../../index.html" class="back-btn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+        
+        <!-- هدر -->
+        <header class="chess-header">
+            <h1>
+                <i class="fas fa-chess-queen"></i>
+                شطرنج هوشمند
+            </h1>
+            <p>
+                چالش با هوش مصنوعی در بازی شاهان. سطح‌های مختلف دشواری، آنالیز حرکات و آموزش استراتژی.
+            </p>
+        </header>
+        
+        <!-- فضای بازی اصلی -->
+        <div class="game-layout">
+            <!-- بازیکن سفید (AI) -->
+            <div class="player-card white">
+                <div class="player-avatar">
+                    🤖
+                </div>
+                <div class="player-details">
+                    <h3>هوش مصنوعی</h3>
+                    <div class="player-level" id="ai-level">سطح: متوسط</div>
+                    <div class="player-time" id="white-time">10:00</div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="white-material">39</span>
+                            <span class="stat-label">ماده</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="white-threats">2</span>
+                            <span class="stat-label">تهدید</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- صفحه شطرنج و کنترل‌ها -->
+            <div>
+                <!-- صفحه شطرنج -->
+                <div class="chessboard-container">
+                    <div id="chessboard">
+                        <!-- صفحه شطرنج به صورت دینامیک ایجاد می‌شود -->
+                    </div>
+                    
+                    <!-- کنترل‌های بازی -->
+                    <div class="game-controls-panel">
+                        <div class="controls-grid">
+                            <button class="control-btn btn-new-game" id="new-game-btn">
+                                <i class="fas fa-plus"></i>
+                                بازی جدید
+                            </button>
+                            <button class="control-btn btn-undo" id="undo-btn">
+                                <i class="fas fa-undo"></i>
+                                بازگشت حرکت
+                            </button>
+                            <button class="control-btn btn-hint" id="hint-btn">
+                                <i class="fas fa-lightbulb"></i>
+                                پیشنهاد حرکت
+                            </button>
+                            <button class="control-btn btn-analyze" id="analyze-btn">
+                                <i class="fas fa-chart-line"></i>
+                                تحلیل موقعیت
+                            </button>
+                            <button class="control-btn btn-resign" id="resign-btn">
+                                <i class="fas fa-flag"></i>
+                                تسلیم
+                            </button>
+                            <button class="control-btn btn-save" id="save-btn">
+                                <i class="fas fa-save"></i>
+                                ذخیره بازی
+                            </button>
+                            <button class="control-btn btn-sound" id="sound-btn">
+                                <i class="fas fa-volume-mute"></i>
+                                روشن کردن صدا
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center; color: #adb5bd; font-size: 0.9em;">
+                            <p>برای حرکت: روی مهره کلیک کنید سپس روی خانه مقصد کلیک کنید</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- بازیکن سیاه (کاربر) -->
+            <div class="player-card black">
+                <div class="player-avatar">
+                    👤
+                </div>
+                <div class="player-details">
+                    <h3>شما</h3>
+                    <div class="player-level">سطح: در حال یادگیری</div>
+                    <div class="player-time" id="black-time">10:00</div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="black-material">39</span>
+                            <span class="stat-label">ماده</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="black-threats">1</span>
+                            <span class="stat-label">تهدید</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="color: #adb5bd; margin-bottom: 10px; font-size: 0.9em;">مهره‌های گرفته شده:</div>
+                        <div class="captured-pieces">
+                            <!-- مهره‌های گرفته شده به صورت دینامیک اضافه می‌شوند -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- پنل اطلاعات -->
+        <div class="info-panel">
+            <div class="info-section">
+                <h3><i class="fas fa-info-circle"></i> اطلاعات بازی</h3>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">وضعیت:</span>
+                        <span class="info-value" id="game-status">آماده</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">نوبت:</span>
+                        <span class="info-value" id="game-turn">سفید</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">حرکت:</span>
+                        <span class="info-value" id="move-number">1</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">نوع بازی:</span>
+                        <span class="info-value">شطرنج استاندارد</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-chart-line"></i> تحلیل موقعیت</h3>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">ارزیابی:</span>
+                        <span class="info-value" id="position-eval">+0.00</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">بهترین خط:</span>
+                        <span class="info-value" id="best-line">e4 e5 Nf3</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">سطح تهدید:</span>
+                        <span class="info-value" id="threat-level">پایین</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">زمان باقی‌مانده:</span>
+                        <span class="info-value" id="time-remaining">09:45</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-history"></i> تاریخچه حرکات</h3>
+                <div class="moves-history" id="moves-list">
+                    <!-- حرکات به صورت دینامیک اضافه می‌شوند -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- حالت‌های بازی -->
+        <div class="game-modes">
+            <h2><i class="fas fa-chess"></i> حالت‌های بازی</h2>
+            
+            <div class="modes-grid">
+                <div class="mode-card active" data-mode="beginner">
+                    <div class="mode-icon">
+                        <i class="fas fa-chess-pawn"></i>
+                    </div>
+                    <h3>مبتدی</h3>
+                    <p>مناسب برای تازه‌کارها و یادگیری اصول اولیه شطرنج</p>
+                    <div class="mode-difficulty">آسان</div>
+                </div>
+                
+                <div class="mode-card" data-mode="intermediate">
+                    <div class="mode-icon">
+                        <i class="fas fa-chess-knight"></i>
+                    </div>
+                    <h3>متوسط</h3>
+                    <p>چالش متعادل برای بازیکنان با تجربه متوسط</p>
+                    <div class="mode-difficulty">متوسط</div>
+                </div>
+                
+                <div class="mode-card" data-mode="advanced">
+                    <div class="mode-icon">
+                        <i class="fas fa-chess-queen"></i>
+                    </div>
+                    <h3>پیشرفته</h3>
+                    <p>برای بازیکنان حرفه‌ای و مسابقه‌ای</p>
+                    <div class="mode-difficulty">سخت</div>
+                </div>
+                
+                <div class="mode-card" data-mode="grandmaster">
+                    <div class="mode-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>استاد بزرگ</h3>
+                    <p>بالاترین سطح - فقط برای شطرنج‌بازان برتر</p>
+                    <div class="mode-difficulty">خیلی سخت</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script>
+        // مخفی کردن اسپینر بعد از لود کامل
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.loading-spinner').style.display = 'none';
+            }, 1000);
+        });
+        
+        // Fallback در صورت خطا
+        window.addEventListener('error', function(e) {
+            console.error('خطا در اجرای بازی:', e);
+            document.querySelector('.loading-spinner').innerHTML = `
+                <div style="text-align: center; color: white;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 4em; color: #e74c3c; margin-bottom: 20px;"></i>
+                    <h2>خطا در بارگذاری بازی</h2>
+                    <p style="margin: 20px 0; color: #adb5bd;">مشکلی در بارگذاری بازی رخ داده است.</p>
+                    <button onclick="location.reload()" style="
+                        padding: 12px 30px;
+                        background: #3498db;
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 1.1em;
+                        cursor: pointer;
+                        margin-top: 20px;
+                    ">
+                        <i class="fas fa-redo"></i>
+                        تلاش مجدد
+                    </button>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

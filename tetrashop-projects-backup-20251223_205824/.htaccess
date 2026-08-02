@@ -1,0 +1,23 @@
+Options +Indexes
+DirectoryIndex index.html
+
+# جلوگیری از لیستینگ دایرکتوری
+Options -Indexes
+
+# ری‌رایت برای SPA
+RewriteEngine On
+RewriteBase /
+
+# پروژه‌ها
+RewriteRule ^chess/?$ chess/index.html [L]
+RewriteRule ^writer/?$ writer/index.html [L]
+RewriteRule ^nlp/?$ nlp/index.html [L]
+RewriteRule ^quantum/?$ quantum/index.html [L]
+RewriteRule ^gardening/?$ gardening/index.html [L]
+RewriteRule ^voice-recognition/?$ voice-recognition/index.html [L]
+RewriteRule ^2d-to-3d/?$ 2d-to-3d/index.html [L]
+
+# اگر فایل یا دایرکتوری وجود ندارد، به index اصلی برو
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L]

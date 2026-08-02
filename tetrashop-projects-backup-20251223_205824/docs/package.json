@@ -1,0 +1,27 @@
+{
+  "name": "tetrasaas-platform",
+  "version": "1.0.0",
+  "description": "TetraSaaS - 23 Microservices Platform",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "node api/index.js",
+    "test": "./test-prod-fixed.sh"
+  },
+  "keywords": [
+    "saas",
+    "microservices",
+    "ai",
+    "quantum",
+    "productivity"
+  ],
+  "author": "TetraShop",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.22.1"
+  },
+  "engines": {
+    "node": ">=16.x"
+  }
+}

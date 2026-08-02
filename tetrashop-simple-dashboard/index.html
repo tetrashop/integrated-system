@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد Tetrashop</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f0f2f5; }
+        .header { background: #4361ee; color: white; padding: 20px; border-radius: 10px; }
+        .file { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        pre { background: #1e1e1e; color: white; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .copy-btn { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 داشبورد Tetrashop</h1>
+        <p>تعداد فایل‌ها: 35</p>
+    </div>
+    
+    <div id="content">
+        <div class="file">
+            <h3>📄 all_codes.html</h3>
+            <p><small>مسیر: tetrashop-complete-dashboard/all_codes.html</small></p>
+            <pre id="code-0">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;کدهای کامل Tetrashop&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: monospace; background: #0d1117; color: #c9d1d9; padding: 20px; }
+        .file-section { margin: 30px 0; padding: 20px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; }
+        .file-header { color: #58a6ff; font-size: 18px; margin-bottom: 10px; }
+        pre { white-space: pre-wrap; margin: 0; }
+        .line-number { color: #6e7681; display: inline-block; width: 40px; text-align: right; margin-right: 10px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 style="color: #58a6ff;"&gt;📁 کدهای کامل پروژه Tetrashop&lt;/h1&gt;
+    &lt;p style="color: #8b949e;"&gt;تاریخ تولید: $(date '+%Y/%m/%d %H:%M')&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</pre>
+            <button class="copy-btn" onclick="copyCode(0)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-complete-dashboard/index.html</small></p>
+            <pre id="code-1">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;داشبورد نهایی Tetrashop&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Tahoma; text-align: center; padding: 50px; background: #f5f5f5; }
+        .card { background: white; padding: 30px; margin: 20px auto; max-width: 600px; 
+               border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; padding: 12px 24px; margin: 10px; 
+              background: #4361ee; color: white; text-decoration: none; 
+              border-radius: 5px; font-size: 16px; }
+        .btn:hover { background: #3a0ca3; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="card"&gt;
+        &lt;h1&gt;🚀 پروژه Tetrashop&lt;/h1&gt;
+        &lt;p&gt;انتخاب روش مشاهده:&lt;/p&gt;
+        
+        &lt;a href="all_codes.html" class="btn"&gt;📖 مشاهده تمام کدها (HTML)&lt;/a&gt;&lt;br&gt;
+        &lt;a href="simple_codes.txt" class="btn"&gt;📄 دانلود فایل متنی&lt;/a&gt;&lt;br&gt;
+        
+        &lt;h3 style="margin-top: 40px;"&gt;📊 آمار پروژه&lt;/h3&gt;
+        &lt;p&gt;تعداد فایل‌های کد: $(find "$PROJECT_DIR" -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.html" -o -name "*.css" ! -path "*/node_modules/*" ! -path "*/.git/*" | wc -l)&lt;/p&gt;
+        &lt;p&gt;آخرین تغییرات: $(date -r "$PROJECT_DIR" '+%Y/%m/%d')&lt;/p&gt;
+        
+        &lt;div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;"&gt;
+            &lt;h4&gt;👨‍💻 توسعه‌دهنده&lt;/h4&gt;
+            &lt;p&gt;Ramin Edjlal&lt;/p&gt;
+            &lt;p&gt;📧 ramin.edjlal1359@gmail.com&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            <button class="copy-btn" onclick="copyCode(1)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-dashboard/index.html</small></p>
+            <pre id="code-2">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;📊 داشبورد پروژه Tetrashop&lt;/title&gt;
+    &lt;style&gt;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;</pre>
+            <button class="copy-btn" onclick="copyCode(2)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 SUMMARY.md</h3>
+            <p><small>مسیر: tetrashop-dashboard/SUMMARY.md</small></p>
+            <pre id="code-3"># خلاصه پروژه Tetrashop
+
+## آمار کلی
+- **تعداد فایل‌ها**: 0
+- **تاریخ تولید**: 2025/12/17 09:26:57
+- **مسیر پروژه**: /data/data/com.termux/files/home/tetrashop-projects
+
+## انواع فایل‌ها
+
+
+## بزرگترین فایل‌ها
+- /data/data/com.termux/files/home/tetrashop-projects/tatus (4.0K)
+
+## دسترسی
+- داشبورد وب: [index.html](/data/data/com.termux/files/home/tetrashop-dashboard/index.html)
+- کاتالوگ متنی: [all_codes.txt](/data/data/com.termux/files/home/tetrashop-dashboard/all_codes.txt)
+- لیست کامل فایل‌ها: [complete_file_list.txt](/data/data/com.termux/files/home/tetrashop-dashboard/complete_file_list.txt)
+
+## نکات
+1. همه کدها قابل کپی‌پیست هستند
+2. ساختار پروژه به صورت درختی نمایش داده شده
+3. فایل‌های باینری و سیستمی فیلتر شده‌اند
+
+---
+*تولید شده توسط سیستم نمایش Tetrashop*</pre>
+            <button class="copy-btn" onclick="copyCode(3)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-final-dashboard/index.html</small></p>
+            <pre id="code-4">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;داشبورد نهایی Tetrashop&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f0f2f5; padding: 20px; }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 30px; border-radius: 10px; 
+            text-align: center; margin-bottom: 20px;
+        }
+        .file-item { 
+            background: white; padding: 15px; margin: 10px 0; 
+            border-radius: 5px; border-left: 4px solid #4361ee;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .file-item:hover { background: #e9ecef; transform: translateX(5px); }
+        .file-content { 
+            background: #1e1e1e; color: #fff; padding: 20px; 
+            margin: 10px 0; border-radius: 5px; 
+            overflow-x: auto; font-family: monospace;
+            display: none;
+        }
+        .file-path { color: #666; font-size: 14px; margin-top: 5px; }
+        .copy-btn { 
+            background: #28a745; color: white; border: none; 
+            padding: 5px 15px; border-radius: 3px; cursor: pointer;
+            margin-top: 10px;
+        }
+        .stats { 
+            background: white; padding: 20px; border-radius: 10px;
+            margin-bottom: 20px; text-align: center;
+        }
+        .stat-number { font-size: 2rem; color: #4361ee; font-weight: bold; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="header"&gt;
+        &lt;h1&gt;📊 داشبورد واقعی Tetrashop&lt;/h1&gt;
+        &lt;p&gt;نمایش کامل کدها و الگوریتم‌های پروژه&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="stats"&gt;
+        &lt;div class="stat-number" id="totalFiles"&gt;0&lt;/div&gt;
+        &lt;p&gt;تعداد فایل‌های کد&lt;/p&gt;
+    &lt;/div&gt;
+    </pre>
+            <button class="copy-btn" onclick="copyCode(4)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-final-sample/projects/dashboard/index.html</small></p>
+            <pre id="code-5">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;داشبورد کسب و کار&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f5f5f5; }
+        .dashboard-header {
+            background: linear-gradient(90deg, #1a237e, #311b92);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 10px 0;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }</pre>
+            <button class="copy-btn" onclick="copyCode(5)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-final-sample/projects/store/index.html</small></p>
+            <pre id="code-6">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;فروشگاه آنلاین&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f5f5f5; }
+        .store-header {
+            background: linear-gradient(90deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(46, 125, 50, 0.2);
+        }
+        .product-image {
+            height: 200px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        .product-info {
+            padding: 25px;
+        }
+        .product-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 10px;
+        }</pre>
+            <button class="copy-btn" onclick="copyCode(6)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-final-sample/projects/analytics/index.html</small></p>
+            <pre id="code-7">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;تحلیل هوشمند&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #0d1b2a; color: white; }
+        .analytics-header {
+            background: linear-gradient(90deg, #6a1b9a, #4a148c);
+            padding: 50px 20px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+        .metrics-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .metric-box {
+            background: #1b263b;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #415a77;
+            transition: all 0.3s;
+        }
+        .metric-box:hover {
+            border-color: #9d4edd;
+            transform: scale(1.05);
+        }
+        .metric-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(90deg, #9d4edd, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sentiment-chart {
+            background: #1b263b;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            border: 1px solid #415a77;</pre>
+            <button class="copy-btn" onclick="copyCode(7)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-final-sample/index.html</small></p>
+            <pre id="code-8">&lt;!DOCTYPE html&gt;
+&lt;html dir="rtl" lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;🚀 Tetrashop Projects&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f8f9fa; color: #333; }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 50px;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 2px solid transparent;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.2);
+        }
+        .project-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .project-title {
+            font-size: 1.5rem;
+            color: #333;</pre>
+            <button class="copy-btn" onclick="copyCode(8)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 server.js</h3>
+            <p><small>مسیر: tetrashop-final-sample/server.js</small></p>
+            <pre id="code-9">const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// سرویس فایل‌های استاتیک
+app.use(express.static(__dirname));
+app.use('/projects', express.static(path.join(__dirname, 'projects')));
+
+// روت اصلی
+app.get('/', (req, res) =&gt; {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// API ساده برای تست
+app.get('/api/status', (req, res) =&gt; {
+    res.json({
+        status: 'active',
+        timestamp: new Date().toISOString(),
+        projects: 3,
+        uptime: process.uptime()
+    });
+});
+
+// شروع سرور
+app.listen(PORT, () =&gt; {
+    console.log('========================================');
+    console.log('  Tetrashop Sample Server Started');
+    console.log('========================================');
+    console.log('  Local:    http://localhost:' + PORT);
+    console.log('  Status:   http://localhost:' + PORT + '/api/status');
+    console.log('');
+    console.log('  Projects Available:');
+    console.log('    • Dashboard: /projects/dashboard/');
+    console.log('    • Store:     /projects/store/');
+    console.log('    • Analytics: /projects/analytics/');
+    console.log('');
+    console.log('========================================');
+    console.log('  Ready for development!');
+    console.log('========================================');
+});</pre>
+            <button class="copy-btn" onclick="copyCode(9)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 package.json</h3>
+            <p><small>مسیر: tetrashop-final-sample/package.json</small></p>
+            <pre id="code-10">{
+  "name": "tetrashop-sample",
+  "version": "1.0.0",
+  "description": "نمونه مخزن کامل Tetrashop با ۳ پروژه اجراشدنی",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.1"
+  }
+}</pre>
+            <button class="copy-btn" onclick="copyCode(10)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 package-lock.json</h3>
+            <p><small>مسیر: tetrashop-final-sample/package-lock.json</small></p>
+            <pre id="code-11">{
+  "name": "tetrashop-sample",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "tetrashop-sample",
+      "version": "1.0.0",
+      "dependencies": {
+        "express": "^4.22.1"
+      }
+    },
+    "node_modules/accepts": {
+      "version": "1.3.8",
+      "resolved": "https://registry.npmmirror.com/accepts/-/accepts-1.3.8.tgz",
+      "integrity": "sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==",
+      "license": "MIT",
+      "dependencies": {
+        "mime-types": "~2.1.34",
+        "negotiator": "0.6.3"
+      },
+      "engines": {
+        "node": "&gt;= 0.6"
+      }
+    },
+    "node_modules/array-flatten": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmmirror.com/array-flatten/-/array-flatten-1.1.1.tgz",
+      "integrity": "sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==",
+      "license": "MIT"
+    },
+    "node_modules/body-parser": {
+      "version": "1.20.4",
+      "resolved": "https://registry.npmmirror.com/body-parser/-/body-parser-1.20.4.tgz",
+      "integrity": "sha512-ZTgYYLMOXY9qKU/57FAo8F+HA2dGX7bqGc71txDRC1rS4frdFI5R7NhluHxH6M0YItAP0sHB4uqAOcYKxO6uGA==",
+      "license": "MIT",
+      "dependencies": {
+        "bytes": "~3.1.2",
+        "content-type": "~1.0.5",
+        "debug": "2.6.9",
+        "depd": "2.0.0",
+        "destroy": "~1.2.0",
+        "http-errors": "~2.0.1",
+        "iconv-lite": "~0.4.24",
+        "on-finished": "~2.4.1",
+        "qs": "~6.14.0",
+        "raw-body": "~2.5.3",
+        "type-is": "~1.6.18",
+        "unpipe": "~1.0.0"</pre>
+            <button class="copy-btn" onclick="copyCode(11)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 README.md</h3>
+            <p><small>مسیر: tetrashop-final-sample/README.md</small></p>
+            <pre id="code-12"># Tetrashop Sample Repository 🚀
+
+## نمونه مخزن کامل با ۳ پروژه اجراشدنی
+
+### 🎯 پروژه‌ها
+
+1. **📈 Dashboard** - داشبورد مدیریت با داده‌های زنده
+2. **🛍️ Store** - فروشگاه آنلاین با سبد خرید
+3. **🤖 Analytics** - تحلیل شبکه‌های اجتماعی
+
+### 🚀 راه‌اندازی
+
+```bash
+cd /data/data/com.termux/files/home/tetrashop-final-sample
+npm install
+npm start
+```
+
+### 🌐 آدرس‌ها
+
+- اصلی: http://localhost:3000
+- API وضعیت: http://localhost:3000/api/status
+- داشبورد: http://localhost:3000/projects/dashboard/
+- فروشگاه: http://localhost:3000/projects/store/
+- تحلیل: http://localhost:3000/projects/analytics/
+
+### ✨ ویژگی‌ها
+
+- ✅ طراحی واکنش‌گرا و زیبا
+- ✅ داده‌های زنده و تعاملی
+- ✅ ساختار استاندارد
+- ✅ آماده برای توسعه
+
+### 📞 ارتباط
+
+توسعه‌یافته توسط تیم Tetrashop</pre>
+            <button class="copy-btn" onclick="copyCode(12)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 index.html</h3>
+            <p><small>مسیر: tetrashop-github/index.html</small></p>
+            <pre id="code-13">&lt;!DOCTYPE html&gt;
+&lt;html lang="fa"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Tetrashop Projects - سیستم کامل کسب و کار&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Tahoma, sans-serif; direction: rtl; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 10px; margin-bottom: 30px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .project-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .project-card:hover { transform: translateY(-5px); }
+        .project-title { color: #333; margin-bottom: 10px; font-size: 1.3rem; }
+        .project-desc { color: #666; line-height: 1.6; }
+        footer { text-align: center; margin-top: 40px; padding: 20px; color: #777; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;header&gt;
+            &lt;h1&gt;🚀 پروژه‌های Tetrashop&lt;/h1&gt;
+            &lt;p class="subtitle"&gt;سیستم کامل مدیریت کسب و کار آنلاین&lt;/p&gt;
+        &lt;/header&gt;
+        
+        &lt;div class="projects-grid"&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 class="project-title"&gt;🛍️ سیستم فروشگاهی&lt;/h3&gt;
+                &lt;p class="project-desc"&gt;سیستم کامل فروشگاه اینترنتی با امکانات پیشرفته&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 class="project-title"&gt;💳 درگاه پرداخت&lt;/h3&gt;
+                &lt;p class="project-desc"&gt;پرداخت آنلاین امن با پشتیبانی از درگاه‌های ایرانی&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 class="project-title"&gt;📊 پنل مدیریت&lt;/h3&gt;
+                &lt;p class="project-desc"&gt;داشبورد مدیریت کامل کسب و کار&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 class="project-title"&gt;🤖 هوش مصنوعی&lt;/h3&gt;
+                &lt;p class="project-desc"&gt;سیستم‌های هوشمند تحلیل و پیشنهاد&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;footer&gt;
+            &lt;p&gt;© 2024 Tetrashop - تمامی حقوق محفوظ است&lt;/p&gt;
+            &lt;p&gt;ارتباط: info@tetrashop.com&lt;/p&gt;</pre>
+            <button class="copy-btn" onclick="copyCode(13)">📋 کپی کد</button>
+        </div>
+        <div class="file">
+            <h3>📄 package.json</h3>
+            <p><small>مسیر: tetrashop-github/package.json</small></p>
+            <pre id="code-14">{
+  "name": "tetrashop-projects",
+  "version": "1.0.0",
+  "description": "Complete e-commerce and business management ecosystem",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run build:css &amp;&amp; npm run build:js",
+    "build:css": "postcss styles.css -o public/build/styles.min.css",
+    "build:js": "browserify src/index.js -o public/build/bundle.js"
+  },
+  "keywords": ["ecommerce", "business", "management", "tetrashop"],
+  "author": "Tetrashop Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.0",
+    "axios": "^1.0.0",
+    "mongoose": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}</pre>
+            <button class="copy-btn" onclick="copyCode(14)">📋 کپی کد</button>
+        </div>
+    </div>
+    
+    <script>
+        function copyCode(id) {
+            const pre = document.getElementById('code-' + id);
+            const text = pre.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ کد کپی شد!');
+            });
+        }
+        
+        // نمایش تعداد فایل‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('تعداد فایل‌ها:', $TOTAL_FILES);
+        });
+    </script>
+</body>
+</html>

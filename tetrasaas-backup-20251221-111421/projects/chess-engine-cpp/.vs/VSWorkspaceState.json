@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\build",
+    "\\build\\Windows-Debug",
+    "\\cmake",
+    "\\MoveGenerator",
+    "\\OpeningBook",
+    "\\src",
+    "\\tests",
+    "\\_deps",
+    "\\_deps\\googletest-subbuild\\Debug",
+    "\\_deps\\googletest-subbuild\\googletest-populate-prefix"
+  ],
+  "PreviewInSolutionExplorer": false
+}

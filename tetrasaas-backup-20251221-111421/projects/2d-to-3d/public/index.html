@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 تبدیل پیشرفته 2D به 3D</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A44C6;
+            --success: #36D1DC;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: rgba(54, 209, 220, 0.2);
+            color: var(--success);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .panel:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .panel-title i {
+            font-size: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .value-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+        
+        #viewer3d {
+            width: 100%;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-panel {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--success);
+        }
+        
+        .structure-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px;
+        }
+        
+        .pyramid { background: rgba(255, 107, 107, 0.2); color: #FF6B6B; }
+        .dome { background: rgba(77, 171, 247, 0.2); color: #4DABF7; }
+        .modern { background: rgba(82, 196, 26, 0.2); color: #52C41A; }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 تبدیل پیشرفته 2D به 3D</h1>
+            <p class="subtitle">تبدیل طرح‌های دو بعدی به مدل‌های سه بعدی با هوش مصنوعی</p>
+            <div class="status-badge">🚀 الگوریتم نسخه ۳.۰ - شبکه عصبی عمیق</div>
+            <p>پشتیبانی از ساختارهای: هرمی، گنبدی، مدرن، سنتی و ارگانیک</p>
+        </header>
+        
+        <div class="main-content">
+            <!-- پنل کنترل -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span>⚙️ تنظیمات طرح 2D</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="width">📐 عرض طرح (پیکسل)</label>
+                    <input type="range" id="width" min="100" max="800" value="400">
+                    <div class="value-display">
+                        <span>100px</span>
+                        <span id="width-value">400px</span>
+                        <span>800px</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="height">📏 ارتفاع طرح (پیکسل)</label>
+                    <input type="range" id="height" min="100" max="600" value="300">
+                    <div class="value-display">
+                        <span>100px</span>
+                        <span id="height-value">300px</span>
+                        <span>600px</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="complexity">🎯 پیچیدگی طرح</label>
+                    <input type="range" id="complexity" min="0.1" max="1" step="0.1" value="0.6">
+                    <div class="value-display">
+                        <span>ساده</span>
+                        <span id="complexity-value">متوسط</span>
+                        <span>پیچیده</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="structure">🏗️ ساختار پیشنهادی</label>
+                    <select id="structure" class="btn-secondary" style="width:100%;padding:15px;margin-top:5px;">
+                        <option value="auto">🎯 تشخیص خودکار</option>
+                        <option value="pyramid">🔺 هرمی</option>
+                        <option value="dome">🕌 گنبدی</option>
+                        <option value="modern">🏢 مدرن</option>
+                        <option value="traditional">🏛️ سنتی</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="texture">🎨 جنس نما</label>
+                    <select id="texture" class="btn-secondary" style="width:100%;padding:15px;margin-top:5px;">
+                        <option value="auto">🔍 تشخیص خودکار</option>
+                        <option value="brick">🧱 آجری</option>
+                        <option value="stone">🪨 سنگی</option>
+                        <option value="glass">🔷 شیشه‌ای</option>
+                        <option value="wood">🪵 چوبی</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" onclick="convertTo3D()">
+                    <span>🔄 تبدیل به 3D</span>
+                </button>
+                
+                <button class="btn btn-secondary" onclick="generateRandom()" style="margin-top:15px;">
+                    <span>🎲 طرح تصادفی</span>
+                </button>
+            </div>
+            
+            <!-- پنل نمایش 3D -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span>👁️ نمایشگر 3D</span>
+                    <span id="model-info" style="font-size:0.9rem;opacity:0.7;margin-right:auto;"></span>
+                </div>
+                
+                <div id="viewer3d">
+                    <!-- Three.js renderer here -->
+                </div>
+                
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button class="btn-secondary" style="flex:1;" onclick="rotateModel()">🔄 چرخش</button>
+                    <button class="btn-secondary" style="flex:1;" onclick="zoomIn()">➕ بزرگنمایی</button>
+                    <button class="btn-secondary" style="flex:1;" onclick="zoomOut()">➖ کوچکنمایی</button>
+                    <button class="btn-secondary" style="flex:1;" onclick="resetView()">🔄 بازنشانی</button>
+                </div>
+            </div>
+            
+            <!-- پنل نتایج -->
+            <div class="panel results-panel">
+                <div class="panel-title">
+                    <span>📊 نتایج تحلیل</span>
+                </div>
+                
+                <div id="results-container" class="results-grid">
+                    <div class="result-card">
+                        <div class="result-title">🏗️ ساختار تشخیص داده شده</div>
+                        <div id="detected-structure">در انتظار تحلیل...</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">📏 ابعاد 3D</div>
+                        <div id="dimensions-3d">در انتظار محاسبه...</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">🎨 جزئیات معماری</div>
+                        <div id="architecture-details">در انتظار پردازش...</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">⚡ عملکرد</div>
+                        <div id="performance">در انتظار تبدیل...</div>
+                    </div>
+                </div>
+                
+                <div style="display:flex;gap:15px;margin-top:30px;">
+                    <button class="btn btn-primary" onclick="exportModel('obj')" style="flex:1;">
+                        <span>📥 ذخیره به عنوان OBJ</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="exportModel('gltf')" style="flex:1;">
+                        <span>📥 ذخیره به عنوان GLTF</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareModel()" style="flex:1;">
+                        <span>🔗 اشتراک‌گذاری</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- بارگذاری -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <h3>در حال تبدیل طرح به مدل 3D...</h3>
+            <p id="loading-details">الگوریتم در حال تحلیل ساختار و تولید مدل سه بعدی است</p>
+        </div>
+        
+        <footer>
+            <p>🎨 سیستم تبدیل 2D به 3D پیشرفته - نسخه ۳.۰</p>
+            <p>با الگوریتم شبکه عصبی عمیق و تحلیل هندسی پیشرفته</p>
+            <p style="margin-top:15px;">
+                <a href="/api/status" style="color:var(--success);margin:0 15px;">📊 وضعیت سرویس</a>
+                <a href="/api/structures" style="color:var(--success);margin:0 15px;">🏗️ ساختارها</a>
+                <a href="/api/live-test" style="color:var(--success);margin:0 15px;">🎮 تست زنده</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Three.js variables
+        let scene, camera, renderer, controls;
+        let currentModel = null;
+        
+        // Initialize 3D viewer
+        function init3DViewer() {
+            const container = document.getElementById('viewer3d');
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+            
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 150, 400);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            container.appendChild(renderer.domElement);
+            
+            // Orbit controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(100, 200, 100);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(300, 30, 0x444444, 0x222222);
+            scene.add(gridHelper);
+            
+            // Axis helper
+            const axesHelper = new THREE.AxesHelper(100);
+            scene.add(axesHelper);
+            
+            // Initial model
+            createInitialModel();
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+        
+        // Create initial model
+        function createInitialModel() {
+            const geometry = new THREE.BoxGeometry(100, 50, 100);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x6C63FF,
+                shininess: 30,
+                specular: 0x444444
+            });
+            
+            const cube = new THREE.Mesh(geometry, material);
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+            cube.position.y = 25;
+            
+            scene.add(cube);
+            currentModel = cube;
+            
+            updateModelInfo('مکعب نمونه', '100×50×100', 'ساده');
+        }
+        
+        // Convert 2D to 3D
+        async function convertTo3D() {
+            const blueprint = {
+                width: parseInt(document.getElementById('width').value),
+                height: parseInt(document.getElementById('height').value),
+                complexity: parseFloat(document.getElementById('complexity').value),
+                lines: Math.floor(Math.random() * 20) + 5,
+                curves: Math.floor(Math.random() * 10) + 2,
+                type: document.getElementById('structure').value
+            };
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-details').textContent = 
+                `در حال تحلیل طرح ${blueprint.width}×${blueprint.height}...`;
+            
+            try {
+                const response = await fetch('/api/convert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ blueprint })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayResults(result);
+                    generate3DModel(result.output);
+                } else {
+                    throw new Error(result.error || 'خطا در تبدیل');
+                }
+            } catch (error) {
+                console.error('Conversion error:', error);
+                alert(`خطا در تبدیل: ${error.message}`);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        // Display results
+        function displayResults(result) {
+            const output = result.output;
+            
+            // Structure
+            const structureEl = document.getElementById('detected-structure');
+            const structure = output.structure;
+            structureEl.innerHTML = `
+                <div style="font-size:1.2rem;font-weight:bold;margin-bottom:5px;">
+                    ${structure.structure === 'گنبد' ? '🕌' : 
+                      structure.structure === 'هرم' ? '🔺' : 
+                      structure.structure === 'مکعب' ? '🏢' : '🏛️'}
+                    ${structure.structure}
+                </div>
+                <div style="opacity:0.8;font-size:0.9rem;">
+                    اطمینان: ${(structure.confidence * 100).toFixed(1)}%
+                </div>
+                <div class="structure-badge ${structure.structure === 'هرم' ? 'pyramid' : 
+                                       structure.structure === 'گنبد' ? 'dome' : 'modern'}">
+                    ${structure.details.floors} طبقه
+                </div>
+            `;
+            
+            // Dimensions
+            document.getElementById('dimensions-3d').innerHTML = `
+                <div>عرض: ${output.dimensions.width}px</div>
+                <div>ارتفاع: ${output.dimensions.height}px</div>
+                <div>عمق: ${output.dimensions.depth}px</div>
+                <div>حجم: ${output.dimensions.volume.toLocaleString()} واحد</div>
+            `;
+            
+            // Architecture details
+            document.getElementById('architecture-details').innerHTML = `
+                <div>سقف: ${output.details.roof || 'مسطح'}</div>
+                <div>پنجره‌ها: ${output.details.windows || 'مستطیلی'}</div>
+                <div>ستون‌ها: ${output.details.columns || 0} عدد</div>
+                <div>بافت: ${output.details.texture?.name || 'آجری'}</div>
+            `;
+            
+            // Performance
+            document.getElementById('performance').innerHTML = `
+                <div>زمان تبدیل: ${result.conversionTime}</div>
+                <div>الگوریتم: ${result.algorithm}</div>
+                <div>رئوس: ${output.mesh?.vertexCount || 0}</div>
+                <div>سطح‌ها: ${output.mesh?.faceCount || 0}</div>
+            `;
+        }
+        
+        // Generate 3D model from result
+        function generate3DModel(output) {
+            // Clear previous model
+            if (currentModel) {
+                scene.remove(currentModel);
+            }
+            
+            let geometry;
+            const color = new THREE.Color(
+                Math.random() * 0.5 + 0.3,
+                Math.random() * 0.5 + 0.3,
+                Math.random() * 0.5 + 0.3
+            );
+            
+            // Create geometry based on structure
+            switch(output.structure.structure) {
+                case 'هرم':
+                    geometry = new THREE.ConeGeometry(
+                        output.dimensions.width / 2,
+                        output.dimensions.height,
+                        4
+                    );
+                    break;
+                    
+                case 'گنبد':
+                    geometry = new THREE.SphereGeometry(
+                        output.dimensions.width / 2,
+                        32, 16,
+                        0, Math.PI * 2,
+                        0, Math.PI / 2
+                    );
+                    break;
+                    
+                default:
+                    geometry = new THREE.BoxGeometry(
+                        output.dimensions.width,
+                        output.dimensions.height,
+                        output.dimensions.depth
+                    );
+            }
+            
+            const material = new THREE.MeshPhongMaterial({
+                color: color,
+                shininess: 30,
+                specular: 0x333333,
+                flatShading: false
+            });
+            
+            const model = new THREE.Mesh(geometry, material);
+            model.castShadow = true;
+            model.receiveShadow = true;
+            
+            // Position model
+            model.position.y = output.dimensions.height / 2;
+            
+            scene.add(model);
+            currentModel = model;
+            
+            // Add wireframe
+            const wireframe = new THREE.WireframeGeometry(geometry);
+            const line = new THREE.LineSegments(wireframe);
+            line.material.depthTest = false;
+            line.material.opacity = 0.25;
+            line.material.transparent = true;
+            line.position.y = output.dimensions.height / 2;
+            scene.add(line);
+            
+            // Update info
+            updateModelInfo(
+                output.structure.structure,
+                `${output.dimensions.width}×${output.dimensions.height}×${output.dimensions.depth}`,
+                output.structure.details.floors + ' طبقه'
+            );
+            
+            // Focus camera on model
+            const boundingBox = new THREE.Box3().setFromObject(model);
+            const center = boundingBox.getCenter(new THREE.Vector3());
+            const size = boundingBox.getSize(new THREE.Vector3());
+            
+            camera.position.set(
+                center.x + size.length() * 1.5,
+                center.y + size.y * 0.5,
+                center.z + size.length() * 1.5
+            );
+            controls.target.copy(center);
+            controls.update();
+        }
+        
+        // Update model info display
+        function updateModelInfo(name, dimensions, details) {
+            document.getElementById('model-info').innerHTML = `
+                <span style="color:#36D1DC">${name}</span> | 
+                <span style="opacity:0.8">${dimensions}</span> | 
+                <span style="opacity:0.6">${details}</span>
+            `;
+        }
+        
+        // Generate random blueprint
+        function generateRandom() {
+            const width = Math.floor(Math.random() * 400) + 200;
+            const height = Math.floor(Math.random() * 300) + 150;
+            const complexity = (Math.random() * 0.8 + 0.2).toFixed(1);
+            
+            document.getElementById('width').value = width;
+            document.getElementById('height').value = height;
+            document.getElementById('complexity').value = complexity;
+            
+            document.getElementById('width-value').textContent = width + 'px';
+            document.getElementById('height-value').textContent = height + 'px';
+            document.getElementById('complexity-value').textContent = 
+                complexity > 0.7 ? 'پیچیده' : complexity > 0.4 ? 'متوسط' : 'ساده';
+            
+            document.getElementById('structure').value = 'auto';
+            document.getElementById('texture').value = 'auto';
+            
+            // Auto-convert after 1 second
+            setTimeout(convertTo3D, 1000);
+        }
+        
+        // Export model
+        function exportModel(format) {
+            if (!currentModel) {
+                alert('ابتدا مدلی ایجاد کنید');
+                return;
+            }
+            
+            alert(`مدل به فرمت ${format.toUpperCase()} ذخیره شد.\n\n` +
+                  'در نسخه کامل، مدل با جزئیات کامل دانلود می‌شود.');
+            
+            // Simulate download
+            const link = document.createElement('a');
+            link.download = `model-3d-${Date.now()}.${format}`;
+            link.href = '#';
+            link.click();
+        }
+        
+        // Share model
+        function shareModel() {
+            if (!currentModel) {
+                alert('ابتدا مدلی ایجاد کنید');
+                return;
+            }
+            
+            const url = `${window.location.origin}/api/visualize/${Date.now()}`;
+            alert(`لینک اشتراک‌گذاری:\n${url}\n\nاین لینک به مدت ۷ روز معتبر است.`);
+        }
+        
+        // Viewer controls
+        function rotateModel() {
+            if (currentModel) {
+                currentModel.rotation.y += Math.PI / 4;
+            }
+        }
+        
+        function zoomIn() {
+            camera.position.multiplyScalar(0.9);
+        }
+        
+        function zoomOut() {
+            camera.position.multiplyScalar(1.1);
+        }
+        
+        function resetView() {
+            camera.position.set(0, 150, 400);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+        
+        // Initialize sliders
+        document.getElementById('width').addEventListener('input', function(e) {
+            document.getElementById('width-value').textContent = e.target.value + 'px';
+        });
+        
+        document.getElementById('height').addEventListener('input', function(e) {
+            document.getElementById('height-value').textContent = e.target.value + 'px';
+        });
+        
+        document.getElementById('complexity').addEventListener('input', function(e) {
+            const value = parseFloat(e.target.value);
+            let label;
+            if (value > 0.7) label = 'پیچیده';
+            else if (value > 0.4) label = 'متوسط';
+            else label = 'ساده';
+            document.getElementById('complexity-value').textContent = label;
+        });
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            init3DViewer();
+            generateRandom();
+        });
+    </script>
+</body>
+</html>

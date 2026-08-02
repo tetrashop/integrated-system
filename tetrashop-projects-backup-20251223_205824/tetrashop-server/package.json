@@ -1,0 +1,35 @@
+{
+  "name": "tetrashop100-server",
+  "version": "3.0.0",
+  "description": "سرور کامل Tetrashop100 با قابلیت‌های پیشرفته",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "build": "echo 'No build process for server'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "tetrashop",
+    "ecommerce",
+    "api",
+    "server",
+    "mongodb",
+    "payment"
+  ],
+  "author": "Tetrashop Team",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^7.5.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.9.2"
+  },
+  "devDependencies": {
+    "vercel": "^28.16.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

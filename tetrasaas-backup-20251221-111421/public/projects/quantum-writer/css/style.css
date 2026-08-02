@@ -1,0 +1,461 @@
+/* نویسنده کوانتومی - تتراشاپ */
+:root {
+    --quantum-blue: #00d4ff;
+    --quantum-purple: #8a2be2;
+    --quantum-pink: #ff00ff;
+    --quantum-dark: #0a0a1a;
+    --quantum-light: #e6f7ff;
+    --quantum-gradient: linear-gradient(135deg, #00d4ff 0%, #8a2be2 50%, #ff00ff 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--quantum-dark);
+    color: white;
+    min-height: 100vh;
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+.quantum-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ذرات کوانتومی در پس‌زمینه */
+#quantum-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* هدر */
+.quantum-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 25px;
+    border: 2px solid var(--quantum-blue);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--quantum-gradient);
+    animation: quantum-glow 3s infinite alternate;
+}
+
+@keyframes quantum-glow {
+    0% { box-shadow: 0 0 20px var(--quantum-blue); }
+    100% { box-shadow: 0 0 40px var(--quantum-pink); }
+}
+
+.quantum-header h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    background: var(--quantum-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.quantum-status {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 1px solid var(--quantum-blue);
+    font-family: 'Courier New', monospace;
+}
+
+/* کیوبیت‌ها */
+.qbit-section {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    color: var(--quantum-blue);
+    font-size: 1.5em;
+}
+
+.qbits-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.qbit {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.qbit:hover {
+    transform: translateY(-10px);
+    border-color: var(--quantum-blue);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+}
+
+.qbit::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    animation: qbit-glow 3s infinite linear;
+}
+
+@keyframes qbit-glow {
+    0% { transform: rotate(45deg) translateX(-100%); }
+    100% { transform: rotate(45deg) translateX(100%); }
+}
+
+.qbit-state {
+    font-size: 2.5em;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 10px;
+    color: var(--quantum-blue);
+}
+
+.qbit-label {
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.qbit.superposition .qbit-state {
+    background: var(--quantum-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: superposition 2s infinite alternate;
+}
+
+@keyframes superposition {
+    0% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.1); }
+}
+
+/* فضای ورودی/خروجی */
+.quantum-io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+    .quantum-io {
+        grid-template-columns: 1fr;
+    }
+}
+
+.io-panel {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 0, 255, 0.2);
+}
+
+.quantum-textarea {
+    width: 100%;
+    min-height: 250px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--quantum-purple);
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    font-size: 1.1em;
+    line-height: 1.8;
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.quantum-textarea:focus {
+    outline: none;
+    border-color: var(--quantum-blue);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* نوار احتمال */
+.probability-display {
+    margin-top: 30px;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    border: 1px solid var(--quantum-pink);
+}
+
+.probability-bar {
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.probability-fill {
+    height: 100%;
+    border-radius: 15px;
+    transition: width 1s ease-in-out;
+    background: var(--quantum-gradient);
+}
+
+.probability-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+/* کنترل‌ها */
+.quantum-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.control-card {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.control-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--quantum-blue);
+    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+}
+
+.control-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: var(--quantum-blue);
+}
+
+.control-card h3 {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.control-card p {
+    color: #aaa;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+/* دکمه‌ها */
+.quantum-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.quantum-btn {
+    padding: 18px 35px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.quantum-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-primary {
+    background: var(--quantum-gradient);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 0, 255, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid var(--quantum-blue);
+}
+
+.btn-secondary:hover {
+    background: var(--quantum-blue);
+    transform: translateY(-5px);
+}
+
+/* خروجی کوانتومی */
+.quantum-output {
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    border: 2px solid var(--quantum-purple);
+}
+
+.output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.collapsed-output {
+    min-height: 200px;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 15px;
+    border: 1px solid var(--quantum-blue);
+    font-size: 1.2em;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+}
+
+/* پویانمایی‌ها */
+@keyframes quantum-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.quantum-spin {
+    animation: quantum-spin 2s linear infinite;
+}
+
+/* ناوبری */
+.nav-back {
+    margin-bottom: 30px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--quantum-blue);
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid var(--quantum-blue);
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    background: var(--quantum-blue);
+    color: black;
+    transform: translateX(5px);
+}
+
+/* پاسخ‌گو */
+@media (max-width: 768px) {
+    .quantum-header h1 {
+        font-size: 2em;
+    }
+    
+    .quantum-io {
+        gap: 20px;
+    }
+    
+    .io-panel {
+        padding: 20px;
+    }
+    
+    .quantum-btn {
+        min-width: 100%;
+    }
+    
+    .qbits-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "TetraSaaS Platform",
+  "version": "1.0.0",
+  "description": "پلتفرم ابری 23 سرویس TetraShop",
+  "services": {
+    "quantum-writer": {
+      "port": 3001,
+      "name": "نویسنده کوانتومی",
+      "category": "ai",
+      "endpoints": ["/process", "/health"]
+    },
+    "formula-solver": {
+      "port": 3008,
+      "name": "حل کننده فرمول",
+      "category": "tools",
+      "endpoints": ["/process", "/health", "/solve"]
+    },
+    "3d-converter": {
+      "port": 3004,
+      "name": "مبدل سه‌بعدی",
+      "category": "tools",
+      "endpoints": ["/process", "/health"]
+    },
+    "content-analyzer": {
+      "port": 3006,
+      "name": "تحلیلگر محتوا",
+      "category": "ai",
+      "endpoints": ["/process", "/health", "/analyze"]
+    },
+    "code-cleaner": {
+      "port": 3009,
+      "name": "تمیز کننده کد",
+      "category": "dev",
+      "endpoints": ["/process", "/health"]
+    }
+  },
+  "gateway": {
+    "port": 8080,
+    "name": "API Gateway",
+    "routes": {
+      "/api/:service/*": "proxy to service",
+      "/health": "health check",
+      "/": "dashboard"
+    }
+  },
+  "dashboard": {
+    "port": 8000,
+    "path": "/saas-dashboard"
+  }
+}

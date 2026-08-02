@@ -1,0 +1,11 @@
+{
+  "name": "@tetrashop/shared",
+  "version": "3.0.0",
+  "description": "ابزارهای اشتراکی Tetrashop",
+  "type": "module",
+  "scripts": {
+    "manager": "node unified-manager.js",
+    "repair": "./emergency-repair-30min.sh",
+    "test": "./test-all-services.sh"
+  }
+}

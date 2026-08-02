@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+<link rel="stylesheet" href="/style.css">
+    <title>شطرنج تعاملی | تتراشاپ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(to bottom, #1a1a2e, #16213e);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #f8c555;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .chess-board {
+            width: 500px;
+            height: 500px;
+            margin: 20px auto;
+            border: 10px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+</head>
+<body style="margin:0;padding:0;min-height:100vh;">
+    <div class="container">
+        <h1>♔ شطرنج تعاملی</h1>
+        <p>بازی شطرنج آنلاین با هوش مصنوعی - سطح مبتدی تا پیشرفته</p>
+        
+        <div class="chess-board" id="chessBoard">
+            <!-- تخته شطرنج با JavaScript ساخته خواهد شد -->
+            <p style="padding: 50px;">در حال بارگذاری تخته شطرنج...</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <button onclick="startNewGame()" style="padding: 10px 20px; margin: 0 10px;">بازی جدید</button>
+            <button onclick="undoMove()" style="padding: 10px 20px; margin: 0 10px;">بازگشت حرکت</button>
+            <button onclick="saveGame()" style="padding: 10px 20px; margin: 0 10px;">ذخیره بازی</button>
+        </div>
+        
+        <div id="gameStatus" style="margin: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <h3>وضعیت بازی: آماده</h3>
+            <p>نوبت: سفید</p>
+        </div>
+        
+        <a href="/" class="back-btn">← بازگشت به صفحه اصلی</a>
+    </div>
+    
+    <script>
+        // شبیه‌سازی اولیه تخته شطرنج
+        const chessBoard = document.getElementById('chessBoard');
+        const pieces = ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'];
+        
+        function drawChessBoard() {
+            let boardHTML = '<div style="display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; height: 100%;">';
+            
+            for(let row = 0; row < 8; row++) {
+                for(let col = 0; col < 8; col++) {
+                    const isDark = (row + col) % 2 === 0;
+                    const bgColor = isDark ? '#769656' : '#eeeed2';
+                    
+                    let piece = '';
+                    if(row === 0) piece = pieces[col];
+                    if(row === 1) piece = '♙';
+                    if(row === 6) piece = '♟';
+                    if(row === 7) piece = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'][col];
+                    
+                    boardHTML += \`
+                        <div style="background-color: \${bgColor}; 
+                                  display: flex; 
+                                  align-items: center; 
+                                  justify-content: center;
+                                  font-size: 30px;
+                                  cursor: pointer;"
+                             onclick="selectSquare(\${row}, \${col})">
+                            \${piece}
+                        </div>
+                    \`;
+                }
+            }
+            
+            boardHTML += '</div>';
+            chessBoard.innerHTML = boardHTML;
+        }
+        
+        function selectSquare(row, col) {
+            document.getElementById('gameStatus').innerHTML = \`
+                <h3>مربع انتخاب شده: \${String.fromCharCode(97+col)}\${8-row}</h3>
+                <p>برای توسعه کامل نیاز به پیاده‌سازی موتور شطرنج دارید</p>
+            \`;
+        }
+        
+        function startNewGame() {
+            drawChessBoard();
+            document.getElementById('gameStatus').innerHTML = \`
+                <h3>بازی جدید شروع شد!</h3>
+                <p>نوبت: سفید</p>
+            \`;
+        }
+        
+        function undoMove() {
+            alert('قابلیت بازگشت حرکت در نسخه کامل فعال خواهد شد');
+        }
+        
+        function saveGame() {
+            alert('بازی ذخیره شد (شبیه‌سازی)');
+        }
+        
+        // رسم تخته هنگام بارگذاری
+        drawChessBoard();
+    </script>
+</body>
+</html>

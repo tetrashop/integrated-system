@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/chess",
+      "dest": "/chess/index.html"
+    },
+    {
+      "src": "/writer",
+      "dest": "/writer/index.html"
+    },
+    {
+      "src": "/nlp",
+      "dest": "/nlp/index.html"
+    },
+    {
+      "src": "/quantum",
+      "dest": "/quantum/index.html"
+    },
+    {
+      "src": "/gardening",
+      "dest": "/gardening/index.html"
+    },
+    {
+      "src": "/voice-recognition",
+      "dest": "/voice-recognition/index.html"
+    },
+    {
+      "src": "/2d-to-3d",
+      "dest": "/2d-to-3d/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "silent": true
+  }
+}

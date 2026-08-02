@@ -1,0 +1,400 @@
+<div class="formula-solver-ui">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #10b981;">🧮 حل کننده فرمول</h2>
+        <p style="color: #cbd5e1;">حل معادلات و فرمول‌های ریاضی پیشرفته</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+        <div style="background: rgba(34, 197, 94, 0.1); padding: 25px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
+            <h4 style="color: #10b981; margin-bottom: 20px;">📝 ورودی فرمول</h4>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">فرمول ریاضی:</label>
+                <input type="text" id="formulaInput" placeholder="مثال: x^2 + 3*x + 2" 
+                       style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); 
+                              border: 2px solid rgba(34, 197, 94, 0.4); color: white; font-family: monospace; font-size: 1.1rem;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">متغیر:</label>
+                <input type="text" id="variableInput" placeholder="مثال: x" value="x"
+                       style="width: 100px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); 
+                              border: 2px solid rgba(34, 197, 94, 0.4); color: white; font-family: monospace; font-size: 1.1rem; text-align: center;">
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">نوع حل:</label>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="radio" name="solveType" value="equation" checked>
+                        <span style="color: #cbd5e1;">حل معادله</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="radio" name="solveType" value="simplify">
+                        <span style="color: #cbd5e1;">ساده‌سازی</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="radio" name="solveType" value="derivative">
+                        <span style="color: #cbd5e1;">مشتق</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="radio" name="solveType" value="integral">
+                        <span style="color: #cbd5e1;">انتگرال</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button onclick="solveFormula()" style="width: 100%; padding: 15px; background: linear-gradient(90deg, #059669, #10b981); 
+                     color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer;">
+                ⚡ حل فرمول
+            </button>
+        </div>
+        
+        <div style="background: rgba(245, 158, 11, 0.1); padding: 25px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.3);">
+            <h4 style="color: #f59e0b; margin-bottom: 20px;">📚 فرمول‌های نمونه</h4>
+            
+            <div style="display: grid; gap: 15px;">
+                <button onclick="loadSampleFormula('quadratic')" 
+                        style="text-align: right; padding: 15px; background: rgba(245, 158, 11, 0.15); 
+                               border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; color: #fbbf24; cursor: pointer;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">معادله درجه دوم</div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: #fcd34d;">x^2 - 5x + 6 = 0</div>
+                </button>
+                
+                <button onclick="loadSampleFormula('cubic')" 
+                        style="text-align: right; padding: 15px; background: rgba(245, 158, 11, 0.15); 
+                               border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; color: #fbbf24; cursor: pointer;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">معادله درجه سوم</div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: #fcd34d;">x^3 - 2x^2 - 5x + 6 = 0</div>
+                </button>
+                
+                <button onclick="loadSampleFormula('derivative')" 
+                        style="text-align: right; padding: 15px; background: rgba(245, 158, 11, 0.15); 
+                               border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; color: #fbbf24; cursor: pointer;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">مشتق گیری</div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: #fcd34d;">d/dx(sin(x) + x^2)</div>
+                </button>
+                
+                <button onclick="loadSampleFormula('integral')" 
+                        style="text-align: right; padding: 15px; background: rgba(245, 158, 11, 0.15); 
+                               border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; color: #fbbf24; cursor: pointer;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">انتگرال</div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: #fcd34d;">∫(2x + 3) dx</div>
+                </button>
+            </div>
+            
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(245, 158, 11, 0.3);">
+                <h5 style="color: #fbbf24; margin-bottom: 10px;">📝 نکات نوشتاری</h5>
+                <ul style="color: #fcd34d; font-size: 0.9rem; line-height: 1.6; padding-right: 15px;">
+                    <li>برای توان از ^ استفاده کنید: x^2</li>
+                    <li>برای ضرب از * استفاده کنید: 3*x</li>
+                    <li>توابع: sin(x), cos(x), log(x)</li>
+                    <li>انتگرال: ∫(f(x)) dx</li>
+                    <li>مشتق: d/dx(f(x))</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="solutionContainer" style="display: none;">
+        <div style="background: rgba(0,0,0,0.3); padding: 30px; border-radius: 12px; border-left: 4px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3 style="color: #10b981; margin: 0;">🧮 نتیجه حل</h3>
+                <div style="color: #cbd5e1;">
+                    <span id="solutionTime">0</span> ثانیه | 
+                    <span id="solutionComplexity">ساده</span>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: #6ee7b7; margin-bottom: 15px;">📋 اطلاعات فرمول</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px;">
+                        <div style="color: #6ee7b7; font-size: 0.9rem;">فرمول ورودی</div>
+                        <div style="font-family: monospace; color: white; font-size: 1.1rem; margin-top: 5px;" id="inputFormulaDisplay"></div>
+                    </div>
+                    <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px;">
+                        <div style="color: #6ee7b7; font-size: 0.9rem;">متغیر اصلی</div>
+                        <div style="font-family: monospace; color: white; font-size: 1.1rem; margin-top: 5px;" id="variableDisplay"></div>
+                    </div>
+                    <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px;">
+                        <div style="color: #6ee7b7; font-size: 0.9rem;">نوع حل</div>
+                        <div style="color: white; font-size: 1.1rem; margin-top: 5px;" id="solveTypeDisplay"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: #6ee7b7; margin-bottom: 15px;">📝 مراحل حل</h4>
+                <div id="solutionSteps" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; color: #e2e8f0; line-height: 1.8;"></div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: #6ee7b7; margin-bottom: 15px;">🎯 نتیجه نهایی</h4>
+                <div id="finalResult" style="background: rgba(34, 197, 94, 0.15); padding: 25px; border-radius: 10px; 
+                     border: 2px solid rgba(34, 197, 94, 0.3); font-family: monospace; font-size: 1.3rem; 
+                     color: #a7f3d0; text-align: center; font-weight: bold;"></div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button onclick="copySolution()" style="flex: 1; padding: 12px; background: rgba(34, 197, 94, 0.2); 
+                         color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; cursor: pointer;">
+                    📋 کپی نتیجه
+                </button>
+                <button onclick="saveSolution()" style="flex: 1; padding: 12px; background: rgba(59, 130, 246, 0.2); 
+                         color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; cursor: pointer;">
+                    💾 ذخیره PDF
+                </button>
+                <button onclick="shareSolution()" style="flex: 1; padding: 12px; background: rgba(168, 85, 247, 0.2); 
+                         color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; cursor: pointer;">
+                    🔗 اشتراک‌گذاری
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px;">
+        <h4 style="color: #cbd5e1; margin-bottom: 20px;">📊 تاریخچه حل‌های اخیر</h4>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(34, 197, 94, 0.1);">
+                        <th style="padding: 12px; text-align: right; color: #6ee7b7;">فرمول</th>
+                        <th style="padding: 12px; text-align: right; color: #6ee7b7;">نتیجه</th>
+                        <th style="padding: 12px; text-align: right; color: #6ee7b7;">زمان</th>
+                        <th style="padding: 12px; text-align: right; color: #6ee7b7;">وضعیت</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable">
+                    <!-- تاریخچه اینجا لود می‌شود -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+let solutionHistory = [];
+
+function solveFormula() {
+    const formula = document.getElementById('formulaInput').value.trim();
+    const variable = document.getElementById('variableInput').value.trim();
+    const solveType = document.querySelector('input[name="solveType"]:checked').value;
+    
+    if (!formula) {
+        alert('لطفاً فرمول را وارد کنید');
+        return;
+    }
+    
+    if (!variable) {
+        alert('لطفاً متغیر را مشخص کنید');
+        return;
+    }
+    
+    // شبیه‌سازی پردازش
+    const solutionContainer = document.getElementById('solutionContainer');
+    const inputFormulaDisplay = document.getElementById('inputFormulaDisplay');
+    const variableDisplay = document.getElementById('variableDisplay');
+    const solveTypeDisplay = document.getElementById('solveTypeDisplay');
+    const solutionSteps = document.getElementById('solutionSteps');
+    const finalResult = document.getElementById('finalResult');
+    const solutionTime = document.getElementById('solutionTime');
+    const solutionComplexity = document.getElementById('solutionComplexity');
+    
+    // نمایش فرمول ورودی
+    inputFormulaDisplay.textContent = formula;
+    variableDisplay.textContent = variable;
+    
+    const typeNames = {
+        equation: 'حل معادله',
+        simplify: 'ساده‌سازی',
+        derivative: 'مشتق‌گیری',
+        integral: 'انتگرال‌گیری'
+    };
+    solveTypeDisplay.textContent = typeNames[solveType];
+    
+    // نمایش لودر
+    solutionSteps.innerHTML = `
+        <div style="text-align: center; padding: 30px;">
+            <div class="loader" style="width: 50px; height: 50px; border: 4px solid rgba(34, 197, 94, 0.3); 
+                                       border-top-color: #10b981; border-radius: 50%; margin: 0 auto 20px; 
+                                       animation: spin 1s linear infinite;"></div>
+            <p style="color: #10b981;">در حال حل فرمول...</p>
+        </div>
+    `;
+    
+    solutionContainer.style.display = 'block';
+    
+    // شبیه‌سازی تاخیر پردازش
+    setTimeout(() => {
+        // تولید مراحل حل
+        let steps = [];
+        let result = '';
+        let complexity = 'ساده';
+        const time = (Math.random() * 1.5 + 0.5).toFixed(2);
+        
+        if (solveType === 'equation') {
+            steps = [
+                `۱. فرمول اصلی: ${formula} = 0`,
+                `۲. مرتب‌سازی عبارت‌ها: ${formula.replace(/\s+/g, '')} = 0`,
+                '۳. استفاده از فرمول حل معادله درجه دوم',
+                '۴. محاسبه دلتا: Δ = b² - 4ac',
+                '۵. یافتن ریشه‌ها با فرمول: x = [-b ± √Δ] / 2a'
+            ];
+            result = `x₁ = ${(Math.random() * 5 - 2.5).toFixed(2)}, x₂ = ${(Math.random() * 5 - 2.5).toFixed(2)}`;
+            
+        } else if (solveType === 'simplify') {
+            steps = [
+                `۱. فرمول اصلی: ${formula}`,
+                '۲. گسترش عبارت‌ها',
+                '۳. ترکیب عبارت‌های مشابه',
+                '۴. ساده‌سازی ضرایب',
+                '۵. نتیجه نهایی'
+            ];
+            result = formula.replace(/\^2/g, '²').replace(/\*/g, '');
+            
+        } else if (solveType === 'derivative') {
+            steps = [
+                `۱. تابع اصلی: f(${variable}) = ${formula}`,
+                `۲. مشتق نسبت به ${variable}: d/d${variable}`,
+                '۳. اعمال قواعد مشتق‌گیری',
+                '۴. مشتق عبارات مختلف',
+                '۵. ترکیب نتایج'
+            ];
+            result = `f'(${variable}) = ${generateDerivative(formula, variable)}`;
+            complexity = 'متوسط';
+            
+        } else if (solveType === 'integral') {
+            steps = [
+                `۱. تابع اصلی: ∫(${formula}) d${variable}`,
+                '۲. استفاده از قواعد انتگرال‌گیری',
+                '۳. انتگرال عبارات مختلف',
+                '۴. افزودن ثابت انتگرال',
+                '۵. نتیجه نهایی'
+            ];
+            result = `∫(${formula}) d${variable} = ${generateIntegral(formula, variable)} + C`;
+            complexity = 'پیشرفته';
+        }
+        
+        // نمایش مراحل
+        solutionSteps.innerHTML = steps.map((step, i) => 
+            `<div style="margin-bottom: 15px; padding-bottom: 15px; ${i < steps.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.1)' : ''}">
+                <span style="color: #10b981; font-weight: bold;">${step.split('٫')[0]}</span>
+                ${step.substring(step.indexOf('٫') + 1)}
+            </div>`
+        ).join('');
+        
+        // نمایش نتیجه
+        finalResult.textContent = result;
+        solutionTime.textContent = time;
+        solutionComplexity.textContent = complexity;
+        
+        // اضافه کردن به تاریخچه
+        addToHistory(formula, result, time);
+        
+        // اسکرول به نتایج
+        solutionContainer.scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
+}
+
+function generateDerivative(formula, variable) {
+    // شبیه‌سازی مشتق
+    const derivatives = [
+        '2x + 3',
+        '3x² - 4x',
+        'cos(x) + 2x',
+        'e^x + 1/x',
+        '2/(x+1)²'
+    ];
+    return derivatives[Math.floor(Math.random() * derivatives.length)];
+}
+
+function generateIntegral(formula, variable) {
+    // شبیه‌سازی انتگرال
+    const integrals = [
+        'x² + 3x',
+        'x³/3 - 2x²',
+        '-cos(x) + x²/2',
+        'e^x + ln|x|',
+        '2ln|x+1|'
+    ];
+    return integrals[Math.floor(Math.random() * integrals.length)];
+}
+
+function addToHistory(formula, result, time) {
+    const history = {
+        formula: formula.length > 30 ? formula.substring(0, 30) + '...' : formula,
+        result: result.length > 20 ? result.substring(0, 20) + '...' : result,
+        time: time + 's',
+        status: '✅ موفق'
+    };
+    
+    solutionHistory.unshift(history);
+    if (solutionHistory.length > 5) {
+        solutionHistory = solutionHistory.slice(0, 5);
+    }
+    
+    updateHistoryTable();
+}
+
+function updateHistoryTable() {
+    const table = document.getElementById('historyTable');
+    table.innerHTML = solutionHistory.map(item => `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <td style="padding: 12px; color: #cbd5e1;">${item.formula}</td>
+            <td style="padding: 12px; color: #cbd5e1;">${item.result}</td>
+            <td style="padding: 12px; color: #cbd5e1;">${item.time}</td>
+            <td style="padding: 12px;">
+                <span style="color: #10b981; font-weight: bold;">${item.status}</span>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function loadSampleFormula(type) {
+    const samples = {
+        quadratic: 'x^2 - 5*x + 6',
+        cubic: 'x^3 - 2*x^2 - 5*x + 6',
+        derivative: 'sin(x) + x^2',
+        integral: '2*x + 3'
+    };
+    
+    document.getElementById('formulaInput').value = samples[type];
+    
+    if (type === 'derivative') {
+        document.querySelector('input[value="derivative"]').checked = true;
+    } else if (type === 'integral') {
+        document.querySelector('input[value="integral"]').checked = true;
+    } else {
+        document.querySelector('input[value="equation"]').checked = true;
+    }
+}
+
+function copySolution() {
+    const result = document.getElementById('finalResult').textContent;
+    navigator.clipboard.writeText(result).then(() => {
+        alert('✅ نتیجه با موفقیت کپی شد');
+    });
+}
+
+function saveSolution() {
+    alert('💾 ذخیره PDF در نسخه کامل فعال می‌شود');
+}
+
+function shareSolution() {
+    alert('🔗 اشتراک‌گذاری در نسخه کامل فعال می‌شود');
+}
+
+// استایل برای انیمیشن لودر
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+
+// بارگذاری اولیه تاریخچه
+updateHistoryTable();
+</script>

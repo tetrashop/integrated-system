@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP Processor - پردازش زبان طبیعی</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+        <div style="margin: 20px; text-align: right;">
+            <a href="../../index.html" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; background: #8b5cf6; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-brain"></i> پردازش زبان طبیعی (NLP)</h1>
+            <p>سیستم پیشرفته تحلیل و پردازش متن با ۲۲۵ پست آموزشی</p>
+        </div>
+        
+        <div class="posts-grid" id="posts-container">
+            <!-- پست‌ها به صورت دینامیک ایجاد می‌شوند -->
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script>
+        // ایجاد ۲۲۵ پست دینامیک
+        const postsContainer = document.getElementById('posts-container');
+        const postTitles = [
+            "آموزش مقدماتی NLP",
+            "توکن‌سازی و تجزیه متن",
+            "مدل‌های زبانی بزرگ",
+            "تشخیص احساسات متن",
+            "خلاصه‌سازی خودکار",
+            "ترجمه ماشینی عصبی",
+            "پرسش و پاسخ هوشمند",
+            "تولید متن خلاقانه",
+            "تشخیص موجودیت‌های نامدار",
+            "تحلیل وابستگی نحوی",
+            "رده‌بندی متن چندکلاسه",
+            "تشخیص زبان متن",
+            "تصحیح املایی خودکار",
+            "استخراج کلمات کلیدی",
+            "تشخیص موضوع متن",
+            "تجزیه و تحلیل احساسات",
+            "تشخیص لحن و سبک نوشتار",
+            "خلاصه‌سازی چندسندی",
+            "تشخیص تقلب در متن",
+            "تولید پرسش از متن"
+        ];
+        
+        const postContent = [
+            "در این پست به اصول اولیه پردازش زبان طبیعی می‌پردازیم",
+            "توکن‌سازی اولین گام در هر پروژه NLP است",
+            "مدل‌های زبانی مانند GPT تحول بزرگی ایجاد کرده‌اند",
+            "تشخیص احساسات متن در تحلیل نظرات کاربران حیاتی است",
+            "خلاصه‌سازی خودکار متن‌های طولانی",
+            "ترجمه ماشینی با شبکه‌های عصبی عمیق",
+            "سیستم‌های پرسش و پاسخ هوشمند",
+            "تولید متن‌های خلاقانه با AI",
+            "تشخیص نام افراد، مکان‌ها و سازمان‌ها",
+            "تحلیل ساختار نحوی جملات",
+            "رده‌بندی متن در دسته‌های مختلف",
+            "تشخیص خودکار زبان متن",
+            "تصحیح خطاهای املایی و نگارشی",
+            "استخراج کلمات و عبارات کلیدی",
+            "تشخیص موضوع اصلی متن",
+            "تحلیل احساسات مثبت و منفی",
+            "تشخیص لحن رسمی، غیررسمی یا طنز",
+            "خلاصه‌سازی چندین سند مرتبط",
+            "تشخیص متون جعلی و تقلبی",
+            "تولید سوالات از محتوای متنی"
+        ];
+        
+        for (let i = 1; i <= 225; i++) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            
+            const titleIndex = (i - 1) % postTitles.length;
+            const contentIndex = (i - 1) % postContent.length;
+            
+            postDiv.innerHTML = `
+                <div class="post-title">
+                    <i class="fas fa-file-alt"></i>
+                    پست ${i}: ${postTitles[titleIndex]}
+                </div>
+                <div class="post-content">
+                    ${postContent[contentIndex]}. این پست شماره ${i} از ۲۲۵ پست آموزشی پروژه NLP است.
+                </div>
+                <div style="margin-top: 15px; font-size: 0.9em; color: rgba(255,255,255,0.6)">
+                    <i class="far fa-calendar"></i> تاریخ: ${i % 30 + 1}/${Math.floor(i / 30) + 1}/1403
+                    <span style="margin-right: 20px;"></span>
+                    <i class="far fa-eye"></i> بازدید: ${(i * 23) % 1000 + 100}
+                </div>
+            `;
+            
+            postsContainer.appendChild(postDiv);
+        }
+    </script>
+</body>
+</html>

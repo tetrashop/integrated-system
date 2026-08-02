@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ماشین حساب درآمد Tetra</title>
+    <style>
+        body { font-family: Vazir; padding: 20px; background: #f5f5f5; }
+        .calculator { background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: 50px auto; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .result { background: #4CAF50; color: white; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>🧮 ماشین حساب درآمد Tetra</h2>
+        <label>تعداد کاربران فعال:</label>
+        <input type="number" id="users" value="10" min="1">
+        
+        <label>میانگین تبدیل ماهانه هر کاربر:</label>
+        <input type="number" id="conversions" value="20" min="1">
+        
+        <label>پلن درآمدی شما:</label>
+        <select id="plan">
+            <option value="0.3">استارتر (۳۰٪ سود)</option>
+            <option value="0.25">پروفشنال (۲۵٪ سود)</option>
+            <option value="0.2">بیزینس (۲۰٪ سود)</option>
+        </select>
+        
+        <button onclick="calculateRevenue()" style="background: #2196F3; color: white; padding: 15px; border: none; border-radius: 5px; width: 100%; margin-top: 10px;">محاسبه درآمد</button>
+        
+        <div class="result" id="result" style="display: none;">
+            <h3>💰 درآمد ماهانه پیش‌بینی شده:</h3>
+            <p id="revenueAmount" style="font-size: 2em; margin: 10px 0;"></p>
+            <p id="details"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateRevenue() {
+            const users = parseInt(document.getElementById('users').value);
+            const conversions = parseInt(document.getElementById('conversions').value);
+            const plan = parseFloat(document.getElementById('plan').value);
+            
+            const totalConversions = users * conversions;
+            const avgProfitPerConversion = 3000; // تومان
+            const monthlyRevenue = Math.round(totalConversions * avgProfitPerConversion * plan);
+            
+            document.getElementById('revenueAmount').textContent = monthlyRevenue.toLocaleString() + ' تومان';
+            document.getElementById('details').textContent = 
+                `${users} کاربر × ${conversions} تبدیل × ${(plan*100)}٪ سود = ${totalConversions} تبدیل در ماه`;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

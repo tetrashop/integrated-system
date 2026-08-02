@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتراشاپ - استقرار Cloudflare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cloudflare-badge {
+            display: inline-block;
+            background: #f38020;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .project-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        
+        .status-live {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-dev {
+            background: #f39c12;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="cloudflare-badge">☁️ Cloudflare Deployment</div>
+            <h1>🚀 سامانه تتراشاپ</h1>
+            <p>استقرار در کلودفلیر - سریع، امن، مقیاس‌پذیر</p>
+            
+            <div style="margin: 30px 0;">
+                <a href="#projects" class="btn">🎯 پروژه‌ها</a>
+                <a href="#api" class="btn">⚡ API‌ها</a>
+                <a href="#deploy" class="btn">🔧 راهنمای استقرار</a>
+            </div>
+        </div>
+
+        <div id="projects">
+            <h2 style="text-align: center; margin-bottom: 30px; color: white;">🎯 پروژه‌های مستقر شده</h2>
+            
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>🧠 نگار کوانتوم</h3>
+                    <div class="status status-live">LIVE</div>
+                    <p>NLP تشخیص و تصحیح خطای فوق المپیک</p>
+                    <a href="/quantum-calligraphy-advanced/quantum_nlp_fixed.py" class="btn">مشاهده</a>
+                    <a href="/api/quantum-nlp/analyze" class="btn">API</a>
+                </div>
+                
+                <div class="project-card">
+                    <h3>💪 نطق مصطلح</h3>
+                    <div class="status status-live">LIVE</div>
+                    <p>موتور بیان قدرتمندتر از نگار کوانتوم</p>
+                    <a href="/common-rhetoric-pro/powerful_rhetoric_fixed.cpp" class="btn">مشاهده</a>
+                    <a href="/api/rhetoric/analyze" class="btn">API</a>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🔐 آمان راز</h3>
+                    <div class="status status-live">LIVE</div>
+                    <p>سیستم خوشه‌ای همسطح با امنیت پیشرفته</p>
+                    <a href="/aman-secret-cluster/cluster_manager_fixed.py" class="btn">مشاهده</a>
+                </div>
+                
+                <div class="project-card">
+                    <h3>♟️ شطرنج کوانتومی</h3>
+                    <div class="status status-dev">در حال توسعه</div>
+                    <p>موتور آموزشی با معماری استوک فیش</p>
+                    <a href="/chess-deepmind/stockfish_deep_learning_engine.cpp" class="btn">مشاهده</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="api" style="background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; margin-bottom: 30px;">⚡ API‌های Cloudflare Workers</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4>🔧 Quantum NLP API</h4>
+                    <pre><code>POST /api/quantum-nlp/analyze
+{
+  "text": "متن نمونه برای تحلیل"
+}</code></pre>
+                </div>
+                
+                <div>
+                    <h4>💪 Rhetoric API</h4>
+                    <pre><code>POST /api/rhetoric/analyze  
+{
+  "text": "متن برای تحلیل بیانی"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="deploy" style="background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px;">
+            <h2 style="text-align: center; margin-bottom: 30px;">🔧 راهنمای استقرار</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div>
+                    <h4>📦 نصب Wrangler</h4>
+                    <pre><code>npm install -g wrangler
+wrangler login</code></pre>
+                </div>
+                
+                <div>
+                    <h4>🚀 استقرار Pages</h4>
+                    <pre><code>cd cloudflare-deploy/pages
+wrangler pages deploy</code></pre>
+                </div>
+                
+                <div>
+                    <h4>⚡ استقرار Workers</h4>
+                    <pre><code>cd cloudflare-deploy/workers
+wrangler deploy</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تست API‌ها
+        async function testAPI(endpoint, data) {
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                return await response.json()
+            } catch (error) {
+                console.error('API Error:', error)
+                return null
+            }
+        }
+
+        // نمونه تست هنگام لود صفحه
+        window.addEventListener('load', async () => {
+            console.log('🧪 تست API‌های Cloudflare...')
+            
+            // تست سلامت
+            const health = await fetch('/health').then(r => r.json())
+            console.log('🏥 وضعیت سلامت:', health)
+        })
+    </script>
+</body>
+</html>

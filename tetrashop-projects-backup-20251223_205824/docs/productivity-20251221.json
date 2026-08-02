@@ -1,0 +1,14 @@
+{
+    "test_date": "2025-12-21T10:40:42+03:30",
+    "period": "today",
+    "stats": {
+        "total_services": 23,
+        "healthy_services": 1,
+        "health_percentage": 4,
+        "avg_response_time_ms": 72,
+        "total_response_time_ms": 72
+    },
+    "productivity_score": 53,
+    "services_health": 4,
+    "performance_grade": ""
+}

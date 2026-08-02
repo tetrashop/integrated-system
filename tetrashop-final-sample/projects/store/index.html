@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه آنلاین</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f5f5f5; }
+        .store-header {
+            background: linear-gradient(90deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(46, 125, 50, 0.2);
+        }
+        .product-image {
+            height: 200px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        .product-info {
+            padding: 25px;
+        }
+        .product-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            color: #2e7d32;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .add-to-cart {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .add-to-cart:hover {
+            background: #1b5e20;
+        }
+        .cart-summary {
+            background: white;
+            padding: 20px;
+            margin: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .cart-total {
+            font-size: 1.5rem;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .back-button {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">⬅ بازگشت به صفحه اصلی</a>
+    
+    <div class="store-header">
+        <h1>🛍️ فروشگاه آنلاین Tetrashop</h1>
+        <p>بهترین محصولات با بهترین قیمت</p>
+    </div>
+    
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-image">💻</div>
+            <div class="product-info">
+                <div class="product-title">لپ‌تاپ حرفه‌ای</div>
+                <p>لپ‌تاپ قدرتمند برای برنامه‌نویسی و طراحی</p>
+                <div class="product-price">۲۵,۹۰۰,۰۰۰ تومان</div>
+                <button class="add-to-cart" onclick="addToCart('لپ‌تاپ حرفه‌ای', 25900000)">افزودن به سبد خرید</button>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="product-image">📱</div>
+            <div class="product-info">
+                <div class="product-title">گوشی هوشمند</div>
+                <p>گوشی پرچم‌دار با دوربین پیشرفته</p>
+                <div class="product-price">۱۸,۵۰۰,۰۰۰ تومان</div>
+                <button class="add-to-cart" onclick="addToCart('گوشی هوشمند', 18500000)">افزودن به سبد خرید</button>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="product-image">🎧</div>
+            <div class="product-info">
+                <div class="product-title">هدفون بی‌سیم</div>
+                <p>هدفون نویزکنسل با کیفیت صوتی عالی</p>
+                <div class="product-price">۴,۹۰۰,۰۰۰ تومان</div>
+                <button class="add-to-cart" onclick="addToCart('هدفون بی‌سیم', 4900000)">افزودن به سبد خرید</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cart-summary">
+        <h2>🛒 سبد خرید شما</h2>
+        <div>تعداد اقلام: <span id="cart-count">۰</span></div>
+        <div class="cart-total">مجموع: <span id="cart-total">۰</span> تومان</div>
+        <button onclick="checkout()" style="margin-top: 15px; padding: 12px 30px; background: #ff9800; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            پرداخت نهایی
+        </button>
+    </div>
+    
+    <script>
+        let cart = [];
+        let total = 0;
+        
+        function addToCart(name, price) {
+            cart.push({name, price});
+            total += price;
+            
+            updateCartDisplay();
+            
+            alert(`✅ ${name} به سبد خرید اضافه شد!\nقیمت: ${price.toLocaleString('fa-IR')} تومان`);
+        }
+        
+        function updateCartDisplay() {
+            document.getElementById('cart-count').textContent = cart.length;
+            document.getElementById('cart-total').textContent = total.toLocaleString('fa-IR');
+        }
+        
+        function checkout() {
+            if (cart.length === 0) {
+                alert('⚠️ سبد خرید شما خالی است!');
+                return;
+            }
+            
+            alert(`🎉 پرداخت موفق!\n\nتعداد اقلام: ${cart.length}\nمبلغ کل: ${total.toLocaleString('fa-IR')} تومان\n\nسفارش شما ثبت شد.`);
+            
+            // ریست کردن سبد خرید
+            cart = [];
+            total = 0;
+            updateCartDisplay();
+        }
+    </script>
+</body>
+</html>

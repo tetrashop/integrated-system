@@ -1,0 +1,19 @@
+{
+  "name": "tetrashop-pro-platform",
+  "version": "1.0.0",
+  "description": "پلتفرم حرفه‌ای تتراشاپ با هوش مصنوعی",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.158.0",
+    "chess.js": "^1.0.0",
+    "tesseract.js": "^4.1.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

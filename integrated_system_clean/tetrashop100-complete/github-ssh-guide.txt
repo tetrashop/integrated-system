@@ -1,0 +1,17 @@
+🚀 راهنمای اضافه کردن SSH Key به GitHub
+
+مراحل:
+1. به آدرس بروید: https://github.com/settings/keys
+2. روی دکمه "New SSH key" کلیک کنید
+3. در قسمت Title: "Termux-Device" وارد کنید
+4. در قسمت Key، محتوای زیر را کپی کنید:
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAo8BWtcgyBEEWzt45dKobjkg+F3TeA0E7xB+yOwiQHX2ym3X79IyXrk1VLbzxuCzp+gj6/jWmZpupsVx6bTgpestidSkERN8fePE9IULCvAGf1y6dthTZjhLHnV8obPehwigsHOn2zb3e8IeytF2gJ4WRAqNDzKIZNCbY2W/AblDFMzVv/YWECUdIm3kvmbB+FU0bdASIV/rpyqfS/2YOnMrc4pnLQ9SmZqvIyoahqoG7qQGu+ez3Xpy+TfU1/1PTPSBaFOZ3rgipkGVg3kgRls3eQb2KQhcX7Tsyf5yd4ACoOV7+EB4PbmG5OjCsXAeS2bQ/5MaOg6g/sza0lAzLIKCId7g0umq9rNaESx4NxTf58hR3I2cnf5Zpj9bbNa2EI7OHo5IEcxYcjY1Dxr/s/9aOy/RjjwxDCcBpKRZkwekOwRtiFHkBKuZgzoAdfi/Ap6lXof+tnY/0R+bXrd7ZtGe/rjA4JgKSEpXo/sKfswDgxSnFYTYyHjPMVtl4CCzEqG2A2Xc0hv2SX30B5OJhbUM4zjXzdL6cjdHc2WRg1um+0BW57pu444Th6shd71l1fOiZRRg6nZcgIDJLBXIbZOzfD7LYQrpUGegUUbIBtz60ogTSPO9t/sDxtyaBVf4SL5ljOZTgDDAHFhwmZfIXG9nQLWsfk+2+epWJx/Pq/w== tetrashop@termux
+
+5. روی "Add SSH key" کلیک کنید
+6. پسورد GitHub خود را وارد کنید
+
+✅ پس از اضافه کردن، دستور زیر را اجرا کنید:
+ssh -T git@github.com
+
+اگر پیام "Hi username! You've successfully authenticated" دیدید، یعنی درست شده است.

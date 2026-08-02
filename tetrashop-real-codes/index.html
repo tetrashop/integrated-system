@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>کدهای واقعی Tetrashop</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f0f2f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                 color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #fff; padding: 20px; border-radius: 5px; 
+                     margin: 15px 0; overflow-x: auto; font-family: 'Courier New', monospace; }
+        .file-title { color: #58a6ff; margin-bottom: 10px; font-size: 18px; }
+        .copy-btn { background: #28a745; color: white; border: none; padding: 8px 15px; 
+                   border-radius: 3px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💻 کدهای واقعی پروژه Tetrashop</h1>
+        <p>مستقیماً از مخزن اصلی - قابل کپی‌پیست</p>
+    </div>
+    
+    <div id="code-container">
+        <!-- کدها اینجا نمایش داده می‌شوند -->
+    </div>
+    
+    <script>
+        // تابع برای نمایش کدها
+        async function loadCodes() {
+            const container = document.getElementById('code-container');
+            
+            // لیست فایل‌های مهم
+            const importantFiles = [
+                'server.js',
+                'index.html', 
+                'package.json',
+                'api/index.js',
+                'src/App.js',
+                'src/index.js'
+            ];
+            
+            for (const file of importantFiles) {
+                try {
+                    const response = await fetch('./codes/' + file);
+                    if (response.ok) {
+                        const code = await response.text();
+                        const div = document.createElement('div');
+                        div.className = 'code-block';
+                        div.innerHTML = `
+                            <div class="file-title">📄 ${file}</div>
+                            <pre>${escapeHtml(code)}</pre>
+                            <button class="copy-btn" onclick="copyCode('${file}', \`${escapeHtml(code)}\`)">
+                                📋 کپی کد
+                            </button>
+                        `;
+                        container.appendChild(div);
+                    }
+                } catch (error) {
+                    console.log('فایل پیدا نشد:', file);
+                }
+            }
+        }
+        
+        // تابع کپی کد
+        function copyCode(filename, code) {
+            navigator.clipboard.writeText(code)
+                .then(() => alert(`✅ کد ${filename} کپی شد!`))
+                .catch(err => console.error('خطا در کپی:', err));
+        }
+        
+        // تابع escape HTML
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // بارگذاری کدها
+        loadCodes();
+    </script>
+</body>
+</html>

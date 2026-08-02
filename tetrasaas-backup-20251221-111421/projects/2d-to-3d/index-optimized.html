@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تبدیل تصویر ۲D به ۳D - تتراشاپ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #2980b9;
+        }
+        
+        .upload-icon {
+            font-size: 60px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .upload-note {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .preview-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .preview-box, .result-box {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .preview-box h3, .result-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        #image-preview {
+            width: 100%;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        #result {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-reset {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .info-section {
+            background: #e8f4fc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border-right: 5px solid #3498db;
+        }
+        
+        .info-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .info-section ul {
+            padding-left: 20px;
+        }
+        
+        .info-section li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* برای موبایل */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .preview-section {
+                flex-direction: column;
+            }
+            
+            .upload-area {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* انیمیشن برای لودر */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 تبدیل تصویر دو بعدی به مدل سه بعدی</h1>
+            <p class="subtitle">آپلود تصویر خود را انجام دهید و مدل ۳D آن را دریافت کنید</p>
+        </header>
+        
+        <div class="upload-area" id="upload-area">
+            <div class="upload-icon">📤</div>
+            <p class="upload-text">برای آپلود تصویر کلیک کنید یا آن را اینجا رها کنید</p>
+            <input type="file" id="image-input" accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
+            <p class="upload-note">فرمت‌های مجاز: JPG, PNG, WebP (حداکثر ۱۰ مگابایت)</p>
+        </div>
+        
+        <div class="preview-section">
+            <div class="preview-box">
+                <h3>👁️ تصویر آپلود شده</h3>
+                <div id="image-preview">
+                    <p>هنوز تصویری انتخاب نشده است</p>
+                </div>
+            </div>
+            
+            <div class="result-box">
+                <h3>🎨 مدل سه بعدی</h3>
+                <div id="result">
+                    <p>پس از آپلود، مدل سه بعدی اینجا نمایش داده می‌شود</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="process-btn" class="btn-primary" disabled>
+                ⚙️ شروع پردازش
+            </button>
+            <button id="download-btn" class="btn-secondary" disabled>
+                💾 دانلود مدل
+            </button>
+            <button id="reset-btn" class="btn-reset">
+                🔄 شروع مجدد
+            </button>
+        </div>
+        
+        <div class="info-section">
+            <h4>💡 نکات مهم:</h4>
+            <ul>
+                <li>تصاویر با کنتراست بالا نتایج بهتری تولید می‌کنند</li>
+                <li>برای پردازش سریع‌تر، تصاویر با سایز کوچک‌تر آپلود کنید</li>
+                <li>پردازش ممکن است ۱۰-۳۰ ثانیه زمان ببرد</li>
+                <li>مدل تولید شده در فرمت OBJ قابل دانلود خواهد بود</li>
+                <li>برای نمایش مدل نیاز به پشتیبانی WebGL در مرورگر است</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>تبدیل تصویر ۲D به ۳D - پروژه تتراشاپ | نسخه بهینه‌شده</p>
+            <p>درآمد ماهانه این پروژه: ۲۲۰,۰۰۰ تومان</p>
+        </footer>
+    </div>
+    
+    <!-- بارگذاری Three.js از CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- اسکریپت‌های ما -->
+    <script src="fix-freeze-issue.js"></script>
+    
+    <script>
+        // مدیریت رویدادها
+        document.getElementById('upload-area').addEventListener('click', () => {
+            document.getElementById('image-input').click();
+        });
+        
+        document.getElementById('image-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('process-btn').disabled = false;
+                document.getElementById('process-btn').classList.remove('pulse');
+            }
+        });
+        
+        document.getElementById('process-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('image-input');
+            if (!fileInput.files[0]) {
+                alert('لطفا ابتدا یک تصویر انتخاب کنید');
+                return;
+            }
+            
+            // فعال کردن انیمیشن
+            document.getElementById('process-btn').classList.add('pulse');
+            document.getElementById('process-btn').innerHTML = '⏳ در حال پردازش...';
+            document.getElementById('process-btn').disabled = true;
+            
+            // شبیه‌سازی پردازش (در نسخه واقعی اینجا پردازش واقعی انجام می‌شود)
+            setTimeout(() => {
+                // نمایش نتیجه
+                document.getElementById('result').innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+                        <h3>مدل سه بعدی با موفقیت ایجاد شد!</h3>
+                        <p>مدل در حال نمایش است</p>
+                    </div>
+                `;
+                
+                document.getElementById('download-btn').disabled = false;
+                document.getElementById('process-btn').classList.remove('pulse');
+                document.getElementById('process-btn').innerHTML = '✅ پردازش کامل شد';
+                
+                // ایجاد یک مدل ۳D ساده
+                if (typeof THREE !== 'undefined') {
+                    initSimple3DModel();
+                }
+            }, 2000);
+        });
+        
+        document.getElementById('download-btn').addEventListener('click', () => {
+            alert('مدل سه بعدی با موفقیت دانلود شد (شبیه‌سازی)');
+        });
+        
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            if (confirm('آیا می‌خواهید از نو شروع کنید؟')) {
+                location.reload();
+            }
+        });
+        
+        // دراگ و دراپ
+        const uploadArea = document.getElementById('upload-area');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#2ecc71';
+            uploadArea.style.background = '#d5f4e6';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#3498db';
+            uploadArea.style.background = '#f8f9fa';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#3498db';
+            uploadArea.style.background = '#f8f9fa';
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                document.getElementById('image-input').files = e.dataTransfer.files;
+                
+                // تریگر event change
+                const event = new Event('change');
+                document.getElementById('image-input').dispatchEvent(event);
+                
+                document.getElementById('process-btn').disabled = false;
+                document.getElementById('process-btn').classList.remove('pulse');
+            } else {
+                alert('لطفا فقط تصویر آپلود کنید');
+            }
+        });
+        
+        // ایجاد مدل ۳D ساده
+        function initSimple3DModel() {
+            const container = document.getElementById('result');
+            container.innerHTML = '<div id="model-viewer" style="width:100%;height:300px;"></div>';
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            renderer.setSize(300, 300);
+            document.getElementById('model-viewer').appendChild(renderer.domElement);
+            
+            // نور
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+            
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            
+            // ایجاد یک مدل ساده (مکعب با بافت)
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshPhongMaterial({ color: 0x3498db });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            camera.position.z = 3;
+            
+            // انیمیشن
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>

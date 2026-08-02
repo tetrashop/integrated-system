@@ -1,0 +1,83 @@
+/* رفع مشکل صفحه کاور سیاه */
+
+/* 1. اطمینان از نمایش صحیح صفحات */
+#home-page, 
+#project-detail {
+    transition: opacity 0.3s ease;
+}
+
+/* 2. وقتی project-detail نمایش داده می‌شود */
+#project-detail[style*="display: block"],
+#project-detail:not([style*="display: none"]) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    z-index: 10 !important;
+    background: white !important; /* جلوگیری از پس‌زمینه سیاه */
+}
+
+/* 3. وقتی home-page مخفی می‌شود */
+#home-page[style*="display: none"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* 4. رفع مشکلات overlay */
+.overlay, .cover, .modal, .dialog {
+    background: transparent !important;
+}
+
+/* 5. اطمینان از visibility */
+body.show-project #project-detail {
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* 6. رفع مشکلات z-index */
+#project-detail {
+    z-index: 100 !important;
+}
+
+/* 7. حذف backdrop-filter اگر باعث مشکل می‌شود */
+* {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 8. رفع مشکلات iframe */
+#iframe-container, #project-frame {
+    background: white !important;
+    border: none !important;
+}
+
+/* 9. کلاس‌های کمکی */
+.no-cover {
+    background: transparent !important;
+}
+
+.show-element {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.hide-element {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* 10. برای موبایل */
+@media (max-width: 768px) {
+    #project-detail {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}

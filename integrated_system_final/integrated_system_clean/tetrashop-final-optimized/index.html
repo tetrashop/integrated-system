@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بپوند تکنولوژی و معنویت - تتراشاپ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; line-height: 1.6; min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 500px; }
+        .clusters-section { background: #f8f9fa; padding: 30px; border-left: 3px solid #e9ecef; }
+        .chess-section { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .cluster-card { background: white; padding: 25px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-right: 5px solid #4CAF50; transition: all 0.3s ease; cursor: pointer; }
+        .cluster-card:hover { transform: translateX(-5px); border-right-color: #2196F3; }
+        .buy-button { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; }
+        .roi-display { font-size: 3rem; font-weight: bold; background: linear-gradient(135deg, #FFD700, #FFED4E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; }
+        .chess-board { display: grid; grid-template-columns: repeat(8, 40px); grid-template-rows: repeat(8, 40px); gap: 2px; background: #8b4513; padding: 10px; border-radius: 10px; border: 3px solid #5d4037; margin: 20px 0; }
+        .chess-cell { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; }
+        .chess-cell.white { background: #f0d9b5; } .chess-cell.black { background: #b58863; }
+        .chess-cell:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(255,215,0,0.6); }
+        @media (max-width: 768px) { .main-content { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>بپوند تکنولوژی و معنویت - تتراشاپ</h1>
+            <div class="subtitle">سیستم یکپارچه با حداکثر پربه‌وری</div>
+        </div>
+        <div class="main-content">
+            <div class="clusters-section">
+                <div class="cluster-card"><h3>بخشش و نیکوکاری</h3><p>خرید با ثبت خیر</p><button class="buy-button">خرید با نیّت خیر</button></div>
+                <div class="cluster-card"><h3>آموزش‌های معنوی در تکنولوژی</h3><p>برنامه‌نویسی به عبادت</p><button class="buy-button">شروع آموزش</button></div>
+                <div class="cluster-card"><h3>اخلاق در توسعه نرم‌افزار</h3><p>توسعه اخلاق‌محور</p><button class="buy-button">مشاهده اصول</button></div>
+                <div class="cluster-card"><h3>تحقیق اخلاقی</h3><p>آموزش اصول اخلاقی</p><button class="buy-button">ورود به تحقیق</button></div>
+            </div>
+            <div class="chess-section">
+                <div class="chess-header"><h2>سیستم شطرنج 🌟</h2><div class="roi-display">۳۴۱% + ۱۰%</div><p>جریان درآمدی ماهانه ROI</p></div>
+                <div class="bonus-system"><h3>سیستم بونوس</h3><p>ادغام هوشمند شطرنج با فروشگاه</p></div>
+                <div class="chess-board" id="chessBoard"></div>
+                <div class="integration-info">♟ هر حرکت = بهبود استراتژی سرمایه‌گذاری</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function initChessBoard() {
+            const chessBoard = document.getElementById('chessBoard');
+            const pieces = ['♜','♞','♝','♛','♚','♝','♞','♜','♟','♟','♟','♟','♟','♟','♟','♟','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','♙','♙','♙','♙','♙','♙','♙','♙','♖','♘','♗','♕','♔','♗','♘','♖'];
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement('div');
+                cell.className = `chess-cell ${Math.floor(i/8+i%8)%2===0?'white':'black'}`;
+                cell.textContent = pieces[i];
+                cell.onclick = ()=>alert(`♟ حرکت در موقعیت ${i} ثبت شد!`);
+                chessBoard.appendChild(cell);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', initChessBoard);
+        document.querySelectorAll('.buy-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert(`🛍️ خرید با نیّت خیر ثبت شد`);
+            });
+        });
+    </script>
+</body>
+</html>

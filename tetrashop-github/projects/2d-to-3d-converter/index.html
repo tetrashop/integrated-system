@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مبدل ۲D به ۳D - تتراشاپ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* استایل‌های تکمیلی */
+        .dimension-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gradient);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        .conversion-time {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+        <div style="margin: 20px; text-align: right;">
+            <a href="../../index.html" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; background: #8b5cf6; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    <div class="converter-container">
+        <header class="converter-header">
+            <h1>
+                <i class="fas fa-cube"></i>
+                مبدل تصاویر ۲D به ۳D
+            </h1>
+            <p>تبدیل تصاویر دو بعدی به مدل‌های سه بعدی با استفاده از هوش مصنوعی و الگوریتم‌های پیشرفته</p>
+        </header>
+        
+        <main>
+            <div class="workspace">
+                <!-- بخش ۲D -->
+                <div class="workspace-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-image"></i>
+                            تصویر ورودی (۲D)
+                        </h2>
+                        <span class="dimension-badge">۲D</span>
+                    </div>
+                    
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>تصویر خود را اینجا رها کنید</h3>
+                        <p>یا کلیک کنید تا فایل انتخاب شود</p>
+                        <p class="formats">پشتیبانی از: JPG, PNG, SVG, BMP</p>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                    </div>
+                    
+                    <div class="preview-container">
+                        <img id="image-preview" src="" alt="پیش‌نمایش تصویر">
+                        <div class="conversion-time">زمان تخمینی: ۳۰ ثانیه</div>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="brightness-slider">
+                                <i class="fas fa-sun"></i> روشنایی
+                            </label>
+                            <input type="range" id="brightness-slider" min="0" max="100" value="50">
+                            <span id="brightness-value">50</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="contrast-slider">
+                                <i class="fas fa-adjust"></i> کنتراست
+                            </label>
+                            <input type="range" id="contrast-slider" min="0" max="100" value="50">
+                            <span id="contrast-value">50</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- بخش ۳D -->
+                <div class="workspace-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-cube"></i>
+                            مدل خروجی (۳D)
+                        </h2>
+                        <span class="dimension-badge" style="background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);">۳D</span>
+                    </div>
+                    
+                    <div class="preview-container">
+                        <canvas id="3d-canvas"></canvas>
+                        <div class="conversion-time">کیفیت: بالا</div>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="depth-slider">
+                                <i class="fas fa-layer-group"></i> عمق
+                            </label>
+                            <input type="range" id="depth-slider" min="10" max="100" value="50">
+                            <span id="depth-value">50</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="smoothness-slider">
+                                <i class="fas fa-wave-square"></i> نرم‌ی
+                            </label>
+                            <input type="range" id="smoothness-slider" min="0" max="100" value="50">
+                            <span id="smoothness-value">50</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="detail-slider">
+                                <i class="fas fa-search"></i> جزئیات
+                            </label>
+                            <input type="range" id="detail-slider" min="10" max="100" value="60">
+                            <span id="detail-value">60</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="converter-buttons">
+                <button class="btn btn-primary" id="convert-btn">
+                    <i class="fas fa-magic"></i>
+                    تبدیل به ۳D
+                </button>
+                
+                <button class="btn btn-secondary" id="download-btn" disabled>
+                    <i class="fas fa-download"></i>
+                    دانلود مدل ۳D
+                </button>
+                
+                <button class="btn btn-secondary" id="reset-btn">
+                    <i class="fas fa-redo"></i>
+                    شروع مجدد
+                </button>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>پیشرفت تبدیل:</span>
+                    <span id="progress-text">۰%</span>
+                </div>
+            </div>
+            
+            <div class="model-info">
+                <div class="info-card">
+                    <h4>تعداد رئوس</h4>
+                    <div class="info-value" id="vertex-count">۰</div>
+                    <div class="info-unit">رأس</div>
+                </div>
+                
+                <div class="info-card">
+                    <h4>تعداد وجه‌ها</h4>
+                    <div class="info-value" id="face-count">۰</div>
+                    <div class="info-unit">وجه</div>
+                </div>
+                
+                <div class="info-card">
+                    <h4>حجم فایل</h4>
+                    <div class="info-value" id="model-size">۰</div>
+                    <div class="info-unit">مگابایت</div>
+                </div>
+                
+                <div class="info-card">
+                    <h4>فرمت خروجی</h4>
+                    <div class="info-value">STL</div>
+                    <div class="info-unit">(قابل تغییر)</div>
+                </div>
+            </div>
+            
+            <div class="conversion-modes" id="conversion-modes" style="display: none;">
+                <div class="mode-card" data-mode="basic">
+                    <i class="fas fa-bolt"></i>
+                    <h3>تبدیل سریع</h3>
+                    <p>مناسب برای تصاویر ساده - کیفیت متوسط</p>
+                    <small>زمان: ۱۵ ثانیه</small>
+                </div>
+                
+                <div class="mode-card" data-mode="advanced">
+                    <i class="fas fa-cogs"></i>
+                    <h3>تبدیل پیشرفته</h3>
+                    <p>الگوریتم‌های پیچیده - کیفیت بالا</p>
+                    <small>زمان: ۴۵ ثانیه</small>
+                </div>
+                
+                <div class="mode-card" data-mode="professional">
+                    <i class="fas fa-crown"></i>
+                    <h3>تبدیل حرفه‌ای</h3>
+                    <p>بهترین کیفیت - پردازش ابری</p>
+                    <small>زمان: ۲ دقیقه</small>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

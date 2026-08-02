@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {"id": "store", "type": "frontend", "path": "/public/index.html", "port": 3001, "status": "ready"},
+    {"id": "gateway", "type": "api", "path": "/api/gateway/server.js", "port": 3000, "status": "ready"},
+    {"id": "admin", "type": "dashboard", "path": "/admin/dashboard/server.js", "port": 3002, "status": "partial"},
+    {"id": "services_catalog", "type": "data", "path": "/data/cloud-services.json", "status": "ready"},
+    {"id": "services_source", "type": "repository", "path": "../tetrasaas-final/", "status": "needs_integration"}
+  ],
+  "edges": [
+    {"from": "store", "to": "gateway", "connection": "api_calls", "status": "needs_setup"},
+    {"from": "gateway", "to": "services_source", "connection": "proxy_routing", "status": "not_setup"},
+    {"from": "admin", "to": "gateway", "connection": "monitoring", "status": "not_setup"},
+    {"from": "admin", "to": "store", "connection": "order_management", "status": "not_setup"}
+  ],
+  "revenue_streams": [
+    {"node": "store", "stream": "direct_sales", "potential": "high", "setup_time": "2h"},
+    {"node": "gateway", "stream": "api_monetization", "potential": "medium", "setup_time": "5h"},
+    {"node": "services_source", "stream": "subscription", "potential": "high", "setup_time": "10h"}
+  ]
+}

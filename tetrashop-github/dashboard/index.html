@@ -1,0 +1,307 @@
+
+        <!DOCTYPE html>
+        <html style="height:100%;">
+        <head>
+<link rel="stylesheet" href="/projects-override.css">
+<link rel="stylesheet" href="/style.css">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>داشبورد فنی تتراشاپ</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+            <style>
+                :root {
+                    --primary: #4361ee;
+                    --secondary: #3a0ca3;
+                    --success: #4cc9f0;
+                    --warning: #f8961e;
+                    --danger: #f72585;
+                    --dark: #1a1a2e;
+                }
+                
+                body {
+                    font-family: 'Vazirmatn', sans-serif;
+                    background: #f8f9fa;
+                    direction: rtl;
+                }
+                
+                .sidebar {
+                    background: var(--dark);
+                    color: white;
+                    min-height: 100vh;
+                    position: fixed;
+                    width: 250px;
+                }
+                
+                .main-content {
+                    margin-right: 250px;
+                    padding: 20px;
+                }
+                
+                .stat-card {
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                    transition: transform 0.3s;
+                }
+                
+                .stat-card:hover {
+                    transform: translateY(-5px);
+                }
+                
+                .project-card {
+                    border-radius: 15px;
+                    overflow: hidden;
+                    margin-bottom: 20px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+                
+                .revenue-chart {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                }
+            </style>
+        </head>
+        <body style="margin:0;padding:0;min-height:100vh;">
+            <nav class="sidebar">
+                <div class="p-4">
+                    <h3 class="mb-4">🎯 تتراشاپ</h3>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                داشبورد
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#projects">
+                                <i class="bi bi-grid me-2"></i>
+                                پروژه‌ها
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#analytics">
+                                <i class="bi bi-graph-up me-2"></i>
+                                آمار و تحلیل
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#revenue">
+                                <i class="bi bi-cash-coin me-2"></i>
+                                درآمدزایی
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" href="#api">
+                                <i class="bi bi-code-slash me-2"></i>
+                                APIها
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>داشبورد فنی تتراشاپ</h2>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        پروژه جدید
+                    </button>
+                </div>
+                
+                <!-- آمار کلی -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card bg-primary text-white">
+                            <h5>کل درآمد</h5>
+                            <h2 id="total-revenue">۰ ریال</h2>
+                            <small>تاکنون</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-success text-white">
+                            <h5>کاربران فعال</h5>
+                            <h2 id="active-users">۰</h2>
+                            <small>در ۳۰ روز گذشته</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-warning text-white">
+                            <h5>درخواست‌ها</h5>
+                            <h2 id="total-requests">۰</h2>
+                            <small>امروز</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-danger text-white">
+                            <h5>میزان موفقیت</h5>
+                            <h2 id="success-rate">۱۰۰٪</h2>
+                            <small>آخرین هفته</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- پروژه‌ها -->
+                <div class="row" id="projects">
+                    <div class="col-12">
+                        <div class="card project-card">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0">📊 پروژه‌های فعال</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="projects-list">
+                                    <!-- پروژه‌ها با JavaScript بارگذاری می‌شوند -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- نمودار درآمد -->
+                <div class="revenue-chart" id="revenue">
+                    <h5>📈 نمودار درآمد ماهانه</h5>
+                    <canvas id="revenueChart" height="100"></canvas>
+                </div>
+                
+                <!-- نمونه کارها -->
+                <div class="card project-card" id="portfolio">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">🎨 نمونه کارها</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6>شطرنج پیشرفته</h6>
+                                        <p class="text-muted">نمونه: تحلیل بازی با هوش مصنوعی سطح GM</p>
+                                        <a href="/api/chess/analyze" class="btn btn-sm btn-outline-primary">مشاهده نمونه</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6>نویسنده هوشمند</h6>
+                                        <p class="text-muted">نمونه: تولید مقاله ۱۰۰۰ کلمه‌ای</p>
+                                        <a href="/api/smart-writer/generate" class="btn btn-sm btn-outline-primary">مشاهده نمونه</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                // بارگذاری آمار
+                async function loadStats() {
+                    const response = await fetch('/api/projects/status');
+                    const data = await response.json();
+                    
+                    document.getElementById('total-revenue').textContent = 
+                        data.total_revenue.toLocaleString() + ' ریال';
+                    document.getElementById('active-users').textContent = 
+                        data.active_users;
+                }
+                
+                // بارگذاری پروژه‌ها
+                async function loadProjects() {
+                    const response = await fetch('/api/projects/status');
+                    const data = await response.json();
+                    
+                    const container = document.getElementById('projects-list');
+                    container.innerHTML = '';
+                    
+                    Object.entries(data.projects).forEach(([key, project]) => {
+                        const col = document.createElement('div');
+                        col.className = 'col-md-4 mb-3';
+                        col.innerHTML = `
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6>${project.name}</h6>
+                                    <p class="text-muted small">وضعیت: ${project.status}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span>کاربران: ${project.users}</span>
+                                        <span>درآمد: ${project.revenue} ریال</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary mt-2 w-100" onclick="testProject('${key}')">
+                                        تست نمونه
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(col);
+                    });
+                }
+                
+                // تست پروژه
+                async function testProject(project) {
+                    let endpoint = '';
+                    let payload = {};
+                    
+                    switch(project) {
+                        case 'chess':
+                            endpoint = '/api/chess/move';
+                            payload = { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', difficulty: 'medium' };
+                            break;
+                        case 'smart_writer':
+                            endpoint = '/api/smart-writer/generate';
+                            payload = { prompt: 'هوش مصنوعی در آینده', style: 'formal', length: 300 };
+                            break;
+                        case 'quantum_writer':
+                            endpoint = '/api/quantum-writer/generate';
+                            payload = { theme: 'تکنولوژی کوانتومی', complexity: 'medium' };
+                            break;
+                    }
+                    
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const result = await response.json();
+                    alert('نتیجه تست: ' + JSON.stringify(result, null, 2));
+                }
+                
+                // نمودار درآمد
+                function initRevenueChart() {
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور'],
+                            datasets: [{
+                                label: 'درآمد (هزار ریال)',
+                                data: [120, 190, 300, 500, 200, 300],
+                                borderColor: '#4361ee',
+                                backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false }
+                            }
+                        }
+                    });
+                }
+                
+                // راه‌اندازی اولیه
+                document.addEventListener('DOMContentLoaded', () => {
+                    loadStats();
+                    loadProjects();
+                    initRevenueChart();
+                });
+            </script>
+        </body>
+        </html>
+    

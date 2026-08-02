@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♟️ شطرجد TetraShop - موتور پیشرفته</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A44C6;
+            --success: #36D1DC;
+            --warning: #FFD93D;
+            --danger: #FF6B6B;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --chess-light: #f0d9b5;
+            --chess-dark: #b58863;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chess-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chess-board-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 1/1;
+            margin: 0 auto;
+            border: 12px solid var(--chess-dark);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        
+        .square {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            position: relative;
+        }
+        
+        .square.light {
+            background-color: var(--chess-light);
+        }
+        
+        .square.dark {
+            background-color: var(--chess-dark);
+        }
+        
+        .square.selected {
+            box-shadow: inset 0 0 0 3px var(--success);
+        }
+        
+        .square.legal-move::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(54, 209, 220, 0.3);
+            border-radius: 50%;
+        }
+        
+        .control-panel {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--success);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, var(--success), #1E90FF);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, var(--warning), #FF9F1C);
+            color: var(--dark);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .difficulty-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .difficulty-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .difficulty-btn.active {
+            background: var(--primary);
+            border-color: var(--success);
+        }
+        
+        .game-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .moves-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .move-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: rgba(54, 209, 220, 0.2);
+            color: var(--success);
+            border-radius: 15px;
+            font-weight: bold;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .analysis-panel {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            border-radius: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.8;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>♟️ شطرجد TetraShop</h1>
+            <p class="subtitle">موتور شطرجد پیشرفته با هوش مصنوعی - توسعه‌یافته توسط TetraShop</p>
+            <div id="server-status">
+                <span class="status-badge">🟢 سرور فعال</span>
+                <span class="status-badge" id="current-port">پورت: 7555</span>
+                <span class="status-badge" id="game-status">آماده بازی</span>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="chess-section">
+                <h2 class="section-title">🎮 تخته شطرجد زنده</h2>
+                <div class="chess-board-container">
+                    <div class="chess-board" id="chess-board">
+                        <!-- تخته با JavaScript ساخته می‌شود -->
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="newGame()">
+                        <span>🆕</span> بازی جدید
+                    </button>
+                    <button class="btn btn-success" onclick="engineMove()">
+                        <span>🤖</span> حرکت موتور
+                    </button>
+                    <button class="btn btn-warning" onclick="analyzePosition()">
+                        <span>🔍</span> تحلیل موقعیت
+                    </button>
+                    <button class="btn" onclick="flipBoard()" style="background: rgba(255,255,255,0.1); color: white;">
+                        <span>🔄</span> چرخش تخته
+                    </button>
+                </div>
+            </div>
+            
+            <div class="control-panel">
+                <h2 class="section-title">⚙️ کنترل بازی</h2>
+                
+                <h3 class="section-title" style="font-size: 1.3rem;">📊 سطح دشواری</h3>
+                <div class="difficulty-selector">
+                    <div class="difficulty-btn active" data-level="beginner" onclick="setDifficulty('beginner')">
+                        مبتدی
+                    </div>
+                    <div class="difficulty-btn" data-level="intermediate" onclick="setDifficulty('intermediate')">
+                        متوسط
+                    </div>
+                    <div class="difficulty-btn" data-level="advanced" onclick="setDifficulty('advanced')">
+                        پیشرفته
+                    </div>
+                    <div class="difficulty-btn" data-level="expert" onclick="setDifficulty('expert')">
+                        استاد
+                    </div>
+                </div>
+                
+                <div class="game-info">
+                    <h3 class="section-title" style="font-size: 1.3rem;">📈 اطلاعات بازی</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span>🎯 سطح:</span>
+                            <span id="current-level">متوسط</span>
+                        </div>
+                        <div class="info-item">
+                            <span>♟️ نوبت:</span>
+                            <span id="current-turn">سفید</span>
+                        </div>
+                        <div class="info-item">
+                            <span>📊 حرکات:</span>
+                            <span id="move-count">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span>⚖️ ارزیابی:</span>
+                            <span id="position-eval">+0.0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="moves-list">
+                    <h3 class="section-title" style="font-size: 1.3rem; margin-bottom: 10px;">📝 تاریخچه حرکات</h3>
+                    <div id="moves-container">
+                        <!-- حرکات اینجا نمایش داده می‌شوند -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="analysis-panel">
+            <h2 class="section-title">🔍 تحلیل موقعیت</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span>بهترین حرکت:</span>
+                    <span id="best-move">e2e4</span>
+                </div>
+                <div class="info-item">
+                    <span>ارزیابی:</span>
+                    <span id="analysis-eval">+0.3</span>
+                </div>
+                <div class="info-item">
+                    <span>عمق تحلیل:</span>
+                    <span id="analysis-depth">12</span>
+                </div>
+                <div class="info-item">
+                    <span>گره‌های بررسی شده:</span>
+                    <span id="analysis-nodes">250k</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%;"></div>
+            </div>
+            <div style="text-align: center; margin-top: 10px;">
+                <button class="btn btn-success" onclick="getDeepAnalysis()" style="padding: 10px 20px;">
+                    <span>🧠</span> تحلیل عمیق
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>♟️ موتور شطرجد TetraShop v1.0 - توسعه داده شده توسط TetraShop Projects</p>
+            <p>🌐 پورت سرور: <strong id="port-display">7555</strong> | 🕒 آخرین به‌روزرسانی: <span id="update-time">اکنون</span></p>
+            <div style="margin-top: 15px;">
+                <button class="btn" onclick="showAPIDocs()" style="background: rgba(255,255,255,0.1); color: white; margin: 5px;">
+                    📖 مستندات API
+                </button>
+                <button class="btn" onclick="testEngine()" style="background: rgba(255,255,255,0.1); color: white; margin: 5px;">
+                    🧪 تست موتور
+                </button>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // داده‌های بازی
+        let gameState = {
+            board: [],
+            selectedSquare: null,
+            legalMoves: [],
+            isWhiteTurn: true,
+            moves: [],
+            difficulty: 'intermediate',
+            gameId: null,
+            isBoardFlipped: false
+        };
+        
+        // نمادهای مهره‌ها
+        const pieces = {
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
+        };
+        
+        // نام فارسی مهره‌ها
+        const pieceNames = {
+            'r': 'رخ سیاه', 'n': 'اسب سیاه', 'b': 'فیل سیاه', 'q': 'وزیر سیاه', 'k': 'شاه سیاه', 'p': 'سرباز سیاه',
+            'R': 'رخ سفید', 'N': 'اسب سفید', 'B': 'فیل سفید', 'Q': 'وزیر سفید', 'K': 'شاه سفید', 'P': 'سرباز سفید'
+        };
+        
+        // مقداردهی اولیه
+        async function init() {
+            await checkServerStatus();
+            createBoard();
+            await newGame();
+            updateGameInfo();
+        }
+        
+        // بررسی وضعیت سرور
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                document.getElementById('current-port').textContent = `پورت: ${data.port}`;
+                document.getElementById('port-display').textContent = data.port;
+                document.getElementById('server-status').innerHTML = `
+                    <span class="status-badge">🟢 سرور فعال</span>
+                    <span class="status-badge">پورت: ${data.port}</span>
+                    <span class="status-badge">${data.engine}</span>
+                `;
+                
+                return true;
+            } catch (error) {
+                showError('سرور در دسترس نیست. لطفاً مطمئن شوید سرور اجرا شده است.');
+                return false;
+            }
+        }
+        
+        // ایجاد تخته شطرجد
+        function createBoard() {
+            const boardElement = document.getElementById('chess-board');
+            boardElement.innerHTML = '';
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+                    square.addEventListener('click', () => handleSquareClick(row, col));
+                    boardElement.appendChild(square);
+                }
+            }
+        }
+        
+        // بارگذاری FEN به تخته
+        function loadFEN(fen) {
+            const board = [];
+            const rows = fen.split(' ')[0].split('/');
+            
+            for (let row = 0; row < 8; row++) {
+                const boardRow = [];
+                const fenRow = rows[row];
+                let colIndex = 0;
+                
+                for (let char of fenRow) {
+                    if (isNaN(char)) {
+                        boardRow.push(char);
+                        colIndex++;
+                    } else {
+                        for (let i = 0; i < parseInt(char); i++) {
+                            boardRow.push(null);
+                            colIndex++;
+                        }
+                    }
+                }
+                board.push(boardRow);
+            }
+            
+            gameState.board = board;
+            updateBoardDisplay();
+        }
+        
+        // به‌روزرسانی نمایش تخته
+        function updateBoardDisplay() {
+            const squares = document.querySelectorAll('.square');
+            
+            squares.forEach(square => {
+                square.textContent = '';
+                square.classList.remove('selected', 'legal-move');
+                
+                const row = parseInt(square.dataset.row);
+                const col = parseInt(square.dataset.col);
+                
+                const piece = gameState.board[row][col];
+                if (piece) {
+                    square.textContent = pieces[piece] || piece;
+                }
+            });
+        }
+        
+        // کلیک روی مربع
+        function handleSquareClick(row, col) {
+            const piece = gameState.board[row][col];
+            
+            // اگر مربعی انتخاب شده بود
+            if (gameState.selectedSquare) {
+                const move = gameState.legalMoves.find(m => 
+                    m.to.row === row && m.to.col === col
+                );
+                
+                if (move) {
+                    makeMove(move);
+                }
+                
+                clearSelection();
+            } else if (piece) {
+                // اگر مهره متعلق به بازیکن فعلی است
+                const isWhitePiece = piece === piece.toUpperCase();
+                if ((gameState.isWhiteTurn && isWhitePiece) || (!gameState.isWhiteTurn && !isWhitePiece)) {
+                    selectSquare(row, col);
+                }
+            }
+        }
+        
+        // انتخاب مربع
+        function selectSquare(row, col) {
+            clearSelection();
+            
+            gameState.selectedSquare = { row, col };
+            document.querySelector(`[data-row="${row}"][data-col="${col}"]`).classList.add('selected');
+            
+            // محاسبه حرکات قانونی (ساده‌شده)
+            gameState.legalMoves = calculateLegalMoves(row, col);
+            highlightLegalMoves();
+        }
+        
+        // محاسبه حرکات قانونی (ساده‌شده)
+        function calculateLegalMoves(row, col) {
+            const moves = [];
+            const piece = gameState.board[row][col];
+            if (!piece) return moves;
+            
+            const isWhite = piece === piece.toUpperCase();
+            
+            // حرکات ساده برای نمایش
+            const directions = [];
+            
+            switch (piece.toLowerCase()) {
+                case 'p': // سرباز
+                    const dir = isWhite ? -1 : 1;
+                    if (isValidSquare(row + dir, col) && !gameState.board[row + dir][col]) {
+                        moves.push({from: {row, col}, to: {row: row + dir, col}});
+                    }
+                    break;
+                    
+                case 'n': // اسب
+                    const knightMoves = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
+                    knightMoves.forEach(([dr, dc]) => {
+                        const newRow = row + dr;
+                        const newCol = col + dc;
+                        if (isValidSquare(newRow, newCol)) {
+                            const target = gameState.board[newRow][newCol];
+                            if (!target || (isWhite && target === target.toLowerCase()) || (!isWhite && target === target.toUpperCase())) {
+                                moves.push({from: {row, col}, to: {row: newRow, col: newCol}});
+                            }
+                        }
+                    });
+                    break;
+                    
+                case 'k': // شاه
+                    const kingMoves = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+                    kingMoves.forEach(([dr, dc]) => {
+                        const newRow = row + dr;
+                        const newCol = col + dc;
+                        if (isValidSquare(newRow, newCol)) {
+                            const target = gameState.board[newRow][newCol];
+                            if (!target || (isWhite && target === target.toLowerCase()) || (!isWhite && target === target.toUpperCase())) {
+                                moves.push({from: {row, col}, to: {row: newRow, col: newCol}});
+                            }
+                        }
+                    });
+                    break;
+            }
+            
+            return moves;
+        }
+        
+        // هایلایت حرکات قانونی
+        function highlightLegalMoves() {
+            gameState.legalMoves.forEach(move => {
+                const square = document.querySelector(`[data-row="${move.to.row}"][data-col="${move.to.col}"]`);
+                if (square) {
+                    square.classList.add('legal-move');
+                }
+            });
+        }
+        
+        // پاک کردن انتخاب
+        function clearSelection() {
+            gameState.selectedSquare = null;
+            gameState.legalMoves = [];
+            document.querySelectorAll('.square').forEach(sq => {
+                sq.classList.remove('selected', 'legal-move');
+            });
+        }
+        
+        // انجام حرکت
+        async function makeMove(move) {
+            const moveUCI = moveToUCI(move);
+            
+            try {
+                const response = await fetch('/api/engine/move?fen=' + encodeURIComponent(generateFEN()) + '&level=' + gameState.difficulty);
+                const data = await response.json();
+                
+                // حرکت بازیکن
+                gameState.board[move.to.row][move.to.col] = gameState.board[move.from.row][move.from.col];
+                gameState.board[move.from.row][move.from.col] = null;
+                
+                // اضافه کردن حرکت به تاریخچه
+                gameState.moves.push({
+                    move: moveUCI,
+                    player: gameState.isWhiteTurn ? 'سفید' : 'سیاه',
+                    eval: data.evaluation
+                });
+                
+                gameState.isWhiteTurn = !gameState.isWhiteTurn;
+                updateBoardDisplay();
+                updateGameInfo();
+                
+                // حرکت موتور
+                setTimeout(async () => {
+                    await engineMove();
+                }, 500);
+                
+            } catch (error) {
+                showError('خطا در انجام حرکت: ' + error.message);
+            }
+        }
+        
+        // حرکت موتور
+        async function engineMove() {
+            try {
+                const fen = generateFEN();
+                const response = await fetch('/api/engine/move?fen=' + encodeURIComponent(fen) + '&level=' + gameState.difficulty);
+                const data = await response.json();
+                
+                if (data.success && data.move) {
+                    const move = uciToMove(data.move);
+                    
+                    // اجرای حرکت موتور
+                    gameState.board[move.to.row][move.to.col] = gameState.board[move.from.row][move.from.col];
+                    gameState.board[move.from.row][move.from.col] = null;
+                    
+                    // اضافه کردن به تاریخچه
+                    gameState.moves.push({
+                        move: data.move,
+                        player: gameState.isWhiteTurn ? 'سفید' : 'سیاه',
+                        eval: data.evaluation
+                    });
+                    
+                    gameState.isWhiteTurn = !gameState.isWhiteTurn;
+                    updateBoardDisplay();
+                    updateGameInfo();
+                    
+                    // به‌روزرسانی تحلیل
+                    document.getElementById('best-move').textContent = data.move;
+                    document.getElementById('analysis-eval').textContent = data.evaluation > 0 ? '+' + data.evaluation.toFixed(1) : data.evaluation.toFixed(1);
+                    document.getElementById('analysis-depth').textContent = data.depth;
+                    document.getElementById('analysis-nodes').textContent = formatNumber(data.nodes);
+                    
+                    showToast(`🤖 موتور حرکت کرد: ${data.move} (ارزیابی: ${data.evaluation.toFixed(1)})`, 'success');
+                }
+            } catch (error) {
+                showError('خطا در دریافت حرکت موتور: ' + error.message);
+            }
+        }
+        
+        // شروع بازی جدید
+        async function newGame() {
+            try {
+                const response = await fetch('/api/game/new', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ difficulty: gameState.difficulty, playerName: 'بازیکن' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    gameState.gameId = data.gameId;
+                    loadFEN(data.fen);
+                    gameState.moves = [];
+                    gameState.isWhiteTurn = true;
+                    
+                    updateGameInfo();
+                    showToast('🎮 بازی جدید شروع شد!', 'success');
+                }
+            } catch (error) {
+                showError('خطا در شروع بازی جدید: ' + error.message);
+                // حالت آفلاین
+                loadFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+                gameState.moves = [];
+                gameState.isWhiteTurn = true;
+                updateGameInfo();
+            }
+        }
+        
+        // تحلیل موقعیت
+        async function analyzePosition() {
+            try {
+                const fen = generateFEN();
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fen: fen, depth: 15 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(`🔍 تحلیل موقعیت: ${data.bestMove} (ارزیابی: ${data.evaluation})`, 'info');
+                    
+                    document.getElementById('best-move').textContent = data.bestMove;
+                    document.getElementById('analysis-eval').textContent = data.evaluation > 0 ? '+' + data.evaluation.toFixed(1) : data.evaluation.toFixed(1);
+                    document.getElementById('analysis-depth').textContent = data.depth;
+                    document.getElementById('analysis-nodes').textContent = formatNumber(data.nodes);
+                }
+            } catch (error) {
+                showError('خطا در تحلیل موقعیت: ' + error.message);
+            }
+        }
+        
+        // تحلیل عمیق
+        async function getDeepAnalysis() {
+            showToast('🧠 در حال تحلیل عمیق موقعیت...', 'info');
+            
+            try {
+                const fen = generateFEN();
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fen: fen, depth: 20 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    let analysisText = `تحلیل عمیق:\n`;
+                    analysisText += `بهترین حرکت: ${data.bestMove}\n`;
+                    analysisText += `ارزیابی: ${data.evaluation > 0 ? '+' + data.evaluation.toFixed(2) : data.evaluation.toFixed(2)}\n`;
+                    analysisText += `عمق: ${data.depth}\n`;
+                    analysisText += `گره‌ها: ${formatNumber(data.nodes)}\n`;
+                    analysisText += `زمان: ${data.time.toFixed(2)} ثانیه`;
+                    
+                    alert(analysisText);
+                }
+            } catch (error) {
+                showError('خطا در تحلیل عمیق: ' + error.message);
+            }
+        }
+        
+        // چرخش تخته
+        function flipBoard() {
+            gameState.isBoardFlipped = !gameState.isBoardFlipped;
+            
+            const squares = document.querySelectorAll('.square');
+            squares.forEach(square => {
+                const row = parseInt(square.dataset.row);
+                const col = parseInt(square.dataset.col);
+                
+                if (gameState.isBoardFlipped) {
+                    square.dataset.displayRow = 7 - row;
+                    square.dataset.displayCol = 7 - col;
+                } else {
+                    delete square.dataset.displayRow;
+                    delete square.dataset.displayCol;
+                }
+            });
+            
+            showToast(gameState.isBoardFlipped ? 'تخته چرخانده شد' : 'تخته به حالت اول برگشت', 'info');
+        }
+        
+        // تنظیم سطح دشواری
+        function setDifficulty(level) {
+            gameState.difficulty = level;
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-level="${level}"]`).classList.add('active');
+            
+            const levelNames = {
+                beginner: 'مبتدی',
+                intermediate: 'متوسط',
+                advanced: 'پیشرفته',
+                expert: 'استاد'
+            };
+            
+            document.getElementById('current-level').textContent = levelNames[level];
+            showToast(`سطح دشواری به '${levelNames[level]}' تغییر کرد`, 'info');
+        }
+        
+        // به‌روزرسانی اطلاعات بازی
+        function updateGameInfo() {
+            document.getElementById('current-turn').textContent = gameState.isWhiteTurn ? 'سفید' : 'سیاه';
+            document.getElementById('move-count').textContent = gameState.moves.length;
+            
+            // به‌روزرسانی تاریخچه حرکات
+            const movesContainer = document.getElementById('moves-container');
+            movesContainer.innerHTML = '';
+            
+            gameState.moves.forEach((move, index) => {
+                const moveItem = document.createElement('div');
+                moveItem.className = 'move-item';
+                moveItem.innerHTML = `
+                    <span>${index + 1}. ${move.move}</span>
+                    <span>${move.player} (${move.eval ? move.eval.toFixed(1) : '?'})</span>
+                `;
+                movesContainer.appendChild(moveItem);
+            });
+            
+            // اسکرول به پایین
+            movesContainer.scrollTop = movesContainer.scrollHeight;
+            
+            // به‌روزرسانی زمان
+            document.getElementById('update-time').textContent = new Date().toLocaleTimeString('fa-IR');
+        }
+        
+        // نمایش مستندات API
+        function showAPIDocs() {
+            alert(`
+📖 مستندات API شطرجد TetraShop:
+
+1. GET /api/status
+   وضعیت سرور و اطلاعات موتور
+
+2. POST /api/game/new
+   شروع بازی جدید
+   پارامترها: {difficulty, playerName}
+
+3. GET /api/engine/move
+   دریافت حرکت از موتور
+   پارامترها: fen, level
+
+4. POST /api/analyze
+   تحلیل موقعیت
+   پارامترها: {fen, depth}
+
+5. POST /api/game/move
+   انجام حرکت در بازی
+   پارامترها: {gameId, move}
+
+مثال‌ها:
+   /api/engine/move?fen=rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR&level=intermediate
+   `);
+        }
+        
+        // تست موتور
+        async function testEngine() {
+            try {
+                const response = await fetch('/api/test/engine');
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(`✅ تست موتور موفق: ${data.move} (ارزیابی: ${data.evaluation})`, 'success');
+                }
+            } catch (error) {
+                showError('خطا در تست موتور: ' + error.message);
+            }
+        }
+        
+        // تبدیل حرکت به UCI
+        function moveToUCI(move) {
+            const {from, to} = move;
+            const colFrom = String.fromCharCode(97 + from.col);
+            const rowFrom = 8 - from.row;
+            const colTo = String.fromCharCode(97 + to.col);
+            const rowTo = 8 - to.row;
+            return `${colFrom}${rowFrom}${colTo}${rowTo}`;
+        }
+        
+        // تبدیل UCI به حرکت
+        function uciToMove(uci) {
+            const colFrom = uci.charCodeAt(0) - 97;
+            const rowFrom = 8 - parseInt(uci.charAt(1));
+            const colTo = uci.charCodeAt(2) - 97;
+            const rowTo = 8 - parseInt(uci.charAt(3));
+            
+            return {
+                from: {row: rowFrom, col: colFrom},
+                to: {row: rowTo, col: colTo}
+            };
+        }
+        
+        // تولید FEN
+        function generateFEN() {
+            let fen = '';
+            
+            for (let row = 0; row < 8; row++) {
+                let empty = 0;
+                
+                for (let col = 0; col < 8; col++) {
+                    const piece = gameState.board[row][col];
+                    
+                    if (piece === null) {
+                        empty++;
+                    } else {
+                        if (empty > 0) {
+                            fen += empty;
+                            empty = 0;
+                        }
+                        fen += piece;
+                    }
+                }
+                
+                if (empty > 0) fen += empty;
+                if (row < 7) fen += '/';
+            }
+            
+            fen += gameState.isWhiteTurn ? ' w' : ' b';
+            fen += ' KQkq - 0 1';
+            
+            return fen;
+        }
+        
+        // بررسی معتبر بودن خانه
+        function isValidSquare(row, col) {
+            return row >= 0 && row < 8 && col >= 0 && col < 8;
+        }
+        
+        // نمایش پیام toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#36D1DC' : type === 'warning' ? '#FFD93D' : type === 'error' ? '#FF6B6B' : 'rgba(108, 99, 255, 0.9)'};
+                color: ${type === 'warning' ? '#000' : '#fff'};
+                padding: 12px 25px;
+                border-radius: 10px;
+                z-index: 10000;
+                font-weight: bold;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                animation: fadeInOut 3s ease;
+                text-align: center;
+                max-width: 80%;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // نمایش خطا
+        function showError(message) {
+            showToast(`❌ ${message}`, 'error');
+        }
+        
+        // فرمت اعداد
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+        
+        // راه‌اندازی اولیه
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

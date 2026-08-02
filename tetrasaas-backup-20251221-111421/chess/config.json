@@ -1,0 +1,17 @@
+{
+  "server": {
+    "port": 7555,
+    "maxGames": 100
+  },
+  "engine": {
+    "defaultDepth": 8,
+    "maxDepth": 20,
+    "useOpeningBook": true
+  },
+  "difficulty": {
+    "beginner": { "depth": 3 },
+    "intermediate": { "depth": 8 },
+    "advanced": { "depth": 12 },
+    "expert": { "depth": 16 }
+  }
+}

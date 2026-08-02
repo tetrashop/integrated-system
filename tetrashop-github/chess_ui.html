@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+<link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Chess Engine - Tetrashop</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 70px);
+            grid-template-rows: repeat(8, 70px);
+            border: 4px solid #8B4513;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .square {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .square.light { background: #F0D9B5; }
+        .square.dark { background: #B58863; }
+        
+        .square.selected { 
+            background: #90EE90 !important;
+            box-shadow: inset 0 0 0 3px #32CD32;
+        }
+        
+        .square.valid-move::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+        }
+        
+        .square.attack-move::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status {
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+        
+        button:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .move-history {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .move-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-connected { background: #10b981; }
+        .status-disconnected { background: #ef4444; }
+        .status-connecting { background: #f59e0b; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .chess-board {
+                grid-template-columns: repeat(8, 45px);
+                grid-template-rows: repeat(8, 45px);
+            }
+            .square {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;min-height:100vh;">
+    <h1>♟️ Cloud Chess Engine - Tetrashop</h1>
+    <p>Play against AI powered by distributed cloud computing</p>
+    
+    <div class="container">
+        <div class="chess-board" id="chessBoard">
+            <!-- Board will be generated by JavaScript -->
+        </div>
+        
+        <div class="panel">
+            <div class="connection-status">
+                <div class="status-dot status-connecting" id="statusDot"></div>
+                <span id="statusText">Connecting to Cloud Server...</span>
+            </div>
+            
+            <div class="status">
+                <h3>Game Status</h3>
+                <p id="gameStatus">Setting up game...</p>
+                <p id="currentPlayer">Current: White</p>
+            </div>
+            
+            <div class="controls">
+                <button onclick="newGame()">🔄 New Game</button>
+                <button onclick="undoMove()">↩️ Undo</button>
+                <button onclick="switchSide()">🔄 Switch Side</button>
+                <button onclick="showHint()">💡 Hint</button>
+            </div>
+            
+            <div class="difficulty">
+                <h3>AI Difficulty</h3>
+                <select id="difficulty" onchange="changeDifficulty()">
+                    <option value="1">Easy (Depth 2)</option>
+                    <option value="2" selected>Medium (Depth 3)</option>
+                    <option value="3">Hard (Depth 4)</option>
+                    <option value="4">Expert (Depth 5)</option>
+                </select>
+            </div>
+            
+            <div class="move-history">
+                <h3>Move History</h3>
+                <div id="moveList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // وضعیت بازی
+        let gameState = {
+            board: [],
+            selectedPiece: null,
+            validMoves: [],
+            currentPlayer: 'white',
+            moveHistory: [],
+            playerColor: 'white',
+            connected: false,
+            gameActive: false
+        };
+
+        // نمادهای Unicode برای مهره‌ها
+        const pieceSymbols = {
+            'white': {
+                'king': '♔', 'queen': '♕', 'rook': '♖',
+                'bishop': '♗', 'knight': '♘', 'pawn': '♙'
+            },
+            'black': {
+                'king': '♚', 'queen': '♛', 'rook': '♜',
+                'bishop': '♝', 'knight': '♞', 'pawn': '♟'
+            }
+        };
+
+        // مقداردهی اولیه صفحه
+        function initializeBoard() {
+            const board = document.getElementById('chessBoard');
+            board.innerHTML = '';
+            
+            for (let row = 7; row >= 0; row--) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+                    
+                    square.addEventListener('click', () => handleSquareClick(row, col));
+                    
+                    board.appendChild(square);
+                }
+            }
+            
+            setupInitialPosition();
+        }
+
+        // تنظیم موقعیت اولیه مهره‌ها
+        function setupInitialPosition() {
+            // رخ‌ها
+            placePiece(0, 0, 'rook', 'white');
+            placePiece(7, 0, 'rook', 'white');
+            placePiece(0, 7, 'rook', 'black');
+            placePiece(7, 7, 'rook', 'black');
+            
+            // اسب‌ها
+            placePiece(1, 0, 'knight', 'white');
+            placePiece(6, 0, 'knight', 'white');
+            placePiece(1, 7, 'knight', 'black');
+            placePiece(6, 7, 'knight', 'black');
+            
+            // فیل‌ها
+            placePiece(2, 0, 'bishop', 'white');
+            placePiece(5, 0, 'bishop', 'white');
+            placePiece(2, 7, 'bishop', 'black');
+            placePiece(5, 7, 'bishop', 'black');
+            
+            // وزیرها
+            placePiece(3, 0, 'queen', 'white');
+            placePiece(3, 7, 'queen', 'black');
+            
+            // شاه‌ها
+            placePiece(4, 0, 'king', 'white');
+            placePiece(4, 7, 'king', 'black');
+            
+            // سربازها
+            for (let col = 0; col < 8; col++) {
+                placePiece(col, 1, 'pawn', 'white');
+                placePiece(col, 6, 'pawn', 'black');
+            }
+        }
+
+        function placePiece(col, row, type, color) {
+            const square = getSquareElement(row, col);
+            square.textContent = pieceSymbols[color][type];
+            square.dataset.piece = type;
+            square.dataset.color = color;
+        }
+
+        function getSquareElement(row, col) {
+            const index = (7 - row) * 8 + col;
+            return document.getElementById('chessBoard').children[index];
+        }
+
+        function handleSquareClick(row, col) {
+            if (!gameState.gameActive || gameState.currentPlayer !== gameState.playerColor) return;
+            
+            const square = getSquareElement(row, col);
+            const piece = square.dataset.piece;
+            const color = square.dataset.color;
+            
+            // اگر مهره انتخاب شده باشد
+            if (gameState.selectedPiece) {
+                const [selectedRow, selectedCol] = gameState.selectedPiece;
+                
+                // بررسی آیا حرکت معتبر است
+                if (isValidMove(selectedRow, selectedCol, row, col)) {
+                    // انجام حرکت
+                    makeMove(selectedRow, selectedCol, row, col);
+                    clearSelection();
+                    
+                    // نوبت AI
+                    if (gameState.gameActive) {
+                        setTimeout(requestAIMove, 500);
+                    }
+                } else {
+                    clearSelection();
+                    if (piece && color === gameState.playerColor) {
+                        selectPiece(row, col);
+                    }
+                }
+            } else if (piece && color === gameState.playerColor) {
+                selectPiece(row, col);
+            }
+        }
+
+        function selectPiece(row, col) {
+            clearSelection();
+            
+            gameState.selectedPiece = [row, col];
+            const square = getSquareElement(row, col);
+            square.classList.add('selected');
+            
+            // محاسبه حرکات معتبر (ساده)
+            gameState.validMoves = calculateValidMoves(row, col);
+            highlightValidMoves();
+        }
+
+        function calculateValidMoves(row, col) {
+            // پیاده‌سازی ساده حرکات معتبر
+            const moves = [];
+            const piece = getSquareElement(row, col).dataset.piece;
+            
+            // بر اساس نوع مهره حرکات ممکن را محاسبه کن
+            switch (piece) {
+                case 'pawn':
+                    // حرکت پیاده
+                    const direction = gameState.playerColor === 'white' ? 1 : -1;
+                    moves.push([row + direction, col]);
+                    break;
+                case 'knight':
+                    // حرکت اسب
+                    const knightMoves = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]];
+                    knightMoves.forEach(([dr, dc]) => {
+                        moves.push([row + dr, col + dc]);
+                    });
+                    break;
+                // سایر مهره‌ها...
+            }
+            
+            return moves.filter(([r, c]) => r >= 0 && r < 8 && c >= 0 && c < 8);
+        }
+
+        function highlightValidMoves() {
+            gameState.validMoves.forEach(([row, col]) => {
+                const square = getSquareElement(row, col);
+                const targetPiece = square.dataset.piece;
+                
+                if (targetPiece) {
+                    square.classList.add('attack-move');
+                } else {
+                    square.classList.add('valid-move');
+                }
+            });
+        }
+
+        function clearSelection() {
+            // پاک کردن انتخاب قبلی
+            document.querySelectorAll('.square').forEach(square => {
+                square.classList.remove('selected', 'valid-move', 'attack-move');
+            });
+            gameState.selectedPiece = null;
+            gameState.validMoves = [];
+        }
+
+        function isValidMove(fromRow, fromCol, toRow, toCol) {
+            return gameState.validMoves.some(([r, c]) => r === toRow && c === toCol);
+        }
+
+        function makeMove(fromRow, fromCol, toRow, toCol) {
+            const fromSquare = getSquareElement(fromRow, fromCol);
+            const toSquare = getSquareElement(toRow, toCol);
+            
+            const piece = fromSquare.dataset.piece;
+            const color = fromSquare.dataset.color;
+            
+            // حرکت مهره
+            toSquare.textContent = fromSquare.textContent;
+            toSquare.dataset.piece = piece;
+            toSquare.dataset.color = color;
+            
+            fromSquare.textContent = '';
+            delete fromSquare.dataset.piece;
+            delete fromSquare.dataset.color;
+            
+            // ثبت حرکت
+            const moveNotation = `${String.fromCharCode(97 + fromCol)}${fromRow + 1}-${String.fromCharCode(97 + toCol)}${toRow + 1}`;
+            addMoveToHistory(moveNotation, color);
+            
+            // تغییر نوبت
+            gameState.currentPlayer = gameState.currentPlayer === 'white' ? 'black' : 'white';
+            updateGameStatus();
+        }
+
+        function addMoveToHistory(move, color) {
+            gameState.moveHistory.push({ move, color });
+            const moveList = document.getElementById('moveList');
+            const moveItem = document.createElement('div');
+            moveItem.className = 'move-item';
+            moveItem.innerHTML = `
+                <span>${gameState.moveHistory.length}.</span>
+                <span>${color === 'white' ? move : '...' + move}</span>
+            `;
+            moveList.appendChild(moveItem);
+            moveList.scrollTop = moveList.scrollHeight;
+        }
+
+        function updateGameStatus() {
+            document.getElementById('currentPlayer').textContent = 
+                `Current: ${gameState.currentPlayer === 'white' ? 'White' : 'Black'}`;
+        }
+
+        // توابع مدیریت بازی
+        function newGame() {
+            clearSelection();
+            initializeBoard();
+            gameState.moveHistory = [];
+            gameState.currentPlayer = 'white';
+            gameState.gameActive = true;
+            document.getElementById('moveList').innerHTML = '';
+            document.getElementById('gameStatus').textContent = 'Game in progress';
+            updateGameStatus();
+        }
+
+        function undoMove() {
+            // پیاده‌سازی undo
+            console.log('Undo move');
+        }
+
+        function switchSide() {
+            gameState.playerColor = gameState.playerColor === 'white' ? 'black' : 'white';
+            newGame();
+        }
+
+        function showHint() {
+            // درخواست hint از سرور
+            console.log('Requesting hint from server');
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            console.log('Difficulty changed to:', difficulty);
+        }
+
+        // توابع ارتباط با سرور ابری
+        function requestAIMove() {
+            if (!gameState.connected) {
+                console.log('Not connected to server');
+                return;
+            }
+            
+            // ارسال وضعیت فعلی به سرور برای محاسبه حرکت
+            const gameData = serializeGameState();
+            Module.sendMove(gameData);
+        }
+
+        function serializeGameState() {
+            // سریالایز کردن وضعیت بازی برای ارسال به سرور
+            return JSON.stringify({
+                board: gameState.board,
+                currentPlayer: gameState.currentPlayer,
+                moveHistory: gameState.moveHistory
+            });
+        }
+
+        // تابعی که از سمت WebAssembly فراخوانی می‌شود
+        function updateBoardWithComputerMove(moveData) {
+            if (moveData.startsWith('MOVE')) {
+                const parts = moveData.split(' ');
+                const from = parts[1];
+                const to = parts[2];
+                
+                // تجزیه حرکت و به‌روزرسانی صفحه
+                const fromCol = from.charCodeAt(0) - 97;
+                const fromRow = parseInt(from.charAt(1)) - 1;
+                const toCol = to.charCodeAt(0) - 97;
+                const toRow = parseInt(to.charAt(1)) - 1;
+                
+                makeMove(fromRow, fromCol, toRow, toCol);
+            }
+        }
+
+        // مدیریت اتصال WebSocket
+        function updateConnectionStatus(connected) {
+            gameState.connected = connected;
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            if (connected) {
+                statusDot.className = 'status-dot status-connected';
+                statusText.textContent = 'Connected to Cloud Server';
+            } else {
+                statusDot.className = 'status-dot status-disconnected';
+                statusText.textContent = 'Disconnected from Server';
+            }
+        }
+
+        // راه‌اندازی اولیه
+        window.onload = function() {
+            initializeBoard();
+            
+            // اتصال به سرور ابری
+            const serverUrl = 'ws://localhost:9002';
+            Module.connectToServer(serverUrl);
+            
+            // شبیه‌سازی اتصال (در حالت واقعی از WebSocket استفاده می‌شود)
+            setTimeout(() => updateConnectionStatus(true), 2000);
+        };
+    </script>
+
+    <!-- بارگذاری WebAssembly -->
+    <script src="chess_client.js"></script>
+</body>
+</html>

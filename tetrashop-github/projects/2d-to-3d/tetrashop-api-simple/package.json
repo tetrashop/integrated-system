@@ -1,0 +1,16 @@
+{
+  "name": "tetrashop-api-optimized",
+  "version": "2.0.0",
+  "description": "سرور بهینه شده Tetrashop با قابلیت‌های پیشرفته",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": ["tetrashop", "api", "ecommerce", "optimized"],
+  "author": "Tetrashop Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

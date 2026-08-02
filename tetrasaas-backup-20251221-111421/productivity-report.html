@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>گزارش بهره‌وری TetraSaaS</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        h1 { color: #333; border-bottom: 2px solid #4f46e5; padding-bottom: 10px; }
+        .stat { margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 5px; }
+        .positive { color: green; }
+        .negative { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 گزارش تحلیل بهره‌وری TetraSaaS</h1>
+        <p>تاریخ تولید: $(date '+%Y/%m/%d %H:%M')</p>
+        
+        <h2>📈 خلاصه عملکرد</h2>
+        <div class="stat">
+            <strong>میانگین سلامت سرویس‌ها:</strong> ${avg_health}%
+        </div>
+        <div class="stat">
+            <strong>میانگین زمان پاسخ:</strong> ${avg_response}ms
+        </div>
+        <div class="stat">
+            <strong>میانگین نمره بهره‌وری:</strong> ${avg_score}/100
+        </div>
+        
+        <h2>📅 روند تغییرات</h2>
+        <div class="stat">
+            <strong>تغییر سلامت از ابتدا:</strong> 
+            <span class="$( [ $health_change -gt 0 ] && echo 'positive' || echo 'negative' )">
+                ${health_change}%
+            </span>
+        </div>
+        <div class="stat">
+            <strong>تغییر نمره از ابتدا:</strong> 
+            <span class="$( [ $score_change -gt 0 ] && echo 'positive' || echo 'negative' )">
+                ${score_change} امتیاز
+            </span>
+        </div>
+        
+        <h2>💡 توصیه‌ها</h2>
+        <ul>
+<li>نیاز به بهبود اساسی در سرویس‌ها</li>
+<li>بررسی سرویس‌های غیرفعال</li>
+<li>بهینه‌سازی زمان پاسخ</li>
+        </ul>
+        
+        <h2>📞 تماس</h2>
+        <p>برای اطلاعات بیشتر، تست‌های روزانه را ادامه دهید.</p>
+        
+        <p style="margin-top: 30px; color: #666; text-align: center;">
+            ایجاد شده توسط سیستم مانیتورینگ TetraSaaS
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نویسنده کوانتومی - تتراشاپ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vazirmatn/math@latest/dist/font-face.css">
+    <style>
+        /* استایل‌های تکمیلی */
+        .quantum-message {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .quantum-success {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            color: white;
+        }
+        
+        .quantum-warning {
+            background: rgba(255, 165, 0, 0.2);
+            border: 1px solid #ffa500;
+            color: white;
+        }
+        
+        .quantum-info {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid #8a2be2;
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100px); opacity: 0; }
+        }
+        
+        .input-stats {
+            font-size: 0.9em;
+            color: #aaa;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- ذرات کوانتومی در پس‌زمینه -->
+    <canvas id="quantum-particles"></canvas>
+    
+    <div class="quantum-container">
+        <!-- ناوبری -->
+        <div class="nav-back">
+            <a href="../../index.html" class="back-btn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+        
+        <!-- هدر -->
+        <header class="quantum-header">
+            <h1>
+                <i class="fas fa-atom"></i>
+                نویسنده کوانتومی
+            </h1>
+            <p>
+                نسل بعدی تولید محتوا با الگوریتم‌های کوانتومی.
+                ترکیبی از فیزیک کوانتوم، هوش مصنوعی و پردازش زبان طبیعی.
+            </p>
+            
+            <div class="quantum-status">
+                <div class="status-item" id="quantum-state">
+                    <i class="fas fa-microchip"></i>
+                    حالت: برهم‌نهی
+                </div>
+                <div class="status-item" id="entanglement-level">
+                    <i class="fas fa-link"></i>
+                    درجه درهم‌تنیدگی: ۰.۸۷
+                </div>
+            </div>
+        </header>
+        
+        <!-- کیوبیت‌ها -->
+        <section class="qbit-section">
+            <div class="section-title">
+                <i class="fas fa-microchip"></i>
+                <h2>سیستم کیوبیت‌ها</h2>
+            </div>
+            
+            <div class="qbits-container">
+                <div class="qbit" data-state="0">
+                    <div class="qbit-state">|0⟩</div>
+                    <div class="qbit-label">کیوبیت پایه</div>
+                </div>
+                
+                <div class="qbit" data-state="1">
+                    <div class="qbit-state">|1⟩</div>
+                    <div class="qbit-label">کیوبیت پایه</div>
+                </div>
+                
+                <div class="qbit superposition">
+                    <div class="qbit-state">|0⟩ + |1⟩</div>
+                    <div class="qbit-label">برهم‌نهی</div>
+                </div>
+                
+                <div class="qbit entangled">
+                    <div class="qbit-state">درهم‌تنیده</div>
+                    <div class="qbit-label">درهم‌تنیدگی</div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: #aaa; margin-top: 20px;">
+                روی کیوبیت‌ها کلیک کنید تا دستکاری کوانتومی انجام شود
+            </p>
+        </section>
+        
+        <!-- کنترل‌های کوانتومی -->
+        <div class="quantum-controls">
+            <div class="control-card" id="superposition-btn">
+                <div class="control-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <h3>ایجاد برهم‌نهی</h3>
+                <p>ترکیب چند حالت به صورت همزمان</p>
+            </div>
+            
+            <div class="control-card" id="entanglement-btn">
+                <div class="control-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <h3>درهم‌تنیدگی</h3>
+                <p>اتصال کوانتومی بین کیوبیت‌ها</p>
+            </div>
+            
+            <div class="control-card" id="measure-btn">
+                <div class="control-icon">
+                    <i class="fas fa-ruler"></i>
+                </div>
+                <h3>اندازه‌گیری</h3>
+                <p>فروریختن تابع موج به یک حالت</p>
+            </div>
+        </div>
+        
+        <!-- ورودی و خروجی -->
+        <div class="quantum-io">
+            <!-- ورودی -->
+            <div class="io-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-keyboard"></i> ورودی کوانتومی</h2>
+                    <div class="input-stats">
+                        <span id="char-count">۰ حرف</span> | 
+                        <span id="word-count">۰ کلمه</span>
+                    </div>
+                </div>
+                <textarea id="quantum-input" class="quantum-textarea" 
+                          placeholder="ایده خود را در حالت برهم‌نهی قرار دهید..."></textarea>
+            </div>
+            
+            <!-- خروجی -->
+            <div class="io-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-wave-square"></i> خروجی کوانتومی</h2>
+                </div>
+                <div class="collapsed-output" id="quantum-output">
+                    منتظر فروریختن تابع موج...
+                </div>
+                
+                <!-- نوارهای احتمال -->
+                <div class="probability-display">
+                    <div class="probability-label">
+                        <span>مقاله علمی</span>
+                        <span>۷۰٪</span>
+                    </div>
+                    <div class="probability-bar" id="article-prob">
+                        <div class="probability-fill" style="width: 70%"></div>
+                    </div>
+                    
+                    <div class="probability-label">
+                        <span>داستان</span>
+                        <span>۲۰٪</span>
+                    </div>
+                    <div class="probability-bar" id="story-prob">
+                        <div class="probability-fill" style="width: 20%"></div>
+                    </div>
+                    
+                    <div class="probability-label">
+                        <span>شعر</span>
+                        <span>۱۰٪</span>
+                    </div>
+                    <div class="probability-bar" id="poem-prob">
+                        <div class="probability-fill" style="width: 10%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- دکمه‌های اصلی -->
+        <div class="quantum-buttons">
+            <button class="quantum-btn btn-primary" id="quantum-generate">
+                <i class="fas fa-play"></i>
+                اجرای الگوریتم کوانتومی
+            </button>
+            
+            <button class="quantum-btn btn-secondary" id="reset-btn">
+                <i class="fas fa-redo"></i>
+                بازنشانی سیستم
+            </button>
+        </div>
+        
+        <!-- اطلاعات سیستم -->
+        <div class="quantum-output" style="margin-top: 40px;">
+            <div class="output-header">
+                <h2><i class="fas fa-info-circle"></i> اطلاعات سیستم کوانتومی</h2>
+                <span id="quantum-time">زمان محاسبه: ۰.۰۰ ثانیه</span>
+            </div>
+            
+            <div class="collapsed-output">
+                <strong>ویژگی‌های سیستم:</strong><br><br>
+                ۱. پردازش موازی ۱۰۰۰ کیوبیت<br>
+                ۲. سرعت محاسبه: ۱۰۰ برابر کلاسیک<br>
+                ۳. دقت کوانتومی: ۹۹.۹٪<br>
+                ۴. پشتیبانی از الگوریتم‌های: Shor, Grover, QFT<br>
+                ۵. شبیه‌سازی ۵۰ لایه کوانتومی
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

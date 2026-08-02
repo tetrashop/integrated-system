@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پردازش زبان طبیعی (NLP) - TetraShop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section, .output-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+        
+        .input-section h2, .output-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .analysis-results {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            color: #666;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 پردازش زبان طبیعی (NLP)</h1>
+            <p>ابزارهای پیشرفته تحلیل و پردازش متن فارسی</p>
+            <div class="button-group" style="justify-content: center; margin-top: 1rem;">
+                <a href="http://localhost:3001" class="btn btn-secondary">🏠 صفحه اصلی</a>
+                <a href="http://localhost:8080" class="btn btn-secondary">🛠️ پنل مدیریت</a>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- بخش ورودی -->
+            <div class="input-section">
+                <h2>📝 وارد کردن متن</h2>
+                <textarea id="inputText" placeholder="متن خود را اینجا وارد کنید...">سلام! امروز روز خوبی است. هوا آفتابی است و من قصد دارم به پارک بروم. دوستانم نیز با من خواهند آمد.</textarea>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="analyzeText()">
+                        🔍 تحلیل متن
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearText()">
+                        🧹 پاک کردن
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadSample()">
+                        📄 نمونه متن
+                    </button>
+                    <button class="btn btn-secondary" onclick="detectLanguage()">
+                        🌍 تشخیص زبان
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">کاراکترها</div>
+                        <div class="stat-value" id="charCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">کلمات</div>
+                        <div class="stat-value" id="wordCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">جملات</div>
+                        <div class="stat-value" id="sentenceCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">خطوط</div>
+                        <div class="stat-value" id="lineCount">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- بخش خروجی -->
+            <div class="output-section">
+                <h2>📊 نتایج تحلیل</h2>
+                
+                <div id="resultsContainer">
+                    <div class="loading">
+                        <p>نتایج تحلیل در اینجا نمایش داده خواهد شد...</p>
+                        <p>برای شروع دکمه "تحلیل متن" را بزنید.</p>
+                    </div>
+                </div>
+                
+                <div id="statsContainer" style="display: none;">
+                    <h3>📈 آمار دقیق</h3>
+                    <div id="detailedStats"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding: 1.5rem; background: #f8f9fa; border-top: 1px solid #e0e0e0;">
+            <h3>🎯 قابلیت‌های سیستم</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                <span style="background: #e0e7ff; color: #3730a3; padding: 5px 10px; border-radius: 20px;">تشخیص احساسات</span>
+                <span style="background: #fce7f3; color: #9d174d; padding: 5px 10px; border-radius: 20px;">خلاصه‌سازی</span>
+                <span style="background: #dcfce7; color: #166534; padding: 5px 10px; border-radius: 20px;">تگ‌گذاری</span>
+                <span style="background: #fef3c7; color: #92400e; padding: 5px 10px; border-radius: 20px;">NER</span>
+                <span style="background: #e0e7ff; color: #3730a3; padding: 5px 10px; border-radius: 20px;">تشخیص موجودیت‌ها</span>
+                <span style="background: #f3e8ff; color: #6b21a8; padding: 5px 10px; border-radius: 20px;">وابستگی‌ها</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // عناصر DOM
+        const inputText = document.getElementById('inputText');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const statsContainer = document.getElementById('statsContainer');
+        const detailedStats = document.getElementById('detailedStats');
+        
+        // آمار
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+        const sentenceCount = document.getElementById('sentenceCount');
+        const lineCount = document.getElementById('lineCount');
+        
+        // به‌روزرسانی آمار در لحظه
+        inputText.addEventListener('input', updateStats);
+        
+        // تابع به‌روزرسانی آمار
+        function updateStats() {
+            const text = inputText.value;
+            
+            charCount.textContent = text.length;
+            wordCount.textContent = text.trim() ? text.split(/\s+/).length : 0;
+            sentenceCount.textContent = text.split(/[.!?]+/).filter(s => s.trim()).length;
+            lineCount.textContent = text.split('\n').length;
+        }
+        
+        // تابع تحلیل متن
+        function analyzeText() {
+            const text = inputText.value.trim();
+            
+            if (!text) {
+                showError('لطفا متن خود را وارد کنید');
+                return;
+            }
+            
+            // نمایش loading
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    <p>🔍 در حال تحلیل متن...</p>
+                    <p>لطفا چند لحظه صبر کنید</p>
+                </div>
+            `;
+            
+            // شبیه‌سازی تحلیل (در آینده با API واقعی جایگزین شود)
+            setTimeout(() => {
+                const analysisResults = performNLPAnalysis(text);
+                displayResults(analysisResults);
+            }, 1000);
+        }
+        
+        // تابع تحلیل متن
+        function performNLPAnalysis(text) {
+            // تحلیل‌های مختلف
+            const words = text.split(/\s+/).filter(w => w);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            const chars = text.length;
+            
+            // تحلیل احساسات ساده
+            const positiveWords = ['خوب', 'عالی', 'زیبا', 'آفتابی', 'دوست', 'خوشحال'];
+            const negativeWords = ['بد', 'زشت', 'بارانی', 'تنها', 'ناراحت'];
+            
+            let sentimentScore = 0;
+            words.forEach(word => {
+                if (positiveWords.includes(word)) sentimentScore++;
+                if (negativeWords.includes(word)) sentimentScore--;
+            });
+            
+            const sentiment = sentimentScore > 0 ? 'مثبت' : sentimentScore < 0 ? 'منفی' : 'خنثی';
+            
+            // کلمات کلیدی (ساده)
+            const wordFrequency = {};
+            words.forEach(word => {
+                const cleanWord = word.replace(/[.,!?;:]/g, '').toLowerCase();
+                if (cleanWord.length > 2) {
+                    wordFrequency[cleanWord] = (wordFrequency[cleanWord] || 0) + 1;
+                }
+            });
+            
+            // مرتب‌سازی کلمات پرتکرار
+            const topWords = Object.entries(wordFrequency)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([word, count]) => `${word} (${count} بار)`);
+            
+            return {
+                sentiment: sentiment,
+                sentimentScore: sentimentScore,
+                topWords: topWords,
+                readingTime: Math.ceil(words.length / 200), // دقیقه
+                complexity: words.length > 100 ? 'پیشرفته' : words.length > 50 ? 'متوسط' : 'ساده',
+                language: detectLanguageAuto(text)
+            };
+        }
+        
+        // تابع تشخیص زبان
+        function detectLanguageAuto(text) {
+            const persianRegex = /[\u0600-\u06FF]/;
+            const englishRegex = /[A-Za-z]/;
+            
+            const hasPersian = persianRegex.test(text);
+            const hasEnglish = englishRegex.test(text);
+            
+            if (hasPersian && hasEnglish) return 'ترکیبی فارسی/انگلیسی';
+            if (hasPersian) return 'فارسی';
+            if (hasEnglish) return 'انگلیسی';
+            return 'نامشخص';
+        }
+        
+        // تابع نمایش نتایج
+        function displayResults(results) {
+            let html = `
+                <div class="success">
+                    ✅ تحلیل متن با موفقیت انجام شد
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-title">😊 احساس کلی متن</div>
+                    <div class="result-value">
+                        <strong>${results.sentiment}</strong> 
+                        (امتیاز: ${results.sentimentScore})
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-title">🏷️ کلمات کلیدی پرتکرار</div>
+                    <div class="result-value">
+                        ${results.topWords.join('، ')}
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-title">⏱️ زمان تخمینی مطالعه</div>
+                    <div class="result-value">
+                        ${results.readingTime} دقیقه
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-title">📊 سطح پیچیدگی</div>
+                    <div class="result-value">
+                        ${results.complexity}
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-title">🌍 زبان متن</div>
+                    <div class="result-value">
+                        ${results.language}
+                    </div>
+                </div>
+            `;
+            
+            resultsContainer.innerHTML = html;
+            
+            // نمایش آمار دقیق
+            showDetailedStats();
+        }
+        
+        // تابع نمایش آمار دقیق
+        function showDetailedStats() {
+            const text = inputText.value;
+            const words = text.split(/\s+/).filter(w => w);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            
+            const avgWordsPerSentence = words.length / (sentences.length || 1);
+            const avgWordLength = words.reduce((sum, word) => sum + word.length, 0) / (words.length || 1);
+            
+            detailedStats.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">میانگین کلمات در جمله</div>
+                        <div class="stat-value">${avgWordsPerSentence.toFixed(1)}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">میانگین طول کلمات</div>
+                        <div class="stat-value">${avgWordLength.toFixed(1)}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">تراکم اطلاعات</div>
+                        <div class="stat-value">${(words.length / (text.length || 1) * 100).toFixed(1)}%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">نوع متن</div>
+                        <div class="stat-value">${detectTextType(text)}</div>
+                    </div>
+                </div>
+            `;
+            
+            statsContainer.style.display = 'block';
+        }
+        
+        // تابع تشخیص نوع متن
+        function detectTextType(text) {
+            if (text.includes('؟') || text.includes('چرا') || text.includes('چگونه')) return 'سوالی';
+            if (text.includes('!')) return 'احساسی';
+            if (text.split('\n').length > 3) return 'چندخطی';
+            return 'معمولی';
+        }
+        
+        // تابع تشخیص زبان (دکمه جداگانه)
+        function detectLanguage() {
+            const text = inputText.value;
+            const lang = detectLanguageAuto(text);
+            showMessage(`🌍 زبان متن تشخیص داده شد: ${lang}`);
+        }
+        
+        // تابع بارگذاری نمونه متن
+        function loadSample() {
+            const samples = [
+                "سلام! امروز روز بسیار خوبی است. هوا آفتابی است و پرندگان آواز می‌خوانند. من قصد دارم به پارک بروم و با دوستانم وقت بگذرانم.",
+                "این متن یک نمونه انگلیسی است که برای تست سیستم پردازش زبان استفاده می‌شود. The quick brown fox jumps over the lazy dog.",
+                "آیا می‌دانستید که پردازش زبان طبیعی یکی از شاخه‌های مهم هوش مصنوعی است؟ این فناوری به کامپیوترها کمک می‌کند زبان انسان را درک کنند.",
+                "احساسات مثبت در این متن موج می‌زند: عشق، شادی، موفقیت، پیشرفت و امید! زندگی زیباست اگر با optimism به آن نگاه کنیم."
+            ];
+            
+            const randomSample = samples[Math.floor(Math.random() * samples.length)];
+            inputText.value = randomSample;
+            updateStats();
+            showMessage('📄 نمونه متن بارگذاری شد');
+        }
+        
+        // تابع پاک کردن متن
+        function clearText() {
+            inputText.value = '';
+            updateStats();
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    <p>نتایج تحلیل در اینجا نمایش داده خواهد شد...</p>
+                    <p>برای شروع دکمه "تحلیل متن" را بزنید.</p>
+                </div>
+            `;
+            statsContainer.style.display = 'none';
+            showMessage('🧹 متن پاک شد');
+        }
+        
+        // تابع نمایش پیام
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error' : 'success';
+            messageDiv.textContent = message;
+            messageDiv.style.marginTop = '10px';
+            messageDiv.style.animation = 'fadeIn 0.5s';
+            
+            document.querySelector('.input-section').appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+        
+        // تابع نمایش خطا
+        function showError(message) {
+            showMessage(message, 'error');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            
+            // اضافه کردن انیمیشن fadeIn
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

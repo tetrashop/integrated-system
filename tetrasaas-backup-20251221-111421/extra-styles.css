@@ -1,0 +1,149 @@
+/* استایل‌های اضافی برای صفحه اصلی */
+.url-guide {
+    animation: guideFadeIn 0.5s ease;
+}
+
+@keyframes guideFadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.project-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+.project-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.project-btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* استایل برای نوتیفیکیشن‌ها */
+.notification {
+    animation: notificationSlide 0.5s ease;
+}
+
+@keyframes notificationSlide {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* استایل برای کارت‌های پروژه */
+.project-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.project-card:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+}
+
+/* استایل برای صفحه تست */
+.test-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.test-link {
+    padding: 8px 15px;
+    background: rgba(139, 92, 246, 0.2);
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.test-link:hover {
+    background: rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+/* استایل برای دکمه اضطراری */
+.emergency-btn {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+/* استایل برای موبایل */
+@media (max-width: 768px) {
+    .url-guide {
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .test-links {
+        justify-content: center;
+    }
+    
+    .emergency-btn {
+        bottom: 70px;
+        right: 10px;
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+
+/* استایل برای حالت تاریک/روشن */
+@media (prefers-color-scheme: light) {
+    .notification {
+        background: #f8f9fa;
+        color: #212529;
+        border-right: 5px solid var(--primary);
+    }
+    
+    .url-guide {
+        background: white;
+        color: #212529;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+}

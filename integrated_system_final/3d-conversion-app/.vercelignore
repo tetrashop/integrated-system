@@ -1,0 +1,7 @@
+apps/tetrashop-ui/
+tetrashop-production/
+modules/
+*.backup.js
+money.js
+revenue.js
+server.js

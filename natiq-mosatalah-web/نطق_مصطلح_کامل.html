@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>🗣️ نطق مصطلح - پایگاه داده عبارات فارسی</title>
+<style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #2c5f2d;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #2c5f2d, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+        .search-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #4CAF50, #2c5f2d);
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .phrase-card {
+            background: white;
+            padding: 25px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-right: 5px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+        .phrase-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .category {
+            display: inline-block;
+            background: #e8f5e8;
+            color: #2c5f2d;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .phrase-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .meaning {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 3px solid #ddd;
+            color: #888;
+            font-style: italic;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .search-box { flex-direction: column; }
+            .header h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>🗣️ نطق مصطلح</h1>
+<p>پایگاه داده جامع عبارات، ضرب‌المثل‌ها و اصطلاحات فارسی</p>
+</div>
+<div class="search-section">
+<div class="search-box">
+<input autocomplete="off" class="search-input" id="searchInput" placeholder="عبارت مورد نظر را جستجو کنید..." type="text"/>
+<button class="btn btn-primary" onclick="searchPhrases()">🔍 جستجو</button>
+<button class="btn btn-secondary" onclick="showAllPhrases()">📚 همه عبارات</button>
+</div>
+<div class="stats" id="statsSection">
+<!-- آمار اینجا نمایش داده می‌شود -->
+</div>
+</div>
+<div class="results" id="results">
+<!-- نتایج جستجو اینجا نمایش داده می‌شود -->
+</div>
+<div class="footer">
+<p>ساخته شده با ❤️ توسط تتراشاپ | ما شاء الله</p>
+</div>
+</div>
+<script>
+window.onerror=function(m,u,l){console.error("Error: "+m+" at "+u+":"+l);return false;};
+        // داده‌های کامل نطق مصطلح
+        const natiqData = {
+            "estelahat": {
+                "ان شاء الله": {
+                    "mani": "اگر خدا بخواهد (بیان امیدواری و توکل بر خدا)",
+                    "mesal": "ان شاء الله فردا در جلسه حاضر خواهم بود",
+                    "ehsas": "امیدوارانه"
+                },
+                "دستش درد نکند": {
+                    "mani": "آفرین، زحمت کشیدی (بیان قدردانی و تشکر)",
+                    "mesal": "دستت درد نکند که این غذای خوشمزه را درست کردی",
+                    "ehsas": "قدردانی"
+                },
+                "چشمم روشن": {
+                    "mani": "خوشحال شدم از دیدن تو",
+                    "mesal": "چشمم روشن که بعد از این همه وقت تو را دیدم",
+                    "ehsas": "خوشحالی"
+                },
+                "دلم تنگ شده": {
+                    "mani": "دلم برای کسی یا چیزی تنگ شده",
+                    "mesal": "دلم تنگ شده برای روزهای قدیم",
+                    "ehsas": "احساسی"
+                },
+                "ما شاء الله": {
+                    "mani": "آنچه خدا خواسته (بیان تحسین، تعجب و توکل)",
+                    "mesal": "ما شاء الله! چه پروژه زیبایی ساخته‌اید!",
+                    "ehsas": "تحسین"
+                }
+            },
+            "zarbolmasalha": {
+                "نابرده رنج گنج میسر نمی‌شود": {
+                    "mani": "بدون زحمت کشیدن نمی‌توان به موفقیت و ثروت رسید",
+                    "mesal": "برای قبولی در دانشگاه باید سخت درس بخوانی، نابرده رنج گنج میسر نمی‌شود",
+                    "ehsas": "انگیزشی"
+                },
+                "کبوتر با کبوتر، باز با باز": {
+                    "mani": "اشخاص با افراد هم‌فکر و هم‌سطح خود معاشرت می‌کنند",
+                    "mesal": "همیشه با کتابخوان‌ها هستی، کبوتر با کبوتر باز با باز",
+                    "ehsas": "اجتماعی"
+                },
+                "آدم عاقل در یک سوراخ دو بار گزیده نمی‌شود": {
+                    "mani": "انسان باهاش از یک اشتباه دوباره تکرار نمی‌کند",
+                    "mesal": "بعد از اینکه کلاهبرداری شدی، دیگر به افراد ناشناس اعتماد نکن",
+                    "ehsas": "پندآموز"
+                },
+                "گر صبر کنی ز غوره حلوا سازی": {
+                    "mani": "با صبر و حوصله می‌توان به نتیجه خوب رسید",
+                    "mesal": "نگران نباش، گر صبر کنی ز غوره حلوا سازی",
+                    "ehsas": "صبر"
+                }
+            },
+            "ashare_mardomi": {
+                "بنى آدم اعضای یک پیکرند": {
+                    "mani": "همه انسانها با هم برادر و برابرند",
+                    "mesal": "در گلستان سعدی: بنى آدم اعضای یک پیکرند که در آفرینش ز یک گوهرند",
+                    "sharer": "سعدی",
+                    "ehsas": "انسانی"
+                },
+                "چو عضوى به درد آورد روزگار، دگر عضوها را نماند قرار": {
+                    "mani": "وقتی یکی رنج ببیند، دیگران نیز آرامش ندارند",
+                    "mesal": "این بیت ادامه همان شعر معروف سعدی است",
+                    "sharer": "سعدی", 
+                    "ehsas": "همدلی"
+                }
+            }
+        };
+
+        // نمایش آمار هنگام بارگذاری صفحه
+        function showStats() {
+            let totalPhrases = 0;
+            const categoryStats = {};
+            
+            for (const [category, phrases] of Object.entries(natiqData)) {
+                const count = Object.keys(phrases).length;
+                categoryStats[category] = count;
+                totalPhrases += count;
+            }
+
+            document.getElementById('statsSection').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalPhrases}+</div>
+                    <div class="stat-label">عبارت فارسی</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.keys(natiqData).length}</div>
+                    <div class="stat-label">دسته‌بندی</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">۱۰۰٪</div>
+                    <div class="stat-label">خالص فارسی</div>
+                </div>
+            `;
+        }
+
+        // جستجوی عبارات
+        function searchPhrases() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            
+            if (!query) {
+                resultsDiv.innerHTML = '<div class="phrase-card">لطفاً عبارتی برای جستجو وارد کنید</div>';
+                return;
+            }
+
+            let foundResults = false;
+            let resultsHTML = '';
+
+            for (const [category, phrases] of Object.entries(natiqData)) {
+                for (const [phrase, details] of Object.entries(phrases)) {
+                    if (phrase.toLowerCase().includes(query) || 
+                        details.mani.toLowerCase().includes(query) ||
+                        details.mesal.toLowerCase().includes(query)) {
+                        
+                        foundResults = true;
+                        resultsHTML += `
+                            <div class="phrase-card">
+                                <div class="category">📂 ${getCategoryName(category)}</div>
+                                <div class="phrase-text">✨ ${phrase}</div>
+                                <div class="meaning">📖 ${details.mani}</div>
+                                <div class="example">💡 ${details.mesal}</div>
+                                ${details.sharer ? `<div style="margin-top: 10px; color: #888;">✍️ ${details.sharer}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (!foundResults) {
+                resultsHTML = `
+                    <div class="phrase-card">
+                        <div style="text-align: center; color: #666;">
+                            <div style="font-size: 3em;">🔍</div>
+                            <div style="font-size: 1.2em; margin: 10px 0;">نتیجه‌ای یافت نشد</div>
+                            <div>عبارت دیگری را امتحان کنید</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = resultsHTML;
+        }
+
+        // نمایش همه عبارات
+        function showAllPhrases() {
+            const resultsDiv = document.getElementById('results');
+            let resultsHTML = '';
+
+            for (const [category, phrases] of Object.entries(natiqData)) {
+                resultsHTML += `<div style="font-size: 1.5em; margin: 30px 0 15px 0; color: #2c5f2d;">📂 ${getCategoryName(category)}</div>`;
+                
+                for (const [phrase, details] of Object.entries(phrases)) {
+                    resultsHTML += `
+                        <div class="phrase-card">
+                            <div class="phrase-text">✨ ${phrase}</div>
+                            <div class="meaning">📖 ${details.mani}</div>
+                            <div class="example">💡 ${details.mesal}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            resultsDiv.innerHTML = resultsHTML;
+        }
+
+        // نام فارسی دسته‌بندی‌ها
+        function getCategoryName(category) {
+            const names = {
+                'estelahat': 'اصطلاحات',
+                'zarbolmasalha': 'ضرب‌المثل‌ها', 
+                'ashare_mardomi': 'اشعار مردمی',
+                'kenayeha': 'کنایه‌ها',
+                'tabirat': 'تعبیرات'
+            };
+            return names[category] || category;
+        }
+
+        // جستجو با کلید Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchPhrases();
+        });
+
+        // نمایش آمار هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', function() {
+            showStats();
+            showAllPhrases();
+        });
+    </script>
+</body>
+</html>

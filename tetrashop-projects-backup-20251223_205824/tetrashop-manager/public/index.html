@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت پیشرفته TetraShop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --dark: #2b2d42;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--dark) 0%, #1a1a2e 100%);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-link {
+            color: #fff;
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: var(--success);
+        }
+        
+        .stat-card {
+            border-radius: 15px;
+            border: none;
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .project-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .online { background: #d1fae5; color: #065f46; }
+        .offline { background: #fee2e2; color: #991b1b; }
+        .warning { background: #fef3c7; color: #92400e; }
+        
+        #projectFrame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- سایدبار -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-4">
+                    <div class="text-center mb-4">
+                        <h2 class="text-white">🧠 TetraManager</h2>
+                        <small class="text-muted">نسخه ۲.۰</small>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#dashboard">
+                                <i class="bi bi-speedometer2"></i> داشبورد
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#projects">
+                                <i class="bi bi-grid"></i> مدیریت پروژه‌ها
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#analytics">
+                                <i class="bi bi-graph-up"></i> آمار و تحلیل
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#users">
+                                <i class="bi bi-people"></i> کاربران
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#settings">
+                                <i class="bi bi-gear"></i> تنظیمات
+                            </a>
+                        </li>
+                        <li class="nav-item mt-4">
+                            <a class="nav-link text-warning" href="#quickActions">
+                                <i class="bi bi-lightning"></i> دسترسی سریع
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-5 text-center">
+                        <div class="text-white mb-2">وضعیت سیستم</div>
+                        <div class="d-flex justify-content-center">
+                            <span class="status-badge online">فعال</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- محتوای اصلی -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+                <!-- هدر -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom mb-4">
+                    <h1 class="h2">داشبورد مدیریت</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button class="btn btn-primary me-2">
+                            <i class="bi bi-plus-circle"></i> پروژه جدید
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i> بروزرسانی
+                        </button>
+                    </div>
+                </div>
+
+                <!-- کارت‌های آماری -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">پروژه‌های فعال</h5>
+                                <h2 class="display-6" id="activeProjects">5</h2>
+                                <p class="card-text">از 5 پروژه</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">کاربران آنلاین</h5>
+                                <h2 class="display-6" id="onlineUsers">3</h2>
+                                <p class="card-text">در 24 ساعت گذشته</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-warning text-dark">
+                            <div class="card-body">
+                                <h5 class="card-title">حافظه مصرفی</h5>
+                                <h2 class="display-6" id="memoryUsage">42%</h2>
+                                <p class="card-text">256MB از 512MB</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">درخواست‌ها</h5>
+                                <h2 class="display-6" id="totalRequests">1,247</h2>
+                                <p class="card-text">امروز</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- لیست پروژه‌ها -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">🔄 مدیریت پروژه‌ها</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>نام پروژه</th>
+                                                <th>نوع</th>
+                                                <th>وضعیت</th>
+                                                <th>آخرین بروزرسانی</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="projectsTable">
+                                            <!-- پروژه‌ها به صورت داینامیک لود می‌شوند -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- پیش‌نمایش پروژه انتخاب شده -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">👁️ پیش‌نمایش پروژه</h5>
+                                <select class="form-select w-auto" id="projectSelector">
+                                    <option value="shop">🛒 فروشگاه</option>
+                                    <option value="chess">♟️ شطرنج</option>
+                                    <option value="nlp">🗣️ NLP</option>
+                                    <option value="quantum">⚛️ کوانتا</option>
+                                </select>
+                            </div>
+                            <div class="card-body">
+                                <iframe id="projectFrame" src="http://localhost:3001"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // داده‌های پروژه‌ها
+        const projects = [
+            { id: 'shop', name: 'فروشگاه اینترنتی', type: 'وب‌سایت', status: 'online', lastUpdate: '2 دقیقه پیش' },
+            { id: 'chess', name: 'شطرنج هوشمند', type: 'بازی/هوش مصنوعی', status: 'online', lastUpdate: '5 دقیقه پیش' },
+            { id: 'nlp', name: 'پردازش زبان طبیعی', type: 'هوش مصنوعی', status: 'warning', lastUpdate: '10 دقیقه پیش' },
+            { id: 'quantum', name: 'نگار کوانتومی', type: 'گرافیک/علمی', status: 'online', lastUpdate: '15 دقیقه پیش' },
+            { id: 'manager', name: 'پنل مدیریت', type: 'اداری', status: 'online', lastUpdate: 'همین الان' }
+        ];
+
+        // تابع بارگذاری پروژه‌ها در جدول
+        function loadProjects() {
+            const tableBody = document.getElementById('projectsTable');
+            tableBody.innerHTML = '';
+            
+            projects.forEach(project => {
+                const statusClass = {
+                    'online': 'online',
+                    'offline': 'offline',
+                    'warning': 'warning'
+                }[project.status] || 'warning';
+                
+                const row = `
+                    <tr>
+                        <td><strong>${project.name}</strong></td>
+                        <td><span class="badge bg-secondary">${project.type}</span></td>
+                        <td><span class="status-badge ${statusClass}">${project.status === 'online' ? 'فعال' : 
+                                                                      project.status === 'offline' ? 'غیرفعال' : 'نیاز به توجه'}</span></td>
+                        <td>${project.lastUpdate}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewProject('${project.id}')">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning" onclick="restartProject('${project.id}')">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="openLogs('${project.id}')">
+                                <i class="bi bi-terminal"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // تابع مشاهده پروژه
+        function viewProject(projectId) {
+            const urls = {
+                'shop': 'http://localhost:3001',
+                'chess': 'http://localhost:3001/chess',
+                'nlp': 'http://localhost:3001/nlp',
+                'quantum': 'http://localhost:3001/quantum',
+                'manager': 'http://localhost:8080'
+            };
+            
+            document.getElementById('projectFrame').src = urls[projectId] || 'http://localhost:3001';
+            document.getElementById('projectSelector').value = projectId;
+            
+            showNotification(`پروژه ${projects.find(p => p.id === projectId)?.name} بارگذاری شد`);
+        }
+
+        // تابع راه‌اندازی مجدد پروژه
+        function restartProject(projectId) {
+            if (confirm(`آیا مطمئن هستید که می‌خواهید پروژه "${projects.find(p => p.id === projectId)?.name}" را راه‌اندازی مجدد کنید؟`)) {
+                fetch(`/api/projects/${projectId}/restart`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification(data.message || 'درخواست راه‌اندازی مجدد ارسال شد');
+                    })
+                    .catch(error => {
+                        showNotification('خطا در ارتباط با سرور');
+                    });
+            }
+        }
+
+        // تابع نمایش لاگ‌ها
+        function openLogs(projectId) {
+            alert(`لاگ‌های پروژه ${projects.find(p => p.id === projectId)?.name} به زودی در این بخش نمایش داده خواهند شد.`);
+        }
+
+        // تابع نمایش نوتیفیکیشن
+        function showNotification(message) {
+            // ایجاد یک toast ساده
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-dark text-white rounded';
+            toast.style.zIndex = '1050';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="me-3">🔔</div>
+                    <div>${message}</div>
+                    <button type="button" class="btn-close btn-close-white ms-3" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 3000);
+        }
+
+        // تغییر پروژه با سلکتور
+        document.getElementById('projectSelector').addEventListener('change', function(e) {
+            viewProject(e.target.value);
+        });
+
+        // بروزرسانی آمار هر 30 ثانیه
+        function updateStats() {
+            // آپدیت اعداد به صورت تصادفی برای نمایش
+            document.getElementById('activeProjects').textContent = 
+                projects.filter(p => p.status === 'online').length;
+            document.getElementById('onlineUsers').textContent = 
+                Math.floor(Math.random() * 10) + 1;
+            document.getElementById('memoryUsage').textContent = 
+                Math.floor(Math.random() * 20) + 30 + '%';
+            document.getElementById('totalRequests').textContent = 
+                (parseInt(document.getElementById('totalRequests').textContent.replace(/,/g, '')) + Math.floor(Math.random() * 5)).toLocaleString();
+        }
+
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjects();
+            updateStats();
+            setInterval(updateStats, 30000);
+            
+            // تست اتصال به سرورها
+            testConnections();
+        });
+
+        // تست اتصال به سرورها
+        async function testConnections() {
+            const endpoints = [
+                { name: 'فروشگاه', url: 'http://localhost:3001/api/status' },
+                { name: 'شطرنج', url: 'http://localhost:3001/chess' },
+                { name: 'NLP', url: 'http://localhost:3001/nlp' },
+                { name: 'کوانتا', url: 'http://localhost:3001/quantum' }
+            ];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    await fetch(endpoint.url);
+                    console.log(`✅ ${endpoint.name} متصل است`);
+                } catch (error) {
+                    console.warn(`⚠️ ${endpoint.name} مشکل دارد: ${error.message}`);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

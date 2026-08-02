@@ -1,0 +1,75 @@
+/* استایل صفحه شطرنج */
+.chess-board {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    gap: 0;
+    border: 3px solid #333;
+    margin: 20px auto;
+    width: 480px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.chess-square {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.white-square {
+    background-color: #f0d9b5;
+}
+
+.black-square {
+    background-color: #b58863;
+}
+
+.selected {
+    background-color: rgba(255, 255, 0, 0.5) !important;
+}
+
+.possible-move {
+    background-color: rgba(0, 255, 0, 0.3) !important;
+}
+
+.chess-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.chess-controls {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.chess-info {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .chess-board {
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+        width: 320px;
+    }
+    
+    .chess-square {
+        width: 40px;
+        height: 40px;
+        font-size: 30px;
+    }
+}

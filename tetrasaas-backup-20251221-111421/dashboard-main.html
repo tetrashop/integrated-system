@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TetraSaaS Dashboard - 23 Services</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 3px solid #4f46e5;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #4f46e5;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .service-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .service-description {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .service-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+        .ui-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            border: 2px solid #4f46e5;
+            position: relative;
+        }
+        .ui-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .close-ui {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .category-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .category-ai { background: rgba(139, 92, 246, 0.3); color: #a78bfa; }
+        .category-tools { background: rgba(34, 197, 94, 0.3); color: #4ade80; }
+        .category-security { background: rgba(239, 68, 68, 0.3); color: #f87171; }
+        .category-system { background: rgba(245, 158, 11, 0.3); color: #fbbf24; }
+        .category-network { background: rgba(59, 130, 246, 0.3); color: #60a5fa; }
+        .category-dev { background: rgba(168, 85, 247, 0.3); color: #a855f7; }
+        .category-science { background: rgba(6, 182, 212, 0.3); color: #22d3ee; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🧠 پلتفرم TetraSaaS</h1>
+            <p>دشبورد مدیریت ۲۳ سرویس ابری هوشمند</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">۲۳</div>
+                    <div>سرویس فعال</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">۰</div>
+                    <div>در حال اجرا</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">۱۰۰%</div>
+                    <div>دسترسی</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="services-grid" id="servicesGrid">
+            <!-- کارت‌های سرویس‌ها اینجا لود می‌شوند -->
+        </div>
+
+        <div class="ui-container" id="uiContainer">
+            <div class="ui-header">
+                <h2 id="uiTitle">واسط کاربری سرویس</h2>
+                <button class="close-ui" onclick="closeUI()">✕ بستن واسط</button>
+            </div>
+            <div id="uiContent">
+                <!-- محتوای واسط کاربری اینجا لود می‌شود -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // داده‌های سرویس‌ها
+        const services = [
+            {
+                id: 1, name: "نویسنده کوانتومی", 
+                description: "تولید محتوای پیشرفته با الگوریتم‌های کوانتومی",
+                port: 3001, category: "ai", icon: "🌀",
+                status: "active"
+            },
+            {
+                id: 2, name: "نویسنده هوشمند", 
+                description: "تولید محتوای متنی با هوش مصنوعی",
+                port: 3002, category: "ai", icon: "✍️",
+                status: "active"
+            },
+            {
+                id: 3, name: "باغ راز آلود", 
+                description: "سیستم امنیتی پیشرفته برای حفاظت از داده‌ها",
+                port: 3003, category: "security", icon: "🔐",
+                status: "active"
+            },
+            {
+                id: 4, name: "مبدل سه‌بعدی", 
+                description: "تبدیل فرمت‌های مختلف سه‌بعدی",
+                port: 3004, category: "tools", icon: "🎨",
+                status: "active"
+            },
+            {
+                id: 5, name: "تبدیل 2D به 3D", 
+                description: "تبدیل تصاویر دوبعدی به مدل‌های سه‌بعدی",
+                port: 3005, category: "ai", icon: "🔄",
+                status: "active"
+            },
+            {
+                id: 6, name: "تحلیلگر محتوا", 
+                description: "تحلیل و آنالیز محتوای متنی",
+                port: 3006, category: "ai", icon: "📊",
+                status: "active"
+            },
+            {
+                id: 7, name: "سامانه ضد چندپارگی", 
+                description: "بهینه‌سازی و یکپارچه‌سازی سیستم",
+                port: 3007, category: "system", icon: "⚙️",
+                status: "active"
+            },
+            {
+                id: 8, name: "حل کننده فرمول", 
+                description: "حل معادلات و فرمول‌های ریاضی",
+                port: 3008, category: "tools", icon: "🧮",
+                status: "active"
+            },
+            {
+                id: 9, name: "تمیز کننده کد", 
+                description: "بهینه‌سازی و نظافت کدهای برنامه‌نویسی",
+                port: 3009, category: "dev", icon: "💻",
+                status: "active"
+            },
+            {
+                id: 10, name: "گرافیکی دو بعدی", 
+                description: "ابزارهای طراحی و ویرایش گرافیک دوبعدی",
+                port: 3010, category: "tools", icon: "🎯",
+                status: "active"
+            },
+            {
+                id: 11, name: "سامانه ضد سیگار", 
+                description: "مانیتورینگ و کنترل سیستم",
+                port: 3011, category: "system", icon: "🚭",
+                status: "active"
+            },
+            {
+                id: 12, name: "طراحی تلسکوپ", 
+                description: "ابزارهای طراحی و شبیه‌سازی تلسکوپ",
+                port: 3012, category: "science", icon: "🔭",
+                status: "active"
+            },
+            {
+                id: 13, name: "سیستم تله‌پورت", 
+                description: "انتقال داده و ارتباطات شبکه",
+                port: 3013, category: "network", icon: "🚀",
+                status: "active"
+            },
+            {
+                id: 14, name: "پردازشگر تصویر", 
+                description: "پردازش و تحلیل تصاویر دیجیتال",
+                port: 3014, category: "ai", icon: "🖼️",
+                status: "active"
+            },
+            {
+                id: 15, name: "مبدل صوت", 
+                description: "تبدیل فرمت‌های مختلف فایل‌های صوتی",
+                port: 3015, category: "tools", icon: "🎵",
+                status: "active"
+            },
+            {
+                id: 16, name: "ویرایشگر ویدیو", 
+                description: "ویرایش و پردازش فایل‌های ویدیویی",
+                port: 3016, category: "tools", icon: "🎬",
+                status: "active"
+            },
+            {
+                id: 17, name: "رمزگذار داده", 
+                description: "رمزگذاری و رمزگشایی اطلاعات",
+                port: 3017, category: "security", icon: "🔒",
+                status: "active"
+            },
+            {
+                id: 18, name: "اسکنر شبکه", 
+                description: "بررسی و آنالیز شبکه‌های کامپیوتری",
+                port: 3018, category: "network", icon: "🌐",
+                status: "active"
+            },
+            {
+                id: 19, name: "بهینه‌ساز باتری", 
+                description: "مدیریت و بهینه‌سازی مصرف انرژی",
+                port: 3019, category: "system", icon: "🔋",
+                status: "active"
+            },
+            {
+                id: 20, name: "سازماندهی فایل", 
+                description: "مدیریت و سازماندهی فایل‌ها",
+                port: 3020, category: "tools", icon: "📁",
+                status: "active"
+            },
+            {
+                id: 21, name: "تولیدکننده رمز", 
+                description: "تولید رمزهای عبور امن و تصادفی",
+                port: 3021, category: "security", icon: "🔑",
+                status: "active"
+            },
+            {
+                id: 22, name: "مانیتور سیستم", 
+                description: "مانیتورینگ لحظه‌ای سیستم",
+                port: 3022, category: "system", icon: "📈",
+                status: "active"
+            },
+            {
+                id: 23, name: "مدیر پشتیبان", 
+                description: "مدیریت و ایجاد نسخه‌های پشتیبان",
+                port: 3023, category: "system", icon: "💾",
+                status: "active"
+            }
+        ];
+
+        // تابع نمایش کارت‌ها
+        function loadServices() {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = '';
+            
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.onclick = () => openServiceUI(service);
+                
+                let categoryClass = 'category-ai';
+                if (service.category === 'tools') categoryClass = 'category-tools';
+                else if (service.category === 'security') categoryClass = 'category-security';
+                else if (service.category === 'system') categoryClass = 'category-system';
+                else if (service.category === 'network') categoryClass = 'category-network';
+                else if (service.category === 'dev') categoryClass = 'category-dev';
+                else if (service.category === 'science') categoryClass = 'category-science';
+                
+                card.innerHTML = `
+                    <div class="${categoryClass} category-badge">${service.category}</div>
+                    <div class="service-icon">${service.icon}</div>
+                    <div class="service-name">${service.name}</div>
+                    <div class="service-description">${service.description}</div>
+                    <div class="service-status status-active">✅ فعال</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // تابع باز کردن واسط کاربری
+        function openServiceUI(service) {
+            document.getElementById('uiTitle').textContent = `${service.icon} ${service.name}`;
+            document.getElementById('uiContent').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">${service.icon}</div>
+                    <h3 style="margin-bottom: 20px; color: #60a5fa;">${service.name}</h3>
+                    <p style="color: #cbd5e1; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        ${service.description}
+                    </p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 30px;">
+                        <h4 style="margin-bottom: 15px; color: #a78bfa;">📊 اطلاعات سرویس</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: right;">
+                            <div>پورت:</div><div><strong>${service.port}</strong></div>
+                            <div>دسته:</div><div><strong>${service.category}</strong></div>
+                            <div>وضعیت:</div><div><span style="color: #4ade80;">فعال ✅</span></div>
+                        </div>
+                    </div>
+                    <div id="serviceInterface">
+                        <!-- واسط کاربری خاص هر سرویس اینجا لود می‌شود -->
+                    </div>
+                </div>
+            `;
+            
+            // لود واسط کاربری خاص
+            loadServiceInterface(service);
+            
+            document.getElementById('uiContainer').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // تابع لود واسط کاربری خاص هر سرویس
+        function loadServiceInterface(service) {
+            const interfaceDiv = document.getElementById('serviceInterface');
+            
+            // واسط‌های مختلف بر اساس نوع سرویس
+            if (service.category === 'ai') {
+                interfaceDiv.innerHTML = getAIInterface(service);
+            } else if (service.category === 'tools') {
+                interfaceDiv.innerHTML = getToolsInterface(service);
+            } else if (service.category === 'security') {
+                interfaceDiv.innerHTML = getSecurityInterface(service);
+            } else if (service.category === 'system') {
+                interfaceDiv.innerHTML = getSystemInterface(service);
+            } else {
+                interfaceDiv.innerHTML = getDefaultInterface(service);
+            }
+        }
+
+        // واسط‌های نمونه
+        function getAIInterface(service) {
+            return `
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="background: rgba(139, 92, 246, 0.1); padding: 25px; border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                        <h4 style="margin-bottom: 20px; color: #a78bfa;">🎯 واسط کاربری هوش مصنوعی</h4>
+                        <textarea id="aiInput" placeholder="متن خود را وارد کنید..." 
+                                  style="width: 100%; height: 150px; padding: 15px; border-radius: 8px; 
+                                         background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); 
+                                         color: white; margin-bottom: 20px; font-family: inherit;"></textarea>
+                        
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <button onclick="processAIRequest('${service.id}')" 
+                                    style="flex: 1; padding: 12px; background: linear-gradient(90deg, #4f46e5, #8b5cf6); 
+                                           color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                                🔄 پردازش
+                            </button>
+                            <button onclick="clearAIInput()" 
+                                    style="flex: 1; padding: 12px; background: rgba(239, 68, 68, 0.2); 
+                                           color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); 
+                                           border-radius: 8px; cursor: pointer;">
+                                پاک کردن
+                            </button>
+                        </div>
+                        
+                        <div id="aiResult" style="display: none; background: rgba(0,0,0,0.3); padding: 20px; 
+                                                  border-radius: 8px; margin-top: 20px; border-left: 4px solid #4f46e5;">
+                            <h5 style="color: #60a5fa; margin-bottom: 10px;">نتیجه پردازش:</h5>
+                            <div id="aiResultContent"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getToolsInterface(service) {
+            return `
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="background: rgba(34, 197, 94, 0.1); padding: 25px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                        <h4 style="margin-bottom: 20px; color: #4ade80;">🛠️ واسط کاربری ابزار</h4>
+                        <div style="display: grid; gap: 15px; margin-bottom: 20px;">
+                            <input type="text" placeholder="ورودی مورد نظر" 
+                                   style="padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); 
+                                          border: 1px solid rgba(255,255,255,0.2); color: white;">
+                            <input type="text" placeholder="پارامترهای اضافی" 
+                                   style="padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); 
+                                          border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        </div>
+                        <button onclick="processToolRequest('${service.id}')" 
+                                style="width: 100%; padding: 12px; background: linear-gradient(90deg, #059669, #10b981); 
+                                       color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                            🔧 اجرای ابزار
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // توابع کمکی
+        function processAIRequest(serviceId) {
+            const input = document.getElementById('aiInput').value;
+            if (!input.trim()) {
+                alert('لطفا متنی برای پردازش وارد کنید');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('aiResult');
+            const contentDiv = document.getElementById('aiResultContent');
+            
+            contentDiv.innerHTML = `
+                <div style="color: #cbd5e1; line-height: 1.6;">
+                    <p>✅ پردازش با موفقیت انجام شد.</p>
+                    <p>ورودی: "${input.substring(0, 50)}..."</p>
+                    <p>زمان پردازش: ۰.۸۵ ثانیه</p>
+                    <p>کیفیت خروجی: ۹۲%</p>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function clearAIInput() {
+            document.getElementById('aiInput').value = '';
+            document.getElementById('aiResult').style.display = 'none';
+        }
+
+        function closeUI() {
+            document.getElementById('uiContainer').style.display = 'none';
+        }
+
+        // بارگذاری اولیه
+        window.onload = function() {
+            loadServices();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم یکپارچه Tetrashop100</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { 
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .system-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .system-card { 
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .system-card:hover { transform: translateY(-5px); }
+        .btn { 
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover { 
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        .status-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 سیستم یکپارچه Tetrashop100</h1>
+            <p>مدیریت کامل کسب‌وکار با تمام سرویس‌ها</p>
+        </div>
+        
+        <div class="system-grid">
+            <div class="system-card">
+                <h2>💰 پنل مدیریت مالی</h2>
+                <p>سیستم کامل حسابداری و گزارش‌گیری</p>
+                <a href="http://localhost:3000/financial-management.html" class="btn">ورود به پنل مالی</a>
+            </div>
+            
+            <div class="system-card">
+                <h2>🔐 پنل مدیریت رمزارز</h2>
+                <p>مدیریت Bitcoin, Ethereum, Tether</p>
+                <a href="http://localhost:3001/crypto-management.html" class="btn">ورود به پنل رمزارز</a>
+            </div>
+            
+            <div class="system-card">
+                <h2>🎯 سیستم تبدیل 3D <span class="status-badge">جدید</span></h2>
+                <p>تبدیل تصاویر 2D به مدل‌های سه‌بعدی</p>
+                <a href="http://localhost:3004/simple-3d-converter.html" class="btn">ورود به تبدیل 3D</a>
+            </div>
+            
+            <div class="system-card">
+                <h2>👤 سیستم احراز هویت</h2>
+                <p>ثبت‌نام و ورود امن به سیستم</p>
+                <a href="http://localhost:3001/auth-system.html" class="btn">ورود / ثبت‌نام</a>
+            </div>
+        </div>
+
+        <div class="system-card" style="margin-top: 30px;">
+            <h2>📊 وضعیت سرویس‌ها</h2>
+            <div id="system-status" style="text-align: left; line-height: 2;">
+                <p>✅ پنل مدیریت مالی: <strong>فعال</strong></p>
+                <p>✅ پنل مدیریت رمزارز: <strong>فعال</strong></p>
+                <p>✅ سیستم تبدیل 3D: <strong>فعال</strong></p>
+                <p>✅ سیستم احراز هویت: <strong>فعال</strong></p>
+                <p>🕐 آخرین بروزرسانی: <span id="timestamp"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('fa-IR');
+        
+        // تست وضعیت سرویس‌ها
+        async function checkServices() {
+            const services = [
+                { name: 'پنل مالی', url: 'http://localhost:3000/financial-management.html' },
+                { name: 'پنل رمزارز', url: 'http://localhost:3001/crypto-management.html' },
+                { name: 'تبدیل 3D', url: 'http://localhost:3004/simple-3d-converter.html' },
+                { name: 'احراز هویت', url: 'http://localhost:3001/auth-system.html' }
+            ];
+            
+            for (let service of services) {
+                try {
+                    await fetch(service.url, { mode: 'no-cors' });
+                    console.log(`✅ ${service.name}: فعال`);
+                } catch (error) {
+                    console.log(`❌ ${service.name}: غیرفعال`);
+                }
+            }
+        }
+        
+        checkServices();
+    </script>
+</body>
+</html>

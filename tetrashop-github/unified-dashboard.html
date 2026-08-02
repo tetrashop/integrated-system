@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 داشبورد یکپارچه TetraShop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* 🎨 نوار کناری */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(43, 45, 66, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.8rem;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-list {
+            list-style: none;
+        }
+
+        .project-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .project-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .project-item.active {
+            background: rgba(67, 97, 238, 0.2);
+            border-color: var(--primary);
+        }
+
+        .project-icon {
+            font-size: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .project-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .project-info .status {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .status.online {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+        }
+
+        .status.offline {
+            background: rgba(247, 37, 133, 0.2);
+            color: var(--warning);
+        }
+
+        /* 🎮 محتوای اصلی */
+        .main-content {
+            flex: 1;
+            margin-right: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            width: 300px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(58, 12, 163, 0.1) 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: white;
+            margin: 0.5rem 0;
+        }
+
+        /* 🖥️ پنجره پروژه */
+        .project-viewer {
+            background: rgba(43, 45, 66, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 🎪 نمایش پروژه‌ها */
+        .project-frame {
+            border-radius: 12px;
+            overflow: hidden;
+            height: 500px;
+            background: #1a1a2e;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .project-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 500px;
+        }
+
+        .project-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .project-details h3 {
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .console-log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        /* 🎨 حالت‌های نمایش */
+        .view-mode {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mode-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* 📱 واکنش‌گرا */
+        @media (max-width: 1200px) {
+            :root { --sidebar-width: 250px; }
+            .project-overview { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+            }
+            .main-content { margin-right: 0; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+
+        /* 🔥 انیمیشن‌ها */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            z-index: 10000;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 🎨 نوار کناری -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1><i class="fas fa-sitemap"></i> TetraHub</h1>
+            <p>پنجره واحد مدیریت پروژه‌ها</p>
+            <div class="status-indicator">
+                <span class="status online"><i class="fas fa-circle"></i> سیستم فعال</span>
+            </div>
+        </div>
+
+        <ul class="project-list">
+            <li class="project-item active" data-project="shop">
+                <div class="project-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="project-info">
+                    <h3>🛒 فروشگاه اینترنتی</h3>
+                    <span class="status online" id="shop-status">آنلاین</span>
+                    <small>پورت 3001</small>
+                </div>
+            </li>
+
+            <li class="project-item" data-project="manager">
+                <div class="project-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="project-info">
+                    <h3>🛠️ پنل مدیریت</h3>
+                    <span class="status online" id="manager-status">آنلاین</span>
+                    <small>پورت 8080</small>
+                </div>
+            </li>
+
+            <li class="project-item" data-project="chess">
+                <div class="project-icon">
+                    <i class="fas fa-chess-knight"></i>
+                </div>
+                <div class="project-info">
+                    <h3>♟️ شطرنج هوشمند</h3>
+                    <span class="status online" id="chess-status">آنلاین</span>
+                    <small>پورت 3001/chess</small>
+                </div>
+            </li>
+
+            <li class="project-item" data-project="quantum">
+                <div class="project-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="project-info">
+                    <h3>⚛️ نگار کوانتومی</h3>
+                    <span class="status online" id="quantum-status">آنلاین</span>
+                    <small>پورت 3001/quantum</small>
+                </div>
+            </li>
+
+            <li class="project-item" data-project="nlp">
+                <div class="project-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <div class="project-info">
+                    <h3>🗣️ پردازش زبان</h3>
+                    <span class="status online" id="nlp-status">آنلاین</span>
+                    <small>پورت 3001/nlp</small>
+                </div>
+            </li>
+        </ul>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <h4>🔗 اتصالات زنده</h4>
+            <div id="connections" style="font-size: 0.9rem; margin-top: 0.5rem;">
+                <div><i class="fas fa-link"></i> همه پروژه‌ها متصل</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎮 محتوای اصلی -->
+    <div class="main-content">
+        <!-- نوار بالا -->
+        <div class="top-bar">
+            <div>
+                <h2 id="current-project">🛒 فروشگاه اینترنتی</h2>
+                <p id="project-description">پروژه اصلی فروشگاه با تمامی قابلیت‌ها</p>
+            </div>
+            <input type="text" class="search-box" placeholder="🔍 جستجو در پروژه‌ها...">
+        </div>
+
+        <!-- آمار لحظه‌ای -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-server"></i>
+                <h3>سرویس‌های فعال</h3>
+                <div class="stat-value" id="active-services">5/5</div>
+                <small>همه سرویس‌ها در حال اجرا</small>
+            </div>
+
+            <div class="stat-card">
+                <i class="fas fa-memory"></i>
+                <h3>مصرف حافظه</h3>
+                <div class="stat-value" id="memory-usage">42%</div>
+                <small>256MB از 512MB</small>
+            </div>
+
+            <div class="stat-card">
+                <i class="fas fa-network-wired"></i>
+                <h3>درخواست‌ها</h3>
+                <div class="stat-value" id="total-requests">1,247</div>
+                <small>در 24 ساعت گذشته</small>
+            </div>
+
+            <div class="stat-card">
+                <i class="fas fa-bolt"></i>
+                <h3>پینگ میانگین</h3>
+                <div class="stat-value" id="avg-ping">24ms</div>
+                <small>سرعت پاسخ‌دهی</small>
+            </div>
+        </div>
+
+        <!-- حالت‌های نمایش -->
+        <div class="view-mode">
+            <button class="mode-btn active" data-mode="iframe">
+                <i class="fas fa-desktop"></i> نمایش زنده
+            </button>
+            <button class="mode-btn" data-mode="overview">
+                <i class="fas fa-chart-bar"></i> آمار و اطلاعات
+            </button>
+            <button class="mode-btn" data-mode="logs">
+                <i class="fas fa-terminal"></i> لاگ‌های سیستم
+            </button>
+            <button class="mode-btn" data-mode="terminal">
+                <i class="fas fa-code"></i> ترمینال یکپارچه
+            </button>
+        </div>
+
+        <!-- 🖥️ نمایشگر پروژه -->
+        <div class="project-viewer">
+            <div class="project-header">
+                <h2 id="viewer-title">نمایش زنده پروژه</h2>
+                <div class="project-actions">
+                    <button class="btn btn-secondary" id="refresh-btn">
+                        <i class="fas fa-redo"></i> بارگذاری مجدد
+                    </button>
+                    <button class="btn btn-primary" id="fullscreen-btn">
+                        <i class="fas fa-expand"></i> تمام صفحه
+                    </button>
+                    <button class="btn btn-secondary" id="api-test">
+                        <i class="fas fa-vial"></i> تست API
+                    </button>
+                </div>
+            </div>
+
+            <!-- حالت نمایش زنده -->
+            <div id="iframe-view" class="project-frame">
+                <iframe id="project-frame" src="http://localhost:3001" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+            </div>
+
+            <!-- حالت آمار -->
+            <div id="overview-view" class="project-overview" style="display: none;">
+                <div class="project-details">
+                    <h3><i class="fas fa-info-circle"></i> اطلاعات پروژه</h3>
+                    <div id="project-details-list">
+                        <!-- اطلاعات به صورت داینامیک پر می‌شود -->
+                    </div>
+                </div>
+                <div class="project-details">
+                    <h3><i class="fas fa-chart-line"></i> آمار عملکرد</h3>
+                    <canvas id="performance-chart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- حالت لاگ -->
+            <div id="logs-view" class="project-details" style="display: none; height: 500px;">
+                <h3><i class="fas fa-terminal"></i> لاگ‌های زنده سیستم</h3>
+                <div class="console-log" id="system-logs">
+                    [12:30] 🟢 سیستم TetraHub راه‌اندازی شد<br>
+                    [12:31] 🔗 اتصال به فروشگاه برقرار شد<br>
+                    [12:32] 📊 دریافت آمار از پنل مدیریت<br>
+                    [12:33] ♟️ موتور شطرنج آماده بازی<br>
+                    [12:34] ⚛️ سرویس کوانتا فعال شد<br>
+                    [12:35] 🗣️ NLP در حال پردازش درخواست‌ها
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔔 نوتیفیکیشن -->
+    <div class="notification" id="notification">
+        <i class="fas fa-bell"></i> <span id="notification-text">پیام سیستم</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 📊 داده‌های پروژه‌ها
+        const projects = {
+            shop: {
+                name: "🛒 فروشگاه اینترنتی",
+                description: "پروژه اصلی فروشگاه با تمامی قابلیت‌ها",
+                url: "http://localhost:3001",
+                port: 3001,
+                api: "/api/status",
+                color: "#4361ee",
+                stats: {
+                    users: 150,
+                    orders: 45,
+                    revenue: "۲,۴۵۰,۰۰۰ ریال"
+                }
+            },
+            manager: {
+                name: "🛠️ پنل مدیریت",
+                description: "کنترل و مانیتورینگ مرکزی سیستم",
+                url: "http://localhost:8080",
+                port: 8080,
+                api: "/api/status",
+                color: "#f72585",
+                stats: {
+                    activeUsers: 3,
+                    alerts: 2,
+                    uptime: "99.8%"
+                }
+            },
+            chess: {
+                name: "♟️ شطرنج هوشمند",
+                description: "موتور شطرنج با هوش مصنوعی پیشرفته",
+                url: "http://localhost:3001/chess",
+                port: 3001,
+                api: "/chess/api/status",
+                color: "#4cc9f0",
+                stats: {
+                    gamesPlayed: 127,
+                    winRate: "78%",
+                    aiLevel: "Expert"
+                }
+            },
+            quantum: {
+                name: "⚛️ نگار کوانتومی",
+                description: "ابزارهای گرافیکی مبتنی بر مکانیک کوانتومی",
+                url: "http://localhost:3001/quantum",
+                port: 3001,
+                api: "/quantum/api/status",
+                color: "#7209b7",
+                stats: {
+                    calculations: 1450,
+                    accuracy: "99.2%",
+                    speed: "1.2ms/op"
+                }
+            },
+            nlp: {
+                name: "🗣️ پردازش زبان",
+                description: "پردازش متن و گفتار فارسی با هوش مصنوعی",
+                url: "http://localhost:3001/nlp",
+                port: 3001,
+                api: "/nlp/api/status",
+                color: "#ff9e00",
+                stats: {
+                    processedText: "۴۵,۶۷۲ کلمه",
+                    accuracy: "94.5%",
+                    languages: "فارسی/انگلیسی"
+                }
+            }
+        };
+
+        // 🌐 متغیرهای global
+        let currentProject = 'shop';
+        let currentMode = 'iframe';
+        let performanceChart = null;
+
+        // 🚀 مقداردهی اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            setupChart();
+            checkAllServices();
+            startLiveUpdates();
+        });
+
+        // 🎯 تنظیم event listeners
+        function setupEventListeners() {
+            // کلیک روی پروژه‌ها در نوار کناری
+            document.querySelectorAll('.project-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const projectId = this.dataset.project;
+                    switchProject(projectId);
+                    
+                    // آپدیت استایل active
+                    document.querySelectorAll('.project-item').forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // تغییر حالت نمایش
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.dataset.mode;
+                    switchViewMode(mode);
+                    
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // دکمه‌های کنترلی
+            document.getElementById('refresh-btn').addEventListener('click', refreshProject);
+            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+            document.getElementById('api-test').addEventListener('click', testAPI);
+        }
+
+        // 🔄 تغییر پروژه فعال
+        function switchProject(projectId) {
+            currentProject = projectId;
+            const project = projects[projectId];
+            
+            // آپدیت عناوین
+            document.getElementById('current-project').textContent = project.name;
+            document.getElementById('project-description').textContent = project.description;
+            document.getElementById('viewer-title').textContent = `نمایش زنده: ${project.name}`;
+            
+            // آپدیت iframe
+            const iframe = document.getElementById('project-frame');
+            iframe.src = project.url;
+            
+            // آپدیت اطلاعات پروژه
+            updateProjectDetails(project);
+            
+            // نمایش نوتیفیکیشن
+            showNotification(`پروژه ${project.name} بارگذاری شد`);
+            
+            // آپدیت چارت
+            updateChart(project);
+        }
+
+        // 🔄 تغییر حالت نمایش
+        function switchViewMode(mode) {
+            currentMode = mode;
+            
+            // مخفی کردن همه viewها
+            document.getElementById('iframe-view').style.display = 'none';
+            document.getElementById('overview-view').style.display = 'none';
+            document.getElementById('logs-view').style.display = 'none';
+            
+            // نمایش view انتخاب شده
+            switch(mode) {
+                case 'iframe':
+                    document.getElementById('iframe-view').style.display = 'block';
+                    break;
+                case 'overview':
+                    document.getElementById('overview-view').style.display = 'grid';
+                    break;
+                case 'logs':
+                    document.getElementById('logs-view').style.display = 'block';
+                    break;
+                case 'terminal':
+                    showNotification('حالت ترمینال به زودی اضافه خواهد شد');
+                    break;
+            }
+        }
+
+        // 📊 تنظیم چارت
+        function setupChart() {
+            const ctx = document.getElementById('performance-chart').getContext('2d');
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['۱۰:۰۰', '۱۱:۰۰', '۱۲:۰۰', '۱۳:۰۰', '۱۴:۰۰', '۱۵:۰۰'],
+                    datasets: [{
+                        label: 'پاسخ‌دهی (ms)',
+                        data: [32, 28, 24, 26, 22, 20],
+                        borderColor: '#4cc9f0',
+                        backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { rtl: true, labels: { font: { family: 'Vazirmatn' } } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { font: { family: 'Vazirmatn' } } },
+                        x: { ticks: { font: { family: 'Vazirmatn' } } }
+                    }
+                }
+            });
+        }
+
+        // 🔄 آپدیت چارت
+        function updateChart(project) {
+            if (!performanceChart) return;
+            
+            // داده‌های متفاوت برای هر پروژه
+            const dataMap = {
+                shop: [45, 42, 38, 35, 32, 30],
+                manager: [28, 26, 24, 22, 20, 18],
+                chess: [120, 110, 95, 85, 75, 65],
+                quantum: [15, 14, 13, 12, 11, 10],
+                nlp: [65, 60, 55, 50, 45, 40]
+            };
+            
+            performanceChart.data.datasets[0].data = dataMap[project] || dataMap.shop;
+            performanceChart.data.datasets[0].label = `پاسخ‌دهی ${project.name} (ms)`;
+            performanceChart.update();
+        }
+
+        // 📝 آپدیت اطلاعات پروژه
+        function updateProjectDetails(project) {
+            const detailsList = document.getElementById('project-details-list');
+            detailsList.innerHTML = `
+                <div class="detail-item">
+                    <span>نام پروژه:</span>
+                    <span>${project.name}</span>
+                </div>
+                <div class="detail-item">
+                    <span>آدرس:</span>
+                    <span>${project.url}</span>
+                </div>
+                <div class="detail-item">
+                    <span>پورت:</span>
+                    <span>${project.port}</span>
+                </div>
+                <div class="detail-item">
+                    <span>کاربران فعال:</span>
+                    <span>${project.stats.users || project.stats.activeUsers || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span>دقت سیستم:</span>
+                    <span>${project.stats.accuracy || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span>آخرین بروزرسانی:</span>
+                    <span>همین الان</span>
+                </div>
+            `;
+        }
+
+        // 🔍 بررسی وضعیت سرویس‌ها
+        async function checkAllServices() {
+            for (const [id, project] of Object.entries(projects)) {
+                try {
+                    const response = await fetch(`http://localhost:${project.port}/api/status`);
+                    const statusElement = document.getElementById(`${id}-status`);
+                    
+                    if (response.ok) {
+                        statusElement.textContent = 'آنلاین';
+                        statusElement.className = 'status online';
+                    } else {
+                        statusElement.textContent = 'مشکل';
+                        statusElement.className = 'status offline';
+                    }
+                } catch (error) {
+                    document.getElementById(`${id}-status`).textContent = 'آفلاین';
+                    document.getElementById(`${id}-status`).className = 'status offline';
+                }
+            }
+        }
+
+        // 🧪 تست API پروژه
+        async function testAPI() {
+            const project = projects[currentProject];
+            showNotification(`در حال تست API ${project.name}...`);
+            
+            try {
+                const response = await fetch(project.api.startsWith('http') ? project.api : `http://localhost:${project.port}${project.api}`);
+                const data = await response.json();
+                
+                showNotification(`✅ API پاسخ داد: ${data.message || 'عملیات موفق'}`);
+            } catch (error) {
+                showNotification(`❌ خطا در تست API: ${error.message}`);
+            }
+        }
+
+        // 🔄 بارگذاری مجدد پروژه
+        function refreshProject() {
+            const iframe = document.getElementById('project-frame');
+            iframe.src = iframe.src;
+            showNotification('پروژه مجدداً بارگذاری شد');
+        }
+
+        // 🖥️ حالت تمام صفحه
+        function toggleFullscreen() {
+            const viewer = document.querySelector('.project-viewer');
+            
+            if (!document.fullscreenElement) {
+                viewer.requestFullscreen().catch(err => {
+                    console.error(`خطا در ورود به حالت تمام صفحه: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // 🔔 نمایش نوتیفیکیشن
+        function showNotification(text) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notification-text').textContent = text;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // ⏱️ بروزرسانی‌های زنده
+        function startLiveUpdates() {
+            // بروزرسانی زمان
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('avg-ping').textContent = `${Math.floor(Math.random() * 10) + 20}ms`;
+            }, 5000);
+
+            // بروزرسانی آمار
+            setInterval(() => {
+                const requests = document.getElementById('total-requests');
+                const current = parseInt(requests.textContent.replace(/,/g, ''));
+                requests.textContent = (current + Math.floor(Math.random() * 5)).toLocaleString('fa-IR');
+            }, 10000);
+
+            // بررسی سرویس‌ها هر 30 ثانیه
+            setInterval(checkAllServices, 30000);
+        }
+
+        // جستجو در پروژه‌ها
+        document.querySelector('.search-box').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            document.querySelectorAll('.project-item').forEach(item => {
+                const projectName = item.querySelector('h3').textContent.toLowerCase();
+                if (projectName.includes(searchTerm) || searchTerm === '') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // مقداردهی اولیه
+        switchProject('shop');
+    </script>
+</body>
+</html>

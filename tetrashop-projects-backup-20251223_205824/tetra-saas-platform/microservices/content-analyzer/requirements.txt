@@ -1,0 +1,5 @@
+Flask==2.3.3
+nltk==3.8.1
+textblob==0.17.1
+persian==0.1.9
+hazm==0.7.0

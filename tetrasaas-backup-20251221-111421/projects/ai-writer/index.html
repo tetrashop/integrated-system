@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نویسنده هوشمند - TetraShop</title>
+    <style>
+        :root {
+            --ai-blue: #3b82f6;
+            --ai-green: #10b981;
+            --ai-purple: #8b5cf6;
+            --ai-dark: #1e293b;
+            --ai-light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--ai-dark) 0%, #0f172a 100%);
+            color: var(--ai-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--ai-blue), var(--ai-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .ai-dashboard {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1000px) {
+            .ai-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .ai-workspace {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 25px;
+        }
+        
+        .input-section, .output-section {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .section-title {
+            color: var(--ai-green);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ai-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .ai-panel {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #475569;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            resize: vertical;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        .ai-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .ai-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, var(--ai-blue), var(--ai-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .ai-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .ai-btn.green {
+            background: linear-gradient(45deg, var(--ai-green), var(--ai-blue));
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .template-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template-card:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .ai-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .ai-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .ai-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--ai-blue);
+        }
+        
+        .ai-output {
+            padding: 25px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--ai-green);
+        }
+        
+        .loading::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">🏠 بازگشت</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 نویسنده هوشمند</h1>
+            <p>سیستم هوش مصنوعی پیشرفته برای تولید محتوای حرفه‌ای - قدرت گرفته از GPT-4</p>
+        </div>
+        
+        <div class="ai-dashboard">
+            <div class="ai-workspace">
+                <div class="input-section">
+                    <h3 class="section-title">
+                        <span>📝</span> ورودی و تنظیمات
+                    </h3>
+                    
+                    <textarea id="ai-input" placeholder="موضوع یا ایده خود را اینجا بنویسید...">نویسنده هوشمند می‌تواند انواع محتوا از جمله مقالات، پست‌های وبلاگ، توصیفات محصول، ایمیل‌های مارکتینگ و حتی کد برنامه‌نویسی تولید کند. این سیستم از الگوریتم‌های پیشرفته یادگیری عمیق استفاده می‌کند.</textarea>
+                    
+                    <div style="margin-top: 20px;">
+                        <label style="display: block; margin-bottom: 10px; color: #94a3b8;">
+                            🎯 نوع محتوا:
+                        </label>
+                        <select id="content-type" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 2px solid #475569; border-radius: 8px; color: white;">
+                            <option value="article">مقاله وبلاگ</option>
+                            <option value="social">پست شبکه‌های اجتماعی</option>
+                            <option value="product">توصیف محصول</option>
+                            <option value="email">ایمیل مارکتینگ</option>
+                            <option value="technical">محتوی فنی</option>
+                            <option value="story">داستان کوتاه</option>
+                            <option value="poem">شعر</option>
+                            <option value="code">کد برنامه‌نویسی</option>
+                        </select>
+                    </div>
+                    
+                    <div class="ai-controls">
+                        <button class="ai-btn" onclick="generateContent()">
+                            <span>🚀</span> تولید محتوا
+                        </button>
+                        <button class="ai-btn green" onclick="enhanceContent()">
+                            <span>✨</span> بهبود کیفیت
+                        </button>
+                        <button class="ai-btn" onclick="translateContent()">
+                            <span>🌐</span> ترجمه
+                        </button>
+                        <button class="ai-btn" onclick="summarizeContent()">
+                            <span>📊</span> خلاصه‌سازی
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <h3 class="section-title">
+                        <span>✨</span> خروجی هوش مصنوعی
+                    </h3>
+                    
+                    <div class="loading" id="loading">در حال پردازش</div>
+                    
+                    <div class="ai-output" id="ai-output">
+                        محتوای تولید شده توسط هوش مصنوعی اینجا نمایش داده می‌شود...
+                    </div>
+                    
+                    <div class="ai-controls" style="margin-top: 20px;">
+                        <button class="ai-btn" onclick="copyOutput()">
+                            <span>📋</span> کپی متن
+                        </button>
+                        <button class="ai-btn" onclick="downloadContent()">
+                            <span>💾</span> دانلود
+                        </button>
+                        <button class="ai-btn green" onclick="regenerate()">
+                            <span>🔄</span> تولید مجدد
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-sidebar">
+                <div class="ai-panel">
+                    <h3 class="section-title">
+                        <span>🎨</span> قالب‌های آماده
+                    </h3>
+                    
+                    <div class="templates-grid">
+                        <div class="template-card" onclick="loadTemplate('blog')">
+                            <div style="font-size: 2rem;">📝</div>
+                            <div>مقاله وبلاگ</div>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('social')">
+                            <div style="font-size: 2rem;">📱</div>
+                            <div>پست شبکه اجتماعی</div>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('product')">
+                            <div style="font-size: 2rem;">🛍️</div>
+                            <div>توصیف محصول</div>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('email')">
+                            <div style="font-size: 2rem;">📧</div>
+                            <div>ایمیل مارکتینگ</div>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('story')">
+                            <div style="font-size: 2rem;">📖</div>
+                            <div>داستان کوتاه</div>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('code')">
+                            <div style="font-size: 2rem;">💻</div>
+                            <div>کد برنامه‌نویسی</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-panel">
+                    <h3 class="section-title">
+                        <span>📊</span> آمار سیستم
+                    </h3>
+                    
+                    <div class="ai-stats">
+                        <div class="ai-stat">
+                            <div class="ai-stat-value" id="total-words">۰</div>
+                            <div>کل کلمات تولید شده</div>
+                        </div>
+                        <div class="ai-stat">
+                            <div class="ai-stat-value" id="ai-quality">۹۵٪</div>
+                            <div>کیفیت تولید</div>
+                        </div>
+                        <div class="ai-stat">
+                            <div class="ai-stat-value" id="time-saved">۸۷h</div>
+                            <div>زمان ذخیره شده</div>
+                        </div>
+                        <div class="ai-stat">
+                            <div class="ai-stat-value" id="projects">۲۴</div>
+                            <div>پروژه‌های فعال</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-panel">
+                    <h3 class="section-title">
+                        <span>💰</span> اشتراک و درآمد
+                    </h3>
+                    
+                    <p style="margin-bottom: 15px; color: #94a3b8;">
+                        نویسنده هوشمند می‌تواند تا 
+                        <strong style="color: #10b981;">۸,۰۰۰,۰۰۰ تومان</strong> 
+                        در ماه درآمد ایجاد کند.
+                    </p>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">طرح‌های اشتراک:</div>
+                        <div style="font-size: 0.9rem;">
+                            • پایه: ۵۰,۰۰۰ تومان/ماه<br>
+                            • حرفه‌ای: ۱۵۰,۰۰۰ تومان/ماه<br>
+                            • سازمانی: ۵۰۰,۰۰۰ تومان/ماه
+                        </div>
+                    </div>
+                    
+                    <button class="ai-btn" style="width: 100%;" onclick="showPricing()">
+                        <span>💎</span> مشاهده قیمت‌ها
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let totalWords = 0;
+        let currentTemplate = 'blog';
+        
+        const templates = {
+            'blog': {
+                title: 'مقاله وبلاگ',
+                prompt: 'مقاله وبلاگ درباره ',
+                example: 'مقاله وبلاگ درباره تاثیر هوش مصنوعی بر صنعت محتوا...'
+            },
+            'social': {
+                title: 'پست شبکه اجتماعی',
+                prompt: 'پست جذاب برای شبکه‌های اجتماعی درباره ',
+                example: 'پست اینستاگرام درباره جدیدترین تکنولوژی‌های هوش مصنوعی...'
+            },
+            'product': {
+                title: 'توصیف محصول',
+                prompt: 'توصیف کامل و جذاب برای محصول ',
+                example: 'توصیف محصول جدید گوشی هوشمند با قابلیت‌های پیشرفته...'
+            },
+            'email': {
+                title: 'ایمیل مارکتینگ',
+                prompt: 'ایمیل مارکتینگ موثر برای ',
+                example: 'ایمیل خبرنامه برای معرفی محصول جدید...'
+            },
+            'story': {
+                title: 'داستان کوتاه',
+                prompt: 'داستان کوتاه جذاب درباره ',
+                example: 'داستان کوتاه درباره زندگی در آینده با هوش مصنوعی...'
+            },
+            'code': {
+                title: 'کد برنامه‌نویسی',
+                prompt: 'کد برای ',
+                example: 'تابع JavaScript برای اعتبارسنجی فرم...'
+            }
+        };
+        
+        const contentExamples = {
+            'article': `# تأثیر هوش مصنوعی بر تولید محتوا
+
+هوش مصنوعی در سال‌های اخیر تحول بزرگی در صنعت تولید محتوا ایجاد کرده است. این فناوری نه تنها سرعت تولید محتوا را افزایش داده، بلکه کیفیت آن را نیز بهبود بخشیده است.
+
+## مزایای استفاده از هوش مصنوعی در تولید محتوا:
+
+1. **سرعت بالا**: تولید محتوای باکیفیت در کسری از ثانیه
+2. **مقیاس‌پذیری**: امکان تولید هزاران محتوای منحصر به فرد
+3. **سفارشی‌سازی**: تولید محتوا بر اساس مخاطب هدف
+4. **کاهش هزینه**: صرفه‌جویی قابل توجه در هزینه‌های تولید محتوا
+
+## آینده هوش مصنوعی در تولید محتوا:
+
+با پیشرفت مداوم الگوریتم‌های یادگیری عمیق، انتظار می‌رود در آینده نزدیک، هوش مصنوعی بتواند محتوایی تولید کند که از محتوای انسانی قابل تشخیص نباشد.`,
+            
+            'social': `🚀 دگرگونی صنعت محتوا با هوش مصنوعی!
+
+آیا می‌دانستید هوش مصنوعی می‌تواند در کمتر از ۱۰ ثانیه یک مقاله کامل بنویسد؟ ✨
+
+✅ تولید محتوا با سرعت نور
+✅ کیفیت حرفه‌ای
+✅ هزینه‌های بهینه‌شده
+✅ مقیاس‌پذیری نامحدود
+
+از امروز، تولید محتوای حرفه‌ای را به هوش مصنوعی بسپارید! 🤖
+
+#هوش_مصنوعی #تولید_محتوا #فناوری #AI #ContentCreation`,
+            
+            'product': `📱 گوشی هوشمند Quantum X - انقلابی در تکنولوژی
+
+با افتخار جدیدترین محصول خود را معرفی می‌کنیم: گوشی هوشمند Quantum X با قابلیت‌های منحصر به فرد!
+
+🌟 ویژگی‌های برتر:
+• پردازنده کوانتومی ۸ هسته‌ای
+• نمایشگر ۶.۸ اینچی با رفرش ریت ۱۲۰ هرتز
+• دوربین ۲۰۰ مگاپیکسلی با قابلیت عکاسی در تاریکی مطلق
+• باتری ۵۰۰۰ میلی‌آمپری با شارژ ۱۰۰ واتی
+• طراحی ضد آب و ضد ضربه
+
+💰 قیمت ویژه پیش‌فروش: ۱۲,۹۹۰,۰۰۰ تومان
+⏰ فرصت محدود: تنها ۱۰۰۰ دستگاه`
+
+        };
+        
+        function loadTemplate(templateId) {
+            currentTemplate = templateId;
+            const template = templates[templateId];
+            document.getElementById('ai-input').value = template.example;
+            document.getElementById('content-type').value = templateId;
+            alert(`قالب "${template.title}" بارگذاری شد`);
+        }
+        
+        function generateContent() {
+            const input = document.getElementById('ai-input').value;
+            const contentType = document.getElementById('content-type').value;
+            
+            if (!input.trim()) {
+                alert('لطفاً موضوع یا ایده خود را وارد کنید');
+                return;
+            }
+            
+            // نمایش لودینگ
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('ai-output').style.display = 'none';
+            
+            // شبیه‌سازی پردازش AI
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('ai-output').style.display = 'block';
+                
+                let output = '';
+                if (contentExamples[contentType]) {
+                    output = contentExamples[contentType];
+                } else {
+                    output = `✨ محتوای تولید شده درباره: "${input}"\n\nاین محتوا توسط هوش مصنوعی پیشرفته تولید شده است. سیستم ما از آخرین الگوریتم‌های GPT-4 برای تولید محتوای باکیفیت و منحصر به فرد استفاده می‌کند.\n\nمحتوا به صورت کامل و حرفه‌ای تولید شده و آماده انتشار است.`;
+                }
+                
+                document.getElementById('ai-output').textContent = output;
+                
+                // به‌روزرسانی آمار
+                totalWords += output.split(' ').length;
+                document.getElementById('total-words').textContent = totalWords.toLocaleString('fa-IR');
+                
+                // شبیه‌سازی کیفیت
+                const quality = 90 + Math.floor(Math.random() * 10);
+                document.getElementById('ai-quality').textContent = `${quality}٪`;
+                
+            }, 2000);
+        }
+        
+        function enhanceContent() {
+            const currentContent = document.getElementById('ai-output').textContent;
+            if (currentContent.includes('محتوای تولید شده')) {
+                const enhanced = currentContent + "\n\n✨ بهبود اعمال شد:\n- گرامر و نگارش اصلاح شد\n- جذابیت محتوا افزایش یافت\n- کلمات کلیدی بهینه شدند\n- ساختار پاراگراف‌بندی بهبود یافت";
+                document.getElementById('ai-output').textContent = enhanced;
+                alert('✅ محتوا با موفقیت بهبود یافت');
+            } else {
+                alert('لطفاً ابتدا محتوایی تولید کنید');
+            }
+        }
+        
+        function translateContent() {
+            alert('🌐 ویژگی ترجمه در حال توسعه است...');
+        }
+        
+        function summarizeContent() {
+            const currentContent = document.getElementById('ai-output').textContent;
+            if (currentContent.includes('محتوای تولید شده')) {
+                const summary = "📌 خلاصه محتوا:\n" + currentContent.substring(0, 200) + "...";
+                document.getElementById('ai-output').textContent = summary;
+                alert('✅ محتوا خلاصه‌سازی شد');
+            } else {
+                alert('لطفاً ابتدا محتوایی تولید کنید');
+            }
+        }
+        
+        function copyOutput() {
+            const outputText = document.getElementById('ai-output').textContent;
+            navigator.clipboard.writeText(outputText)
+                .then(() => alert('✅ متن با موفقیت کپی شد'))
+                .catch(() => {
+                    // Fallback برای مرورگرهای قدیمی
+                    const textArea = document.createElement('textarea');
+                    textArea.value = outputText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('✅ متن با موفقیت کپی شد');
+                });
+        }
+        
+        function downloadContent() {
+            const content = document.getElementById('ai-output').textContent;
+            const contentType = document.getElementById('content-type').value;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai-content-${contentType}-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('✅ محتوا با موفقیت دانلود شد');
+        }
+        
+        function regenerate() {
+            document.getElementById('ai-output').textContent = 'محتوای تولید شده توسط هوش مصنوعی اینجا نمایش داده می‌شود...';
+            alert('🔄 آماده برای تولید محتوای جدید');
+        }
+        
+        function showPricing() {
+            alert('💰 طرح‌های اشتراک نویسنده هوشمند:\n\n' +
+                  '🎯 طرح پایه: ۵۰,۰۰۰ تومان/ماه\n' +
+                  '   • تولید ۱۰۰ مقاله در ماه\n' +
+                  '   • پشتیبانی پایه\n\n' +
+                  '💼 طرح حرفه‌ای: ۱۵۰,۰۰۰ تومان/ماه\n' +
+                  '   • تولید نامحدود محتوا\n' +
+                  '   • قالب‌های پیشرفته\n' +
+                  '   • پشتیبانی اختصاصی\n\n' +
+                  '🏢 طرح سازمانی: ۵۰۰,۰۰۰ تومان/ماه\n' +
+                  '   • تمام ویژگی‌های حرفه‌ای\n' +
+                  '   • API دسترسی\n' +
+                  '   • پشتیبانی ۲۴/۷');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌سازی آمار زنده
+            setInterval(() => {
+                const timeSaved = 85 + Math.floor(Math.random() * 15);
+                document.getElementById('time-saved').textContent = `${timeSaved}h`;
+                
+                const projects = 20 + Math.floor(Math.random() * 10);
+                document.getElementById('projects').textContent = projects;
+            }, 5000);
+            
+            // بارگذاری قالب پیش‌فرض
+            loadTemplate('blog');
+        });
+    </script>
+</body>
+</html>

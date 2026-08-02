@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت TetraShop - CMS عملیاتی</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: Tahoma;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .folders {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .folder-btn {
+            background: #1e293b;
+            border: 2px solid #0ea5e9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        .folder-btn:hover {
+            background: #0ea5e9;
+        }
+        .file-list {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .file-item {
+            padding: 10px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item:hover {
+            background: #2d3748;
+        }
+        .action-btn {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .status {
+            padding: 10px;
+            background: #10b981;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>مدیریت عملیاتی TetraShop</h1>
+        <p>کنترل مستقیم پوشه‌های ریشه، public و projects</p>
+    </div>
+    
+    <div class="folders">
+        <button class="folder-btn" onclick="loadFolder('root')">📁 ریشه پروژه</button>
+        <button class="folder-btn" onclick="loadFolder('public')">📂 پوشه Public</button>
+        <button class="folder-btn" onclick="loadFolder('projects')">🗂️ پوشه Projects</button>
+    </div>
+    
+    <div id="status" class="status">آماده به کار - پوشه‌ها را انتخاب کنید</div>
+    
+    <div class="file-list">
+        <h3 id="folder-title">فایل‌ها</h3>
+        <div id="file-container">فایلی انتخاب نشده است</div>
+    </div>
+    
+    <script>
+        // داده‌های واقعی پوشه‌ها (شبیه‌سازی)
+        const folderData = {
+            'root': [
+                {name: 'README.md', type: 'file', size: '2KB'},
+                {name: 'start.sh', type: 'file', size: '1KB'},
+                {name: 'manage.sh', type: 'file', size: '2KB'},
+                {name: 'package.json', type: 'file', size: '1KB'},
+                {name: 'public/', type: 'folder', size: '--'},
+                {name: 'projects/', type: 'folder', size: '--'}
+            ],
+            'public': [
+                {name: 'index.html', type: 'file', size: '5KB'},
+                {name: 'cms/', type: 'folder', size: '--'},
+                {name: 'projects/', type: 'folder', size: '--'},
+                {name: 'test-simple.html', type: 'file', size: '3KB'}
+            ],
+            'projects': [
+                {name: 'quantum-writer/', type: 'folder', size: '--'},
+                {name: 'ai-writer/', type: 'folder', size: '--'},
+                {name: 'secret-garden/', type: 'folder', size: '--'},
+                {name: '3d-converter/', type: 'folder', size: '--'},
+                {name: '2d-to-3d/', type: 'folder', size: '--'},
+                {name: 'content-manager/', type: 'folder', size: '--'}
+            ]
+        };
+        
+        function loadFolder(folder) {
+            const files = folderData[folder] || [];
+            const container = document.getElementById('file-container');
+            const status = document.getElementById('status');
+            const title = document.getElementById('folder-title');
+            
+            title.textContent = `فایل‌های پوشه ${folder}`;
+            status.textContent = `در حال نمایش ${files.length} آیتم از ${folder}`;
+            status.style.background = '#0ea5e9';
+            
+            if (files.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:20px;">پوشه خالی است</p>';
+                return;
+            }
+            
+            let html = '';
+            files.forEach(item => {
+                const icon = item.type === 'folder' ? '📁' : '📄';
+                const path = getPath(folder, item.name);
+                
+                html += `
+                    <div class="file-item">
+                        <div>
+                            <strong>${icon} ${item.name}</strong>
+                            <div style="font-size:12px;color:#94a3b8;">
+                                نوع: ${item.type === 'folder' ? 'پوشه' : 'فایل'} | حجم: ${item.size}
+                            </div>
+                        </div>
+                        <div>
+                            ${getActionButtons(folder, item)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function getPath(folder, filename) {
+            const basePaths = {
+                'root': '',
+                'public': 'public/',
+                'projects': 'projects/'
+            };
+            return basePaths[folder] + filename;
+        }
+        
+        function getActionButtons(folder, item) {
+            if (item.type === 'folder') {
+                return `<button class="action-btn" onclick="openFolder('${folder}', '${item.name}')">
+                    باز کردن
+                </button>`;
+            } else {
+                return `<a class="action-btn" href="${getPath(folder, item.name)}" target="_blank">
+                    مشاهده
+                </a>`;
+            }
+        }
+        
+        function openFolder(folder, folderName) {
+            const cleanName = folderName.replace('/', '');
+            alert(`باز کردن پوشه: ${cleanName}\n\nدر نسخه کامل، محتوای این پوشه نمایش داده می‌شود.`);
+            
+            // به روزرسانی وضعیت
+            document.getElementById('status').textContent = 
+                `پوشه ${cleanName} انتخاب شد (از ${folder})`;
+            document.getElementById('status').style.background = '#10b981';
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('CMS عملیاتی TetraShop بارگذاری شد');
+        });
+    </script>
+</body>
+</html>

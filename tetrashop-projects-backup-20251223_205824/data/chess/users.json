@@ -1,0 +1,30 @@
+{
+  "admin": {
+    "id": "chess_admin_001",
+    "username": "admin",
+    "email": "admin@chess.tetrashop",
+    "password": "YWRtaW4=",
+    "coins": 1000,
+    "subscription": "premium",
+    "rating": 2000,
+    "gamesPlayed": 50,
+    "wins": 35,
+    "losses": 10,
+    "draws": 5,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  "test_user": {
+    "id": "chess_user_001",
+    "username": "test_user",
+    "email": "test@chess.tetrashop",
+    "password": "dGVzdA==",
+    "coins": 150,
+    "subscription": "free",
+    "rating": 1400,
+    "gamesPlayed": 10,
+    "wins": 5,
+    "losses": 4,
+    "draws": 1,
+    "createdAt": "2024-01-15T12:00:00.000Z"
+  }
+}

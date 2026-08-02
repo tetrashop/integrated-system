@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نویسنده کوانتومی - TetraShop</title>
+    <style>
+        :root {
+            --quantum-blue: #0ea5e9;
+            --quantum-purple: #8b5cf6;
+            --quantum-pink: #ec4899;
+            --quantum-green: #10b981;
+            --quantum-dark: #0f172a;
+            --quantum-light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--quantum-dark) 0%, #1e293b 100%);
+            color: var(--quantum-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--quantum-blue), var(--quantum-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .writing-area {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .panel {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .panel-title {
+            color: var(--quantum-green);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #475569;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            resize: vertical;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, var(--quantum-blue), var(--quantum-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn.green {
+            background: linear-gradient(45deg, var(--quantum-green), #0ea5e9);
+        }
+        
+        .btn.pink {
+            background: linear-gradient(45deg, var(--quantum-pink), var(--quantum-purple));
+        }
+        
+        .quantum-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .option-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-card:hover {
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--quantum-blue);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .output-area {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">🏠 بازگشت</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌀 نویسنده کوانتومی</h1>
+            <p>سیستم تولید محتوای مبتنی بر مکانیک کوانتومی - خلق محتوای چندبعدی</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="writing-area">
+                <h3 class="panel-title">✍️ ناحیه نوشتن کوانتومی</h3>
+                <textarea id="input-text" placeholder="ایده خود را اینجا وارد کنید یا موضوع را بنویسید...">نویسنده کوانتومی می‌تواند متون چندبعدی، مقالات علمی، داستان‌های کوانتومی و محتوای آموزشی تولید کند. این سیستم از اصول مکانیک کوانتومی مانند سوپرپوزیشن، درهم‌تنیدگی و عدم قطعیت برای خلق محتوای نوآورانه استفاده می‌کند.</textarea>
+                
+                <div class="controls">
+                    <button class="btn" onclick="quantumGenerate()">
+                        <span>🌀</span> تولید کوانتومی
+                    </button>
+                    <button class="btn green" onclick="optimizeText()">
+                        <span>⚡</span> بهینه‌سازی
+                    </button>
+                    <button class="btn pink" onclick="superpositionMode()">
+                        <span>🔮</span> حالت سوپرپوزیشن
+                    </button>
+                    <button class="btn" onclick="entangleText()">
+                        <span>🔗</span> درهم‌تنیدگی متنی
+                    </button>
+                </div>
+                
+                <div id="output" class="output-area">
+                    <h4>✨ خروجی کوانتومی:</h4>
+                    <div id="quantum-output"></div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="panel">
+                    <h3 class="panel-title">🎯 تنظیمات کوانتومی</h3>
+                    <div class="quantum-options">
+                        <div class="option-card" onclick="setMode('article')">
+                            <div style="font-size: 2rem;">📝</div>
+                            <div>مقاله علمی</div>
+                        </div>
+                        <div class="option-card" onclick="setMode('story')">
+                            <div style="font-size: 2rem;">📖</div>
+                            <div>داستان کوانتومی</div>
+                        </div>
+                        <div class="option-card" onclick="setMode('poem')">
+                            <div style="font-size: 2rem;">🎭</div>
+                            <div>شعر چندبعدی</div>
+                        </div>
+                        <div class="option-card" onclick="setMode('technical')">
+                            <div style="font-size: 2rem;">🔬</div>
+                            <div>محتوی فنی</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h3 class="panel-title">📊 آمار کوانتومی</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="word-count">۰</div>
+                            <div>کلمات تولید شده</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="quantum-score">۹۸٪</div>
+                            <div>کیفیت کوانتومی</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="dimensions">۳</div>
+                            <div>ابعاد متنی</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="entanglement">۷۵٪</div>
+                            <div>درجه درهم‌تنیدگی</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h3 class="panel-title">💰 سیستم درآمدزایی</h3>
+                    <p style="margin-bottom: 15px; color: #94a3b8;">
+                        نویسنده کوانتومی می‌تواند تا <strong style="color: #10b981;">۵,۰۰۰,۰۰۰ تومان</strong> در ماه درآمد ایجاد کند.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <button class="btn" style="font-size: 0.9rem;" onclick="buyTokens(100)">
+                            🪙 ۱۰۰ توکن
+                        </button>
+                        <button class="btn green" style="font-size: 0.9rem;" onclick="subscribe()">
+                            💎 اشتراک
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 15px;">
+            <h3 style="color: #f59e0b; margin-bottom: 20px;">🌌 ویژگی‌های کوانتومی</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                    <h4>🌀 سوپرپوزیشن متنی</h4>
+                    <p>ایجاد چندین حالت متنی همزمان</p>
+                </div>
+                <div style="padding: 20px; background: rgba(236, 72, 153, 0.1); border-radius: 10px;">
+                    <h4>🔗 درهم‌تنیدگی موضوعی</h4>
+                    <p>ارتباط عمیق بین مفاهیم مختلف</p>
+                </div>
+                <div style="padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 10px;">
+                    <h4>📈 عدم قطعیت خلاق</h4>
+                    <p>تولید محتوای غیرقابل پیش‌بینی</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMode = 'article';
+        let wordCount = 0;
+        
+        function setMode(mode) {
+            currentMode = mode;
+            const modes = {
+                'article': 'مقاله علمی',
+                'story': 'داستان کوانتومی',
+                'poem': 'شعر چندبعدی',
+                'technical': 'محتوی فنی'
+            };
+            alert(`🎯 حالت به "${modes[mode]}" تغییر کرد`);
+        }
+        
+        function quantumGenerate() {
+            const input = document.getElementById('input-text').value;
+            if (!input.trim()) {
+                alert('لطفاً متنی برای پردازش کوانتومی وارد کنید');
+                return;
+            }
+            
+            // شبیه‌سازی پردازش کوانتومی
+            document.getElementById('output').style.display = 'block';
+            
+            const quantumOutputs = [
+                `🌀 خروجی کوانتومی سطح ۱:\n\n${input} \n\nاین متن از طریق الگوریتم‌های کوانتومی بهینه‌سازی شده و ابعاد جدیدی به آن اضافه شده است.`,
+                `✨ خروجی سوپرپوزیشن:\n\n${input.substring(0, input.length/2)} \n\n📊 تحلیل کوانتومی نشان می‌دهد این متن می‌تواند در ۳ حالت مختلف تفسیر شود.`,
+                `🔮 خروجی چندبعدی:\n\n${input} \n\nاین محتوا در ۵ بعد مختلف قابل درک است و برای مخاطبان با سطوح مختلف قابل استفاده می‌باشد.`
+            ];
+            
+            const output = quantumOutputs[Math.floor(Math.random() * quantumOutputs.length)];
+            document.getElementById('quantum-output').textContent = output;
+            
+            // به‌روزرسانی آمار
+            wordCount += output.split(' ').length;
+            document.getElementById('word-count').textContent = wordCount.toLocaleString('fa-IR');
+            
+            // شبیه‌سازی امتیاز کوانتومی
+            const score = 85 + Math.floor(Math.random() * 15);
+            document.getElementById('quantum-score').textContent = `${score}٪`;
+        }
+        
+        function optimizeText() {
+            const input = document.getElementById('input-text').value;
+            if (!input.trim()) {
+                alert('لطفاً متنی برای بهینه‌سازی وارد کنید');
+                return;
+            }
+            
+            // شبیه‌سازی بهینه‌سازی
+            const optimized = input + "\n\n✨ بهینه‌سازی کوانتومی اعمال شد:\n- ساختار بهبود یافت\n- اصطلاحات تخصصی اضافه شد\n- خوانایی ۴۰٪ افزایش یافت";
+            document.getElementById('input-text').value = optimized;
+            alert('✅ متن با موفقیت بهینه‌سازی شد');
+        }
+        
+        function superpositionMode() {
+            alert('🌀 حالت سوپرپوزیشن فعال شد!\n\nاز این پس متن شما در چندین حالت موازی پردازش می‌شود.');
+        }
+        
+        function entangleText() {
+            alert('🔗 درهم‌تنیدگی متنی فعال شد!\n\nمفاهیم مختلف در متن شما با یکدیگر درگیر شده و ارتباطات عمیق تری ایجاد کردند.');
+        }
+        
+        function buyTokens(amount) {
+            alert(`🪙 ${amount} توکن کوانتومی خریداری شد!\n\nاز این توکن‌ها برای دسترسی به ویژگی‌های پیشرفته استفاده کنید.`);
+        }
+        
+        function subscribe() {
+            alert('💎 اشتراک کوانتومی فعال شد!\n\nدسترسی نامحدود به تمام ویژگی‌های پیشرفته نویسنده کوانتومی.');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌سازی آمار اولیه
+            setInterval(() => {
+                const dimensions = 1 + Math.floor(Math.random() * 5);
+                document.getElementById('dimensions').textContent = dimensions;
+                
+                const entanglement = 60 + Math.floor(Math.random() * 40);
+                document.getElementById('entanglement').textContent = `${entanglement}٪`;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

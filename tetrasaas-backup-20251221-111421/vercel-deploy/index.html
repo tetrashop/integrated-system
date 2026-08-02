@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+<link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتراشاپ - مستقر در Vercel</title>
+    <style>
+        :root {
+            --primary: #0070f3;
+            --secondary: #7928ca;
+            --success: #17c964;
+            --dark: #1a1a1a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 1000px;
+            width: 100%;
+            border: 3px solid var(--success);
+        }
+        .vercel-badge {
+            background: #000;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        h1 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 3em;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        .project-card {
+            background: #f8f9fa;
+            padding: 30px 25px;
+            border-radius: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        .project-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .project-card h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .project-card p {
+            color: #666;
+            margin-bottom: 25px;
+            min-height: 80px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            margin: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 112, 243, 0.3);
+        }
+        .vercel-features {
+            background: linear-gradient(45deg, #f8f9fa, #ffffff);
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 50px;
+            text-align: right;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: right;
+        }
+        .feature-item {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            h1 { font-size: 2.2em; }
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;min-height:100vh;">
+    <div class="container">
+        <div class="vercel-badge">▲ Vercel</div>
+        <h1>تتراشاپ</h1>
+        <p class="subtitle">پلتفرم پیشرفته مدیریت - مستقر در Vercel</p>
+
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-icon">🧠</div>
+                <h3>نگار کوانتوم</h3>
+                <p>سیستم NLP تشخیص و تصحیح خطای فوق المپیک با الگوریتم‌های کوانتومی</p>
+                <a href="/quantum-calligraphy-advanced/quantum_nlp_fixed.py" class="btn">مشاهده کد</a>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-icon">💪</div>
+                <h3>نطق مصطلح</h3>
+                <p>موتور تحلیل و بهبود بیان با قابلیت‌های پیشرفته‌تر از نگار کوانتوم</p>
+                <a href="/common-rhetoric-pro/powerful_rhetoric_fixed.cpp" class="btn">مشاهده کد</a>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-icon">🔐</div>
+                <h3>آمان راز</h3>
+                <p>سیستم خوشه‌ای امن برای مدیریت اطلاعات محرمانه با معماری همتا به همتا</p>
+                <a href="/aman-secret-cluster/cluster_manager_fixed.py" class="btn">مشاهده کد</a>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-icon">♟️</div>
+                <h3>شطرنج کوانتومی</h3>
+                <p>موتور آموزشی هوشمند با الهام از معماری استوک فیش و یادگیری عمیق</p>
+                <a href="/chess-deepmind/stockfish_deep_learning_engine.cpp" class="btn">مشاهده کد</a>
+            </div>
+        </div>
+
+        <div class="vercel-features">
+            <h3 style="color: var(--dark); margin-bottom: 30px; text-align: center;">🚀 مزایای استقرار در Vercel</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>⚡ سرعت بالا</strong>
+                    <p>Edge Network جهانی</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔧 راه‌اندازی آسان</strong>
+                    <p>اتصال مستقیم به GitHub</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔄 CI/CD خودکار</strong>
+                    <p>استقرار با هر Commit</p>
+                </div>
+                <div class="feature-item">
+                    <strong>📱 بهینه‌شده</strong>
+                    <p>Performance عالی در موبایل</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔒 امنیت</strong>
+                    <p>SSL رایگان</p>
+                </div>
+                <div class="feature-item">
+                    <strong>💰 رایگان</strong>
+                    <p>پلن Hobby رایگان</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="https://github.com/tetrashop/tetrashop-projects" class="btn" style="background: #333;">📂 مخزن GitHub</a>
+            <a href="#projects" class="btn" style="background: var(--success);">🎯 پروژه‌ها</a>
+        </div>
+    </div>
+
+    <script>
+        // انیمیشن‌های ورود
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(40px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

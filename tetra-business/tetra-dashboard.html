@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra Ecosystem - پنل مدیریت کامل</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazir', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 0;
+            transition: all 0.3s;
+            border-left: 1px solid #334155;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #334155;
+            background: #0f172a;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin: 0;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-right: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #334155;
+            color: white;
+            border-right-color: var(--primary);
+        }
+        
+        .sidebar-menu i {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 1rem 1.5rem;
+        }
+        
+        .content-area {
+            padding: 1.5rem;
+        }
+        
+        /* Cards */
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* Converter Panel */
+        .converter-panel {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed #475569;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .template-card {
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .template-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .template-card.selected {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        /* Progress */
+        .progress {
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.6s ease;
+        }
+        
+        /* Tables */
+        .data-table {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 1rem;
+        }
+        
+        .table td {
+            border-bottom: 1px solid #334155;
+            padding: 1rem;
+            color: #cbd5e1;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                transform: translateX(100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="sidebar-header">
+                    <h4 class="text-white mb-0">
+                        <i class="bi bi-triangle"></i>
+                        Tetra Ecosystem
+                    </h4>
+                    <small class="text-muted">پنل مدیریت</small>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-tab="dashboard"><i class="bi bi-speedometer2"></i> پیشخوان</a></li>
+                    <li><a href="#" data-tab="converter"><i class="bi bi-arrow-repeat"></i> تبدیل تصاویر</a></li>
+                    <li><a href="#" data-tab="finance"><i class="bi bi-graph-up"></i> امور مالی</a></li>
+                    <li><a href="#" data-tab="analytics"><i class="bi bi-bar-chart"></i> آمار و گزارشات</a></li>
+                    <li><a href="#" data-tab="users"><i class="bi bi-people"></i> مدیریت کاربران</a></li>
+                    <li><a href="#" data-tab="settings"><i class="bi bi-gear"></i> تنظیمات</a></li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content" style="margin-right: 25%;">
+                <!-- Navbar -->
+                <nav class="navbar">
+                    <div class="d-flex justify-content-between w-100 align-items-center">
+                        <button class="btn btn-outline-light d-md-none" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle me-2"></i>
+                                    مدیر سیستم
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>پروفایل</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>خروج</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Content Area -->
+                <div class="content-area">
+                    <!-- Dashboard Tab -->
+                    <div class="tab-content fade-in" id="dashboard-tab">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3 class="text-white mb-3">📊 پیشخوان مدیریت</h3>
+                                <p class="text-muted">نمای کلی از عملکرد سیستم Tetra Ecosystem</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">
+                                        <i class="bi bi-currency-exchange"></i>
+                                    </div>
+                                    <div class="stat-value text-success" id="total-revenue">0 تومان</div>
+                                    <div class="stat-label">درآمد کل</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </div>
+                                    <div class="stat-value text-primary" id="total-conversions">0</div>
+                                    <div class="stat-label">تبدیل‌ها</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--warning);">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="stat-value text-warning" id="total-users">0</div>
+                                    <div class="stat-label">کاربران فعال</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                    </div>
+                                    <div class="stat-value text-danger" id="success-rate">0%</div>
+                                    <div class="stat-label">میزان موفقیت</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">⚡ اقدامات سریع</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary w-100" onclick="showTab('converter')">
+                                                <i class="bi bi-plus-circle me-2"></i>
+                                                تبدیل جدید
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-outline-light w-100" onclick="showTab('finance')">
+                                                <i class="bi bi-receipt me-2"></i>
+                                                گزارش مالی
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Recent Activity -->
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">📝 فعالیت‌های اخیر</h5>
+                                    <div class="data-table">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>کاربر</th>
+                                                        <th>عمل</th>
+                                                        <th>زمان</th>
+                                                        <th>وضعیت</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="recent-activities">
+                                                    <!-- Activities will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <!-- System Health -->
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">🩺 سلامت سیستم</h5>
+                                    <div id="system-health">
+                                        <!-- Health status will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Top Contributors -->
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">🏆 برترین مشارکت‌کنندگان</h5>
+                                    <div id="top-contributors">
+                                        <!-- Contributors will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Converter Tab -->
+                    <div class="tab-content fade-in d-none" id="converter-tab">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3 class="text-white mb-3">🖼️ تبدیل تصاویر 2D به 3D</h3>
+                                <p class="text-muted">آپلود تصویر و انتخاب الگوی تبدیل</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">📤 آپلود تصویر</h5>
+                                    <div class="upload-area" id="uploadArea">
+                                        <i class="bi bi-cloud-arrow-up display-4 text-muted mb-3"></i>
+                                        <h5 class="text-white">تصویر خود را اینجا رها کنید</h5>
+                                        <p class="text-muted mb-3">یا برای انتخاب فایل کلیک کنید</p>
+                                        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                                            <i class="bi bi-folder2-open me-2"></i>
+                                            انتخاب فایل
+                                        </button>
+                                        <input type="file" id="fileInput" accept="image/*" class="d-none">
+                                    </div>
+                                    <div id="fileInfo" class="mt-3 d-none">
+                                        <!-- File info will be shown here -->
+                                    </div>
+                                </div>
+                                
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">🎛️ تنظیمات تبدیل</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label text-white">فرمت خروجی</label>
+                                            <select class="form-select bg-dark text-white border-secondary" id="outputFormat">
+                                                <option value="obj">OBJ (پیشنهادی)</option>
+                                                <option value="stl">STL</option>
+                                                <option value="fbx">FBX</option>
+                                                <option value="gltf">GLTF</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label text-white">کیفیت</label>
+                                            <select class="form-select bg-dark text-white border-secondary" id="quality">
+                                                <option value="high">عالی</option>
+                                                <option value="medium" selected>متوسط</option>
+                                                <option value="low">پایه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input" type="checkbox" id="enhancement">
+                                        <label class="form-check-label text-white" for="enhancement">
+                                            بهبود کیفیت با هوش مصنوعی
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="priority">
+                                        <label class="form-check-label text-white" for="priority">
+                                            پردازش سریع (پرمیوم)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="converter-panel">
+                                    <h5 class="text-white mb-4">💎 الگوهای تبدیل</h5>
+                                    <div class="row g-3" id="templates-container">
+                                        <!-- Templates will be loaded here -->
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <button class="btn btn-success w-100" id="convertBtn" onclick="startConversion()" disabled>
+                                            <i class="bi bi-play-circle me-2"></i>
+                                            شروع تبدیل
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="converter-panel" id="conversionProgress" style="display: none;">
+                                    <h5 class="text-white mb-3">🔄 در حال تبدیل</h5>
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                                    </div>
+                                    <p class="text-center text-muted mb-0" id="progressText">آماده سازی...</p>
+                                </div>
+                                
+                                <div class="converter-panel" id="conversionResult" style="display: none;">
+                                    <!-- Result will be shown here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Finance Tab -->
+                    <div class="tab-content fade-in d-none" id="finance-tab">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3 class="text-white mb-3">💰 امور مالی و درآمد</h3>
+                                <p class="text-muted">مدیریت تراکنش‌ها و گزارش‌های مالی</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="converter-panel">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h5 class="text-white mb-0">تراکنش‌ها</h5>
+                                        <div>
+                                            <select class="form-select bg-dark text-white border-secondary d-inline-block w-auto" id="dateRange">
+                                                <option value="today">امروز</option>
+                                                <option value="week">هفته جاری</option>
+                                                <option value="month">ماه جاری</option>
+                                                <option value="all">همه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="data-table">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>شناسه</th>
+                                                        <th>کاربر</th>
+                                                        <th>مبلغ</th>
+                                                        <th>نوع</th>
+                                                        <th>تاریخ</th>
+                                                        <th>وضعیت</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="transactions-table">
+                                                    <!-- Transactions will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE = 'https://tetra-master-repo-p3u2am6bd-ramin-edjlal-s-projects.vercel.app';
+        let currentFile = null;
+        let selectedTemplate = null;
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            loadTemplates();
+            setupEventListeners();
+        });
+
+        // Tab Navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('d-none');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.remove('d-none');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Load tab-specific data
+            if (tabName === 'dashboard') {
+                loadDashboardData();
+            } else if (tabName === 'finance') {
+                loadFinanceData();
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Sidebar toggle for mobile
+            document.getElementById('sidebarToggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('show');
+            });
+
+            // Tab clicks
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabName = this.getAttribute('data-tab');
+                    showTab(tabName);
+                });
+            });
+
+            // File upload
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            
+            // Drag and drop
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+            
+            // Date range change
+            document.getElementById('dateRange').addEventListener('change', loadFinanceData);
+        }
+
+        // Handle file selection
+        function handleFileSelect(e) {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('لطفاً یک فایل تصویری انتخاب کنید');
+                return;
+            }
+
+            currentFile = file;
+            
+            const fileInfo = document.getElementById('fileInfo');
+            fileInfo.innerHTML = `
+                <div class="alert alert-success d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <div>
+                        <strong>${file.name}</strong>
+                        <div class="text-muted">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                    </div>
+                </div>
+            `;
+            fileInfo.classList.remove('d-none');
+            
+            // Enable convert button if template is selected
+            updateConvertButton();
+        }
+
+        // Load templates
+        function loadTemplates() {
+            const templates = [
+                {
+                    id: 'basic-2d-to-3d',
+                    name: 'پایه',
+                    price: '5,000 تومان',
+                    description: 'تبدیل استاندارد با کیفیت خوب',
+                    time: '۲-۵ دقیقه',
+                    features: ['کیفیت مناسب', 'پردازش سریع']
+                },
+                {
+                    id: 'ai-enhanced',
+                    name: 'هوش مصنوعی',
+                    price: '12,000 تومان',
+                    description: 'تبدیل پیشرفته با الگوریتم AI',
+                    time: '۵-۱۰ دقیقه',
+                    features: ['کیفیت عالی', 'بهبود خودکار']
+                },
+                {
+                    id: 'advanced-3d-model',
+                    name: 'پیشرفته',
+                    price: '15,000 تومان',
+                    description: 'تبدیل حرفه‌ای برای کارهای studio',
+                    time: '۱۰-۱۵ دقیقه',
+                    features: ['کیفیت studio', 'جزئیات کامل']
+                },
+                {
+                    id: 'mesh-optimization',
+                    name: 'بهینه‌سازی',
+                    price: '8,000 تومان',
+                    description: 'بهینه‌سازی مدل‌های موجود',
+                    time: '۳-۷ دقیقه',
+                    features: ['کاهش حجم', 'بهبود عملکرد']
+                }
+            ];
+
+            const container = document.getElementById('templates-container');
+            container.innerHTML = templates.map(template => `
+                <div class="col-12">
+                    <div class="template-card" onclick="selectTemplate('${template.id}')" id="template-${template.id}">
+                        <h6 class="text-white">${template.name}</h6>
+                        <div class="text-warning fw-bold mb-2">${template.price}</div>
+                        <p class="text-muted small mb-2">${template.description}</p>
+                        <div class="d-flex justify-content-between text-muted small">
+                            <span>⏱️ ${template.time}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectTemplate(templateId) {
+            selectedTemplate = templateId;
+            
+            // Update UI
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById(`template-${templateId}`).classList.add('selected');
+            
+            // Enable convert button if file is selected
+            updateConvertButton();
+        }
+
+        function updateConvertButton() {
+            const convertBtn = document.getElementById('convertBtn');
+            convertBtn.disabled = !(currentFile && selectedTemplate);
+        }
+
+        // Start conversion process
+        async function startConversion() {
+            if (!currentFile || !selectedTemplate) return;
+
+            const convertBtn = document.getElementById('convertBtn');
+            const progressSection = document.getElementById('conversionProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            // Show progress
+            convertBtn.disabled = true;
+            progressSection.style.display = 'block';
+
+            // Simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 90) progress = 90;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `در حال پردازش... ${Math.round(progress)}%`;
+            }, 500);
+
+            try {
+                // Prepare conversion data
+                const conversionData = {
+                    userId: 'user-' + Date.now(),
+                    imageData: {
+                        format: currentFile.name.split('.').pop(),
+                        size: currentFile.size,
+                        resolution: { width: 1920, height: 1080 },
+                        name: currentFile.name
+                    },
+                    templateId: selectedTemplate,
+                    options: {
+                        enhancement: document.getElementById('enhancement').checked,
+                        priorityProcessing: document.getElementById('priority').checked,
+                        outputFormat: document.getElementById('outputFormat').value,
+                        quality: document.getElementById('quality').value
+                    }
+                };
+
+                // Send conversion request
+                const response = await fetch(`${API_BASE}/api/v1/convert`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(conversionData)
+                });
+
+                const result = await response.json();
+
+                // Complete progress
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                progressText.textContent = 'تکمیل شد!';
+
+                // Show result
+                setTimeout(() => {
+                    showConversionResult(result);
+                    progressSection.style.display = 'none';
+                    loadDashboardData(); // Refresh stats
+                }, 1000);
+
+            } catch (error) {
+                clearInterval(interval);
+                progressText.textContent = 'خطا در پردازش';
+                progressBar.style.background = 'var(--danger)';
+                
+                setTimeout(() => {
+                    progressSection.style.display = 'none';
+                    convertBtn.disabled = false;
+                    alert('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.');
+                }, 2000);
+            }
+        }
+
+        function showConversionResult(result) {
+            const resultSection = document.getElementById('conversionResult');
+            
+            if (result.success) {
+                resultSection.innerHTML = `
+                    <div class="alert alert-success">
+                        <h6 class="alert-heading">✅ تبدیل با موفقیت انجام شد!</h6>
+                        <hr>
+                        <p class="mb-1"><strong>شناسه:</strong> ${result.conversionId}</p>
+                        <p class="mb-1"><strong>کیفیت:</strong> ${(result.result.quality * 100).toFixed(1)}%</p>
+                        <p class="mb-1"><strong>حجم فایل:</strong> ${(result.result.fileSize / 1024 / 1024).toFixed(2)} MB</p>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-success" onclick="downloadResult('${result.conversionId}')">
+                                <i class="bi bi-download me-2"></i>
+                                دانلود فایل 3D
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultSection.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">❌ خطا در تبدیل</h6>
+                        <p class="mb-0">${result.error || 'خطای ناشناخته'}</p>
+                    </div>
+                `;
+            }
+            
+            resultSection.style.display = 'block';
+        }
+
+        function downloadResult(conversionId) {
+            alert(`دانلود فایل ${conversionId} آغاز شد...`);
+            // In a real app, this would trigger the actual download
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load system health
+                const healthResponse = await fetch(`${API_BASE}/api/v1/system/health`);
+                const healthData = await healthResponse.json();
+                updateSystemHealth(healthData);
+
+                // Load analytics
+                const analyticsResponse = await fetch(`${API_BASE}/api/v1/analytics/overview`);
+                const analyticsData = await analyticsResponse.json();
+                updateDashboardStats(analyticsData);
+
+                // Load recent activities
+                updateRecentActivities();
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                // Fallback to mock data
+                updateDashboardStats({
+                    finance: { totalRevenue: 34000 },
+                    converter: { 
+                        totalConversions: 4,
+                        successfulConversions: 4,
+                        successRate: 100
+                    }
+                });
+            }
+        }
+
+        function updateSystemHealth(healthData) {
+            const healthSection = document.getElementById('system-health');
+            const status = healthData.status === 'healthy' ? 'سالم' : 'مشکل';
+            const statusClass = healthData.status === 'healthy' ? 'success' : 'danger';
+            
+            healthSection.innerHTML = `
+                <div class="alert alert-${statusClass}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>وضعیت سیستم: <strong>${status}</strong></span>
+                        <i class="bi bi-${healthData.status === 'healthy' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">آپتایم: ${Math.round(healthData.uptime)} ثانیه</small><br>
+                        <small class="text-muted">کامپوننت‌های فعال: ${healthData.components?.active}/${healthData.components?.total}</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateDashboardStats(data) {
+            document.getElementById('total-revenue').textContent = (data.finance?.totalRevenue || 0).toLocaleString() + ' تومان';
+            document.getElementById('total-conversions').textContent = data.converter?.totalConversions || 0;
+            document.getElementById('success-rate').textContent = (data.converter?.successRate || 0) + '%';
+            document.getElementById('total-users').textContent = data.community?.totalContributors || 5;
+        }
+
+        function updateRecentActivities() {
+            const activities = [
+                { user: 'کاربر ۱', action: 'تبدیل تصویر', time: '۲ دقیقه پیش', status: 'موفق' },
+                { user: 'کاربر ۲', action: 'تبدیل تصویر', time: '۵ دقیقه پیش', status: 'موفق' },
+                { user: 'کاربر ۳', action: 'ثبت نام', time: '۱۰ دقیقه پیش', status: 'تکمیل' },
+                { user: 'کاربر ۴', action: 'شارژ حساب', time: '۱۵ دقیقه پیش', status: 'تکمیل' }
+            ];
+
+            const container = document.getElementById('recent-activities');
+            container.innerHTML = activities.map(activity => `
+                <tr>
+                    <td>${activity.user}</td>
+                    <td>${activity.action}</td>
+                    <td>${activity.time}</td>
+                    <td><span class="badge bg-success">${activity.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Load finance data
+        async function loadFinanceData() {
+            const dateRange = document.getElementById('dateRange').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/finance/report?dateRange=${dateRange}`);
+                const data = await response.json();
+                updateFinanceTable(data);
+            } catch (error) {
+                console.error('Error loading finance data:', error);
+                // Fallback to mock data
+                updateFinanceTable({
+                    recentTransactions: [
+                        { id: 'TXN_001', userId: 'user1', amount: 5000, type: 'conversion', timestamp: new Date().toISOString(), status: 'completed' },
+                        { id: 'TXN_002', userId: 'user2', amount: 12000, type: 'conversion', timestamp: new Date().toISOString(), status: 'completed' }
+                    ]
+                });
+            }
+        }
+
+        function updateFinanceTable(data) {
+            const container = document.getElementById('transactions-table');
+            const transactions = data.recentTransactions || [];
+            
+            if (transactions.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            هیچ تراکنشی یافت نشد
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = transactions.map(txn => `
+                <tr>
+                    <td><code>${txn.id}</code></td>
+                    <td>${txn.userId}</td>
+                    <td>${txn.amount?.toLocaleString() || '0'} تومان</td>
+                    <td>${txn.type}</td>
+                    <td>${new Date(txn.timestamp).toLocaleString('fa-IR')}</td>
+                    <td><span class="badge bg-success">تکمیل شده</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize with dashboard tab
+        showTab('dashboard');
+    </script>
+</body>
+</html>

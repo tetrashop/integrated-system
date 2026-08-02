@@ -1,0 +1,27 @@
+# لاگ‌ها و فایل‌های موقت
+*.log
+*.pid
+/tetra-logs/
+/tetra-pids/
+productivity-*.json
+comparison-report.html
+
+# محیط‌های مجازی
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# وابستگی‌ها
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# سیستم
+.DS_Store
+Thumbs.db

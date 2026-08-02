@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>گزارش مقایسه بهره‌وری TetraSaaS</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 2px solid #4f46e5; padding-bottom: 10px; }
+        .stat-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #4f46e5; }
+        .positive { color: green; font-weight: bold; }
+        .negative { color: red; font-weight: bold; }
+        .timeline { margin: 30px 0; }
+        .timeline-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.9rem; margin-left: 10px; }
+        .badge-good { background: #d4edda; color: #155724; }
+        .badge-average { background: #fff3cd; color: #856404; }
+        .badge-poor { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 گزارش مقایسه بهره‌وری TetraSaaS</h1>
+        <p>تاریخ تولید: $(date '+%Y/%m/%d %H:%M')</p>
+        
+        <div class="stat-box">
+            <h3>📈 عملکرد کلی</h3>
+            <p><strong>میانگین سلامت سرویس‌ها:</strong> ${avg_health}%</p>
+            <p><strong>میانگین زمان پاسخ:</strong> ${avg_response}ms</p>
+            <p><strong>میانگین نمره بهره‌وری:</strong> ${avg_score}/100</p>
+        </div>
+        
+        <div class="stat-box">
+            <h3>🏆 بهترین و بدترین عملکرد</h3>
+            <p><strong>بهترین نمره:</strong> ${best_score}/100 
+                <span class="badge badge-good">عالی</span></p>
+            <p><strong>بدترین نمره:</strong> ${worst_score}/100 
+                <span class="badge badge-poor">نیاز به بهبود</span></p>
+            <p><strong>پتانسیل بهبود:</strong> <span class="positive">+$((best_score - worst_score)) امتیاز</span></p>
+        </div>
+        
+        <div class="timeline">
+            <h3>📅 تاریخچه تست‌ها</h3>
+            <div class="timeline-item">
+                10:44 21/12 - نمره: /100 
+                <span class="badge badge-poor">ضعیف</span>
+            </div>
+        </div>
+        
+        <div class="stat-box">
+            <h3>💡 راهکارهای بهبود</h3>
+            <ul>
+                <li>راه‌اندازی سرویس‌های غیرفعال</li>
+                <li>بررسی پورت‌های ۳۰۰۱-۳۰۲۳</li>
+                <li>تست سلامت تک‌تک سرویس‌ها</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e9ecef; border-radius: 5px;">
+            <h4>📞 دستورات مفید</h4>
+            <pre style="background: white; padding: 10px; border-radius: 5px;">
+# تست سلامت: ./test-prod-fixed.sh
+# راه‌اندازی سرویس‌ها: ./start-all-services.sh
+# مدیریت سرویس‌ها: ~/tetra-services-manager.sh status
+            </pre>
+        </div>
+        
+        <p style="margin-top: 30px; color: #666; text-align: center; font-size: 0.9rem;">
+            سیستم مانیتورینگ TetraSaaS | آخرین بروزرسانی: $(date '+%Y/%m/%d %H:%M')
+        </p>
+    </div>
+</body>
+</html>

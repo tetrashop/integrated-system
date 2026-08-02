@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>🏆 تترا المپیک</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: Tahoma;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 15px;
+            border-right: 5px solid gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏆 اکوسیستم تترا المپیک</h1>
+        <p>استاندارد طلای المپیک - راه‌اندازی شده در ترمکس</p>
+    </div>
+    
+    <div class="card">
+        <h3>✅ سیستم فعال است</h3>
+        <p>تمام ماژول‌ها به طور کامل راه‌اندازی شده‌اند</p>
+    </div>
+    
+    <div class="card">
+        <h3>💰 کیف پول المپیک</h3>
+        <p>سیستم کیف پول اختصاصی برای هر کاربر</p>
+    </div>
+    
+    <div class="card">
+        <h3>📊 نظارت بلادرنگ</h3>
+        <p>مانیتورینگ لحظه‌ای تمام ماژول‌ها</p>
+    </div>
+
+    <script>
+        fetch('/api/status')
+            .then(r => r.json())
+            .then(data => {
+                console.log('وضعیت سیستم:', data);
+            });
+    </script>
+</body>
+</html>

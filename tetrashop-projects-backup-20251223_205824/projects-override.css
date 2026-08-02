@@ -1,0 +1,64 @@
+/* override برای پروژه‌ها - جلوگیری از صفحه سیاه */
+
+/* 1. رفع پس‌زمینه‌های سیاه */
+body, html, div, section, main, article {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 2. رفع display:none */
+#project-detail ~ * {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 3. رفع position fixed اگر باعث مشکل می‌شود */
+.overlay, .modal, .dialog, .popup {
+    position: relative !important;
+}
+
+/* 4. رفع z-index منفی */
+* {
+    z-index: auto !important;
+}
+
+/* 5. اطمینان از نمایش iframe */
+iframe {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: white !important;
+}
+
+/* 6. کلاس‌های کمکی */
+.no-dark-mode {
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+.force-visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 7. برای پروژه خاص chess */
+#chess-board, .chess-container {
+    background: white !important;
+}
+
+/* 8. برای پروژه خاص writer */
+.editor-container, .writing-area {
+    background: white !important;
+}
+
+/* 9. برای پروژه خاص nlp */
+.nlp-interface, .text-analysis {
+    background: white !important;
+}
+
+/* 10. برای همه پروژه‌ها */
+body > *:not(#project-detail) {
+    background: inherit !important;
+}

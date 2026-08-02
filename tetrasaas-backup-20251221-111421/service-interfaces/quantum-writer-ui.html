@@ -1,0 +1,242 @@
+<div class="quantum-writer-ui">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #a78bfa;">🌀 نویسنده کوانتومی</h2>
+        <p style="color: #cbd5e1;">تولید محتوای پیشرفته با الگوریتم‌های کوانتومی</p>
+    </div>
+    
+    <div style="background: rgba(139, 92, 246, 0.1); padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+        <h4 style="color: #a78bfa; margin-bottom: 15px;">🎯 تنظیمات تولید محتوا</h4>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">موضوع محتوا:</label>
+                <input type="text" id="topic" placeholder="مثلاً: هوش مصنوعی در پزشکی" 
+                       style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.05); 
+                              border: 1px solid rgba(139, 92, 246, 0.3); color: white;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">طول محتوا:</label>
+                <select id="length" style="width: 100%; padding: 10px; border-radius: 8px; 
+                                          background: rgba(255,255,255,0.05); border: 1px solid rgba(139, 92, 246, 0.3); 
+                                          color: white;">
+                    <option value="short">کوتاه (100-200 کلمه)</option>
+                    <option value="medium" selected>متوسط (300-500 کلمه)</option>
+                    <option value="long">طولانی (600-1000 کلمه)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">سبک نگارش:</label>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="radio" name="style" value="formal" checked>
+                    <span style="color: #cbd5e1;">رسمی</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="radio" name="style" value="casual">
+                    <span style="color: #cbd5e1;">غیررسمی</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="radio" name="style" value="academic">
+                    <span style="color: #cbd5e1;">علمی</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="radio" name="style" value="creative">
+                    <span style="color: #cbd5e1;">خلاقانه</span>
+                </label>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #cbd5e1;">زبان:</label>
+            <select id="language" style="width: 100%; padding: 10px; border-radius: 8px; 
+                                         background: rgba(255,255,255,0.05); border: 1px solid rgba(139, 92, 246, 0.3); 
+                                         color: white;">
+                <option value="persian" selected>فارسی</option>
+                <option value="english">انگلیسی</option>
+                <option value="arabic">عربی</option>
+            </select>
+        </div>
+    </div>
+    
+    <button onclick="generateQuantumContent()" 
+            style="width: 100%; padding: 15px; background: linear-gradient(90deg, #7c3aed, #8b5cf6); 
+                   color: white; border: none; border-radius: 10px; font-size: 1.1rem; 
+                   font-weight: bold; cursor: pointer; margin-bottom: 25px;">
+        ⚡ تولید محتوای کوانتومی
+    </button>
+    
+    <div id="resultContainer" style="display: none;">
+        <div style="background: rgba(0,0,0,0.3); padding: 25px; border-radius: 12px; border-left: 4px solid #8b5cf6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h4 style="color: #a78bfa; margin: 0;">نتیجه تولید</h4>
+                <div style="color: #cbd5e1; font-size: 0.9rem;">
+                    <span id="wordCount">0</span> کلمه | 
+                    <span id="generationTime">0</span> ثانیه
+                </div>
+            </div>
+            <div id="generatedContent" style="color: #e2e8f0; line-height: 1.8; max-height: 400px; overflow-y: auto; padding: 15px; 
+                                              background: rgba(0,0,0,0.2); border-radius: 8px;">
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 15px;">
+                <button onclick="copyToClipboard()" style="flex: 1; padding: 10px; background: rgba(34, 197, 94, 0.2); 
+                                                          color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); 
+                                                          border-radius: 8px; cursor: pointer;">
+                    📋 کپی متن
+                </button>
+                <button onclick="saveContent()" style="flex: 1; padding: 10px; background: rgba(59, 130, 246, 0.2); 
+                                                       color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); 
+                                                       border-radius: 8px; cursor: pointer;">
+                    💾 ذخیره فایل
+                </button>
+                <button onclick="shareContent()" style="flex: 1; padding: 10px; background: rgba(168, 85, 247, 0.2); 
+                                                        color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); 
+                                                        border-radius: 8px; cursor: pointer;">
+                    🔗 اشتراک‌گذاری
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px;">
+        <h4 style="color: #cbd5e1; margin-bottom: 15px;">📊 آمار استفاده</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px;">
+                <div style="font-size: 1.8rem; color: #a78bfa; font-weight: bold;">۱۲۴۷</div>
+                <div style="color: #cbd5e1; font-size: 0.9rem;">تولید شده</div>
+            </div>
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px;">
+                <div style="font-size: 1.8rem; color: #a78bfa; font-weight: bold;">۹۴%</div>
+                <div style="color: #cbd5e1; font-size: 0.9rem;">رضایت کاربران</div>
+            </div>
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px;">
+                <div style="font-size: 1.8rem; color: #a78bfa; font-weight: bold;">۳.۲s</div>
+                <div style="color: #cbd5e1; font-size: 0.9rem;">میانگین زمان</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function generateQuantumContent() {
+    const topic = document.getElementById('topic').value;
+    if (!topic.trim()) {
+        alert('لطفاً موضوع محتوا را وارد کنید');
+        return;
+    }
+    
+    const length = document.getElementById('length').value;
+    const language = document.getElementById('language').value;
+    const style = document.querySelector('input[name="style"]:checked').value;
+    
+    // شبیه‌سازی پردازش
+    const resultContainer = document.getElementById('resultContainer');
+    const generatedContent = document.getElementById('generatedContent');
+    const wordCount = document.getElementById('wordCount');
+    const generationTime = document.getElementById('generationTime');
+    
+    // نمایش لودر
+    generatedContent.innerHTML = `
+        <div style="text-align: center; padding: 40px;">
+            <div class="loader" style="width: 40px; height: 40px; border: 3px solid rgba(139, 92, 246, 0.3); 
+                                       border-top-color: #8b5cf6; border-radius: 50%; margin: 0 auto 20px; 
+                                       animation: spin 1s linear infinite;"></div>
+            <p style="color: #a78bfa;">در حال تولید محتوای کوانتومی...</p>
+        </div>
+    `;
+    
+    resultContainer.style.display = 'block';
+    
+    // شبیه‌سازی تاخیر پردازش
+    setTimeout(() => {
+        const sampleContent = {
+            formal: `مقاله علمی در مورد ${topic}
+
+با توجه به پیشرفت‌های اخیر در زمینه ${topic}، می‌توان به جرات گفت که این حوزه در حال تجربه تحولی شگرف است. تکنولوژی‌های نوظهور نه تنها روش‌های سنتی را متحول کرده‌اند، بلکه افق‌های جدیدی را در برابر پژوهشگران و متخصصان گشوده‌اند.
+
+بر اساس آخرین یافته‌های پژوهشی، ${topic} تأثیر قابل توجهی بر جنبه‌های مختلف زندگی بشری داشته است. از کاربردهای صنعتی گرفته تا حوزه‌های پزشکی و آموزشی، همه و همه از این پیشرفت‌ها بهره برده‌اند.
+
+با این حال، چالش‌هایی همچون ملاحظات اخلاقی، محدودیت‌های فنی و مسائل اقتصادی نیز وجود دارند که نیازمند توجه و برنامه‌ریزی دقیق هستند.`,
+            
+            casual: `حرفی درباره ${topic} دارم!
+
+وایسا ببین ${topic} واقعاً چیز جالبیه. این روزا همه دارن ازش حرف می‌زنن و کلی کارهای باحال با این تکنولوژی می‌کنن.
+
+من خودم چند بار تجربه کار با ${topic} رو داشتم و باید بگم واقعاً زندگی رو راحت‌تر کرده. از اون کارای خسته‌کننده قدیمیمون چیزی نمونده!
+
+البته یه چیزایی هم هست که باید حواسمون باشه. بعضی وقتا ممکنه مشکلاتی پیش بیاد، ولی به نظرم ارزشش رو داره.`,
+            
+            academic: `پژوهشی در زمینه ${topic}
+
+۱. مقدمه
+${topic} به عنوان یکی از مباحث مطرح در علوم معاصر، توجه بسیاری از محققان را به خود جلب کرده است. این پژوهش به بررسی ابعاد مختلف ${topic} می‌پردازد.
+
+۲. روش‌شناسی
+در این مطالعه از روش‌های کمی و کیفی به صورت ترکیبی استفاده شده است. جامعه آماری شامل متخصصان فعال در حوزه ${topic} می‌باشد.
+
+۳. یافته‌ها
+نتایج تحقیق نشان می‌دهد که ${topic} تأثیر معنی‌داری بر شاخص‌های مورد مطالعه داشته است.`,
+            
+            creative: `دنیای شگفت‌انگیز ${topic}
+
+تصور کن وارد دنیایی بشی که همه چیز حول محور ${topic} می‌چرخه! مثل یه رویای علمی-تخیلی که به واقعیت تبدیل شده.
+
+${topic} نه یه کلمه ساده، که یه دروازه‌ست به سوی آینده. آینده‌ای که توش انسان و ماشین با هم دیگه همکاری می‌کنن، مشکلات قدیم حل می‌شن و فرصت‌های جدید خلق می‌شن.
+
+یه لحظه چشمات رو ببند و تصور کن ${topic} چه تغییراتی می‌تونه توی زندگیت ایجاد کنه...`
+        };
+        
+        const content = sampleContent[style];
+        const words = content.split(' ').length;
+        const time = (Math.random() * 2 + 1.5).toFixed(1);
+        
+        generatedContent.innerHTML = `<div style="white-space: pre-line;">${content}</div>`;
+        wordCount.textContent = words;
+        generationTime.textContent = time;
+        
+        // اسکرول به نتیجه
+        resultContainer.scrollIntoView({ behavior: 'smooth' });
+    }, 2000);
+}
+
+function copyToClipboard() {
+    const content = document.getElementById('generatedContent').innerText;
+    navigator.clipboard.writeText(content).then(() => {
+        alert('✅ متن با موفقیت کپی شد');
+    });
+}
+
+function saveContent() {
+    const content = document.getElementById('generatedContent').innerText;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `quantum-content-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function shareContent() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'محتوای تولید شده با نویسنده کوانتومی',
+            text: document.getElementById('generatedContent').innerText.substring(0, 100) + '...',
+            url: window.location.href
+        });
+    } else {
+        alert('اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود');
+    }
+}
+
+// استایل برای انیمیشن لودر
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+</script>

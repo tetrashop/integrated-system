@@ -1,0 +1,48 @@
+{
+  "core_projects": {
+    "tetrashop_projects": {
+      "path": "/data/data/com.termux/files/home/tetrashop-projects",
+      "status": "active",
+      "port": 3000,
+      "role": "فروشگاه و API مرکزی"
+    },
+    "islamic_converter": {
+      "path": "??",  # پس از کشف پر می‌شود
+      "status": "running_in_pm2",
+      "port": "??",  # پس از کشف پر می‌شود
+      "role": "ماژول مبدل اسلامی"
+    },
+    "tetrasaas_final": {
+      "path": "/data/data/com.termux/files/home/tetrasaas-final",
+      "status": "unknown",
+      "port": "none",
+      "role": "منبع سرویس‌های اصلی"
+    }
+  },
+  "required_connections": [
+    {
+      "from": "tetrashop_projects (gateway)",
+      "to": "islamic_converter",
+      "type": "api_call",
+      "purpose": "اعتبارسنجی شرعی تراکنش‌ها"
+    },
+    {
+      "from": "islamic_converter",
+      "to": "tetrasaas_final",
+      "type": "service_integration",
+      "purpose": "تزریق قواعد اسلامی به سرویس‌ها"
+    },
+    {
+      "from": "tetrashop_projects (storefront)",
+      "to": "islamic_converter",
+      "type": "ui_component",
+      "purpose": "نمایش گواهی شرعی برای محصولات"
+    }
+  ],
+  "unified_data_structure": {
+    "type": "graph_database",
+    "suggestion": "استفاده از Neo4j یا ساختار JSON گراف",
+    "nodes": ["customers", "services", "transactions", "islamic_rules"],
+    "edges": ["purchases", "validates", "contains", "complies_with"]
+  }
+}

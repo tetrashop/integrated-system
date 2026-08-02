@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra Ecosystem - سامانه تبدیل 2D به 3D | درآمدزایی هوشمند</title>
+    <meta name="description" content="تبدیل تصاویر 2D به مدل‌های 3D با هوش مصنوعی. کسب درآمد خودکار از هر تبدیل با پنل مدیریت فارسی">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* هدر */
+        .header { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .nav-links a { color: white; text-decoration: none; margin: 0 1rem; }
+        
+        /* هیرو */
+        .hero { 
+            text-align: center; 
+            padding: 150px 20px 80px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+        }
+        .hero h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* دکمه‌ها */
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+        }
+        
+        /* ویژگی‌ها */
+        .features {
+            padding: 80px 0;
+            background: var(--light);
+            color: var(--dark);
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* تعرفه‌ها */
+        .pricing {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1e293b, #334155);
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .price-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 1rem 0;
+        }
+        .price-period {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* فوتر */
+        .footer {
+            background: var(--dark);
+            padding: 3rem 0;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css">
+</head>
+<body>
+    <!-- هدر -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">🚀 Tetra Ecosystem</div>
+                <div class="nav-links">
+                    <a href="#features">ویژگی‌ها</a>
+                    <a href="#pricing">تعرفه‌ها</a>
+                    <a href="#contact">تماس</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <section class="hero">
+        <div class="container">
+            <h1>تبدیل هوشمند 2D به 3D</h1>
+            <p>با Tetra Ecosystem، تصاویر معمولی را به مدل‌های سه‌بعدی حرفه‌ای تبدیل کنید و از هر تبدیل درآمد کسب کنید</p>
+            <div class="hero-buttons">
+                <button class="btn" onclick="startFreeTrial()">شروع رایگان - ۱۰ تبدیل هدیه</button>
+                <button class="btn btn-secondary" onclick="showLiveDemo()">مشاهده دمو زنده</button>
+            </div>
+            <div style="margin-top: 2rem; font-size: 1.1rem;">
+                <span>🎁 پیش‌فروش ویژه: <strong id="countdown">۱۵ روز تا پایان</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ویژگی‌ها -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">چرا Tetra Ecosystem؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💸</div>
+                    <h3>درآمدزایی خودکار</h3>
+                    <p>۳۰٪ سود از هر تبدیل - پول در بیاورید حتی وقتی خوابید!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>هوش مصنوعی پیشرفته</h3>
+                    <p>تبدیل با کیفیت studio با ۴ الگوی مختلف و کنترل کامل</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>پنل مدیریت فارسی</h3>
+                    <p>مدیریت آسان درآمد، کاربران و آمار زنده به زبان فارسی</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>راه‌اندازی ۵ دقیقه‌ای</h3>
+                    <p>کافیست ثبت نام کنید و لینک مخصوص خود را دریافت کنید</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تعرفه‌ها -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">تعرفه‌های درآمدی</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>استارتر</h3>
+                    <div class="price">۳۰٪</div>
+                    <div class="price-period">سود از هر تبدیل</div>
+                    <ul style="list-style: none; margin: 2rem 0;">
+                        <li>✅ ۱۰۰ تبدیل در ماه</li>
+                        <li>✅ پنل مدیریت پایه</li>
+                        <li>✅ پشتیبانی تلگرام</li>
+                        <li>❌ API دسترسی</li>
+                    </ul>
+                    <button class="btn" onclick="selectPlan('starter')">رایگان شروع کنید</button>
+                </div>
+                <div class="price-card" style="border: 2px solid var(--accent); transform: scale(1.05);">
+                    <div style="background: var(--accent); padding: 0.5rem; border-radius: 20px; margin-bottom: 1rem;">پرفروش</div>
+                    <h3>پروفشنال</h3>
+                    <div class="price">۲۵٪</div>
+                    <div class="price-period">سود از هر تبدیل</div>
+                    <ul style="list-style: none; margin: 2rem 0;">
+                        <li>✅ تبدیل نامحدود</li>
+                        <li>✅ پنل مدیریت پیشرفته</li>
+                        <li>✅ پشتیبانی واتساپ</li>
+                        <li>✅ API پایه</li>
+                    </ul>
+                    <button class="btn" onclick="selectPlan('pro')">ماهانه ۱۵۰٬۰۰۰ تومان</button>
+                </div>
+                <div class="price-card">
+                    <h3>بیزینس</h3>
+                    <div class="price">۲۰٪</div>
+                    <div class="price-period">سود از هر تبدیل</div>
+                    <ul style="list-style: none; margin: 2rem 0;">
+                        <li>✅ همه امکانات پرو</li>
+                        <li>✅ API کامل</li>
+                        <li>✅ پشتیبانی اختصاصی</li>
+                        <li>✅ وایت لیبل</li>
+                    </ul>
+                    <button class="btn" onclick="selectPlan('business')">ماهانه ۳۰۰٬۰۰۰ تومان</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- فوتر -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <h3>آماده درآمدزایی هستید؟</h3>
+            <p style="margin: 1rem 0; opacity: 0.8;">همین امروز شروع کنید و در ۲۴ ساعت اول درآمد کسب کنید</p>
+            <div style="margin: 2rem 0;">
+                <button class="btn" onclick="contactOnWhatsApp()">
+                    💬 ارتباط در واتساپ
+                </button>
+                <button class="btn btn-secondary" onclick="contactOnTelegram()">
+                    📱 ارتباط در تلگرام
+                </button>
+            </div>
+            <div style="opacity: 0.6; margin-top: 2rem;">
+                <p>شماره تماس: ۰۹۱۲۳۴۵۶۷۸۹ | ایمیل: info@tetra-ecosystem.ir</p>
+                <p>© ۲۰۲۴ Tetra Ecosystem - تمام حقوق محفوظ است</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // شمارش معکوس
+        function updateCountdown() {
+            const launchDate = new Date('2024-12-15').getTime();
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').textContent = days + " روز تا پایان پیش‌فروش";
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // عملکرد دکمه‌ها
+        function startFreeTrial() {
+            const phone = "989123456789";
+            const message = "سلام! می‌خواهم در Tetra Ecosystem ثبت نام کنم و ۱۰ تبدیل رایگان دریافت کنم";
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function showLiveDemo() {
+            window.open('https://tetra-master-repo-p3u2am6bd-ramin-edjlal-s-projects.vercel.app/', '_blank');
+        }
+
+        function selectPlan(plan) {
+            const plans = {
+                'starter': 'پلن استارتر (رایگان)',
+                'pro': 'پلن پروفشنال (۱۵۰٬۰۰۰ تومان)',
+                'business': 'پلن بیزینس (۳۰۰٬۰۰۰ تومان)'
+            };
+            const message = `سلام! می‌خواهم ${plans[plan]} را انتخاب کنم. لطفا راهنمایی کنید.`;
+            window.open(`https://wa.me/989123456789?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function contactOnWhatsApp() {
+            window.open('https://wa.me/989123456789', '_blank');
+        }
+
+        function contactOnTelegram() {
+            window.open('https://t.me/tetra_ecosystem', '_blank');
+        }
+
+        // اسکرول نرم
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

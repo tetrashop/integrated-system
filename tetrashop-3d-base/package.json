@@ -1,0 +1,31 @@
+{
+  "name": "tetrashop-mono-repo",
+  "version": "1.0.0",
+  "description": "Tetrashop Mono-Repository - 3D Conversion + Ecommerce",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:tetrashop": "npm run dev --workspace=tetrashop-ui",
+    "build:tetrashop": "npm run build --workspace=tetrashop-ui",
+    "dev:3d": "npm run dev --workspace=3d-app",
+    "build:3d": "npm run build --workspace=3d-app",
+    "deploy:tetrashop": "npm run deploy --workspace=tetrashop-ui",
+    "build": "cd apps/tetrashop-ui && npm run build",
+    "test": "echo \"No tests specified\" && exit 0",
+    "dev": "npm run dev --workspace=tetrashop-ui"
+  },
+  "keywords": [
+    "tetrashop",
+    "ecommerce",
+    "3d",
+    "conversion",
+    "react"
+  ],
+  "author": "Tetrashop Team",
+  "license": "MIT",
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.10.29"
+  }
+}

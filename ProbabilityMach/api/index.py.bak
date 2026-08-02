@@ -1,0 +1,456 @@
+import random
+import math
+import json
+from collections import defaultdict
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, JSONResponse
+from typing import List, Dict, Tuple
+
+app = FastAPI()
+random.seed(42)
+
+# ---------- تنظیمات ----------
+SIM_COUNT = 2000
+ELO_K = 32           # ضریب به‌روزرسانی Elo
+DRAW_BOOST = 0.05
+
+# ---------- داده‌های گروه‌ها (با رتبه‌بندی واقعی‌تر) ----------
+# رتبه‌بندی تقریبی بر اساس قدرت واقعی تیم‌ها در سال 2026 (از 1200 تا 2000)
+# می‌توانید این اعداد را با رتبه‌بندی فیفا جایگزین کنید.
+GROUPS = [
+    {"name": "Group A", "teams": ["Mexico", "South Korea", "South Africa", "Czech Republic"], "elo": [1700, 1550, 1450, 1600]},
+    {"name": "Group B", "teams": ["Canada", "Switzerland", "Qatar", "Bosnia and Herzegovina"], "elo": [1650, 1750, 1420, 1580]},
+    {"name": "Group C", "teams": ["Brazil", "Morocco", "Scotland", "Haiti"], "elo": [1950, 1620, 1550, 1300]},
+    {"name": "Group D", "teams": ["USA", "Australia", "Paraguay", "Turkey"], "elo": [1720, 1650, 1550, 1680]},
+    {"name": "Group E", "teams": ["Germany", "Curacao", "Ivory Coast", "Ecuador"], "elo": [1880, 1350, 1650, 1620]},
+    {"name": "Group F", "teams": ["Netherlands", "Japan", "Sweden", "Tunisia"], "elo": [1850, 1580, 1680, 1520]},
+    {"name": "Group G", "teams": ["Belgium", "Iran", "Egypt", "New Zealand"], "elo": [1800, 1550, 1620, 1480]},
+    {"name": "Group H", "teams": ["Spain", "Uruguay", "Saudi Arabia", "Cabo Verde"], "elo": [1900, 1700, 1500, 1420]},
+    {"name": "Group I", "teams": ["France", "Senegal", "Norway", "Iraq"], "elo": [1920, 1650, 1700, 1450]},
+    {"name": "Group J", "teams": ["Argentina", "Austria", "Algeria", "Jordan"], "elo": [1940, 1680, 1600, 1450]},
+    {"name": "Group K", "teams": ["Portugal", "Colombia", "Uzbekistan", "DR Congo"], "elo": [1830, 1720, 1480, 1550]},
+    {"name": "Group L", "teams": ["England", "Croatia", "Ghana", "Panama"], "elo": [1890, 1750, 1600, 1500]}
+]
+
+# ---------- مدل پایه (Poisson با پارامترهای بهتر) ----------
+def expected_goals(elo_a: float, elo_b: float) -> float:
+    # فرمول استاندارد تبدیل اختلاف Elo به انتظار گل
+    return math.exp((elo_a - elo_b) / 400.0)
+
+def poisson_sample(lambda_val: float) -> int:
+    if lambda_val <= 0: return 0
+    L = math.exp(-lambda_val)
+    p = 1.0
+    k = 0
+    while p > L:
+        k += 1
+        p *= random.random()
+    return k - 1
+
+def simulate_match_elo(team_a: str, team_b: str, elo_dict: Dict[str, float], home_advantage: float = 1.2):
+    exp_home = expected_goals(elo_dict[team_a], elo_dict[team_b]) * home_advantage
+    exp_away = expected_goals(elo_dict[team_b], elo_dict[team_a])
+    hg = poisson_sample(exp_home)
+    ag = poisson_sample(exp_away)
+    if random.random() < DRAW_BOOST and hg != ag:
+        return (1, 1) if random.random() < 0.5 else (2, 2)
+    return hg, ag
+
+# ---------- به‌روزرسانی Elo بر اساس نتیجه واقعی ----------
+def update_elo(elo_dict: Dict[str, float], home: str, away: str, home_goals: int, away_goals: int):
+    r_home = elo_dict[home]
+    r_away = elo_dict[away]
+    # محاسبه انتظار برد (برای هر تیم، بر اساس تفاضل گل به عنوان یک معیار ساده)
+    # فرمول ساده: اختلاف گل > 1 = برد، =0 مساوی، <1 باخت
+    if home_goals > away_goals:
+        result_home = 1.0
+        result_away = 0.0
+    elif home_goals < away_goals:
+        result_home = 0.0
+        result_away = 1.0
+    else:
+        result_home = 0.5
+        result_away = 0.5
+    # انتظار برد بر اساس Elo
+    expected_home = 1.0 / (1.0 + math.pow(10, (r_away - r_home) / 400.0))
+    expected_away = 1.0 / (1.0 + math.pow(10, (r_home - r_away) / 400.0))
+    # به‌روزرسانی
+    elo_dict[home] += ELO_K * (result_home - expected_home)
+    elo_dict[away] += ELO_K * (result_away - expected_away)
+
+# ---------- اعتبارسنجی و حذف تکراری ----------
+def is_valid_result(group_name: str, home: str, away: str, home_goals: int, away_goals: int):
+    if home_goals < 0 or away_goals < 0:
+        return False, "گل‌ها نمی‌توانند منفی باشند."
+    if home == away:
+        return False, "تیم میزبان و مهمان نمی‌توانند یکسان باشند."
+    group = next((g for g in GROUPS if g["name"] == group_name), None)
+    if not group: return False, "گروه نامعتبر است."
+    if home not in group["teams"]: return False, f"تیم '{home}' در گروه وجود ندارد."
+    if away not in group["teams"]: return False, f"تیم '{away}' در گروه وجود ندارد."
+    return True, ""
+
+def deduplicate_results(results: List[Dict]) -> List[Dict]:
+    unique = {}
+    for r in results:
+        valid, _ = is_valid_result(r["group"], r["home"], r["away"], r["home_goals"], r["away_goals"])
+        if not valid: continue
+        key = (r["group"], tuple(sorted([r["home"], r["away"]])))
+        unique[key] = r
+    return list(unique.values())
+
+# ---------- منطق اصلی تورنومنت با Elo پویا ----------
+def apply_fixed_result(group: Dict, home: str, away: str, home_goals: int, away_goals: int,
+                       points: List[int], gf: List[int], ga: List[int]):
+    idx_h = group["teams"].index(home)
+    idx_a = group["teams"].index(away)
+    gf[idx_h] += home_goals
+    ga[idx_h] += away_goals
+    gf[idx_a] += away_goals
+    ga[idx_a] += home_goals
+    if home_goals > away_goals:
+        points[idx_h] += 3
+    elif home_goals < away_goals:
+        points[idx_a] += 3
+    else:
+        points[idx_h] += 1
+        points[idx_a] += 1
+
+def simulate_remaining_matches(group: Dict, points: List[int], gf: List[int], ga: List[int],
+                               elo_dict: Dict[str, float], fixed_results: List[Dict], goal_stats: Dict):
+    all_matches = [(0,1),(0,2),(0,3),(1,2),(1,3),(2,3)]
+    fixed_pairs = set()
+    for fr in fixed_results:
+        if fr["group"] == group["name"]:
+            h, a = fr["home"], fr["away"]
+            if h in group["teams"] and a in group["teams"]:
+                idx_h = group["teams"].index(h)
+                idx_a = group["teams"].index(a)
+                fixed_pairs.add((min(idx_h, idx_a), max(idx_h, idx_a)))
+    simulated = []
+    for i, j in all_matches:
+        if (min(i,j), max(i,j)) in fixed_pairs: continue
+        home_team = group["teams"][i]
+        away_team = group["teams"][j]
+        hg, ag = simulate_match_elo(home_team, away_team, elo_dict)
+        gf[i] += hg; ga[i] += ag
+        gf[j] += ag; ga[j] += hg
+        if hg > ag:
+            points[i] += 3
+        elif hg < ag:
+            points[j] += 3
+        else:
+            points[i] += 1
+            points[j] += 1
+        simulated.append((home_team, away_team, hg, ag))
+        key = (group["name"], home_team, away_team)
+        goal_stats[key]["home"].append(hg)
+        goal_stats[key]["away"].append(ag)
+    return points, gf, ga, simulated
+
+def process_group(group: Dict, elo_dict: Dict[str, float], fixed_results: List[Dict], goal_stats: Dict):
+    n = 4
+    points = [0]*n
+    gf = [0]*n
+    ga = [0]*n
+    for fr in fixed_results:
+        if fr["group"] == group["name"]:
+            apply_fixed_result(group, fr["home"], fr["away"], fr["home_goals"], fr["away_goals"],
+                               points, gf, ga)
+    points, gf, ga, sim_matches = simulate_remaining_matches(group, points, gf, ga, elo_dict, fixed_results, goal_stats)
+    standings = [{"team": group["teams"][i], "points": points[i], "gd": gf[i]-ga[i], "gf": gf[i]} for i in range(n)]
+    standings.sort(key=lambda x: (-x["points"], -x["gd"], -x["gf"]))
+    return standings, sim_matches
+
+def run_knockout(qualified_teams: List[str], elo_dict: Dict[str, float], goal_stats: Dict, seed_offset: int):
+    random.seed(42 + seed_offset)
+    teams = qualified_teams.copy()
+    random.shuffle(teams)
+    stages = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Final"]
+    winners = teams
+    all_rounds = []
+    for stage in stages:
+        next_round = []
+        matches = []
+        for i in range(0, len(winners), 2):
+            if i+1 >= len(winners): break
+            a, b = winners[i], winners[i+1]
+            g_a, g_b = simulate_match_elo(a, b, elo_dict, home_advantage=1.0)
+            winner = a if g_a > g_b else (b if g_b > g_a else (a if random.random() < 0.5 else b))
+            next_round.append(winner)
+            matches.append((a, b, g_a, g_b, winner))
+            key = (f"KO_{stage}", a, b)
+            goal_stats[key]["home"].append(g_a)
+            goal_stats[key]["away"].append(g_b)
+        all_rounds.append({"stage": stage, "matches": matches})
+        winners = next_round
+        if len(winners) == 1: break
+    champion = winners[0] if winners else "Unknown"
+    return all_rounds, champion
+
+def full_tournament(fixed_results: List[Dict]):
+    fixed_results = deduplicate_results(fixed_results)
+    # کپی Elo اولیه
+    elo_dict = {team: g["elo"][i] for g in GROUPS for i, team in enumerate(g["teams"])}
+    # به‌روزرسانی Elo بر اساس نتایج واقعی (یک بار)
+    for fr in fixed_results:
+        update_elo(elo_dict, fr["home"], fr["away"], fr["home_goals"], fr["away_goals"])
+    # آمار گل
+    goal_stats = defaultdict(lambda: {"home": [], "away": []})
+    for fr in fixed_results:
+        key = (fr["group"], fr["home"], fr["away"])
+        for _ in range(SIM_COUNT):
+            goal_stats[key]["home"].append(fr["home_goals"])
+            goal_stats[key]["away"].append(fr["away_goals"])
+    # حلقه شبیه‌سازی (هر بار از elo_dict به‌روز شده استفاده می‌کند)
+    group_tables = {}
+    group_sim_matches = {}
+    knockout_rounds = []
+    champion = None
+    for sim_idx in range(SIM_COUNT):
+        temp_group_tables = {}
+        temp_group_sim = {}
+        all_third = []
+        for g in GROUPS:
+            standings, sim_matches = process_group(g, elo_dict, fixed_results, goal_stats)
+            temp_group_tables[g["name"]] = standings
+            temp_group_sim[g["name"]] = sim_matches
+            all_third.append((standings[2]["team"], standings[2]["points"], standings[2]["gd"], standings[2]["gf"]))
+        best_third = sorted(all_third, key=lambda x: (-x[1], -x[2], -x[3]))[:8]
+        best_third_teams = [t[0] for t in best_third]
+        qualified = []
+        for g in GROUPS:
+            standings = temp_group_tables[g["name"]]
+            qualified.append(standings[0]["team"])
+            qualified.append(standings[1]["team"])
+        qualified.extend(best_third_teams)
+        ko_rounds, champ = run_knockout(qualified, elo_dict, goal_stats, sim_idx)
+        if sim_idx == SIM_COUNT - 1:
+            group_tables = temp_group_tables
+            group_sim_matches = temp_group_sim
+            knockout_rounds = ko_rounds
+            champion = champ
+    # محاسبه آمار نهایی گل
+    goal_summary = {}
+    for key, vals in goal_stats.items():
+        home_mean = sum(vals["home"]) / len(vals["home"]) if vals["home"] else 0
+        away_mean = sum(vals["away"]) / len(vals["away"]) if vals["away"] else 0
+        home_var = sum((x - home_mean)**2 for x in vals["home"]) / len(vals["home"]) if vals["home"] else 0
+        away_var = sum((x - away_mean)**2 for x in vals["away"]) / len(vals["away"]) if vals["away"] else 0
+        goal_summary[key] = {
+            "home_mean": home_mean,
+            "home_std": math.sqrt(home_var) if home_var > 0 else 0,
+            "away_mean": away_mean,
+            "away_std": math.sqrt(away_var) if away_var > 0 else 0
+        }
+    return group_tables, group_sim_matches, knockout_rounds, champion, goal_summary
+
+# ---------- تولید HTML (همان نسخه قبل، بدون تغییر) ----------
+def render_tables_html(group_tables, group_sim_matches, knockout_rounds, champion, goal_summary):
+    html_parts = []
+    for g in GROUPS:
+        name = g["name"]
+        standings = group_tables[name]
+        html_parts.append(f"""
+        <div class='group-card'>
+            <h2>{name}</h2>
+            <div class='table-responsive'>
+                <table class='standings-table'>
+                    <thead><tr><th>رتبه</th><th>تیم</th><th>بازی</th><th>امتیاز</th><th>گل زده</th><th>گل خورده</th><th>تفاضل</th></tr></thead>
+                    <tbody>
+        """)
+        for idx, s in enumerate(standings, 1):
+            played = 3
+            html_parts.append(f"<tr><td>{idx}</td><td class='team-name'>{s['team']}</td><td>{played}</td><td class='points'>{s['points']}</td><td>{s['gf']}</td><td>{s['gf']-s['gd']}</td><td>{s['gd']}</td></tr>")
+        html_parts.append("</tbody>\\</div>")
+        html_parts.append("<div class='goal-stats'><strong>📊 میانگین گل ± انحراف معیار (پیش‌بینی):</strong><br>")
+        for i in range(4):
+            for j in range(i+1,4):
+                home = g["teams"][i]; away = g["teams"][j]
+                key = (name, home, away)
+                if key in goal_summary:
+                    stat = goal_summary[key]
+                    html_parts.append(f"{home} vs {away}: {stat['home_mean']:.2f}±{stat['home_std']:.2f} – {stat['away_mean']:.2f}±{stat['away_std']:.2f}<br>")
+        html_parts.append("</div>")
+        if group_sim_matches[name]:
+            html_parts.append("<div class='sim-matches'><strong>بازی‌های باقیمانده (شبیه‌سازی شده):</strong><br>")
+            for (h,a,hg,ag) in group_sim_matches[name]:
+                html_parts.append(f"{h} {hg} – {ag} {a}<br>")
+            html_parts.append("</div>")
+        html_parts.append("</div>")
+    if knockout_rounds:
+        html_parts.append("<h2>🏅 مرحله حذفی</h2>")
+        for rd in knockout_rounds:
+            html_parts.append(f"<div class='round-card'><h3>{rd['stage']}</h3><div class='table-responsive'><table class='knockout-table'><thead><tr><th>بازی</th><th>نتیجه</th><th>برنده</th></td></thead><tbody>")
+            for (a,b,ga,gb,w) in rd["matches"]:
+                html_parts.append(f"<tr><td>{a} vs {b}</td><td>{ga} – {gb}</td><td class='winner'>{w}</td></tr>")
+            html_parts.append("</tbody>\\</div></div>")
+    if champion:
+        html_parts.append(f"<div class='champion'><h2>🏆 قهرمان: {champion}</h2></div>")
+    return "".join(html_parts)
+
+@app.get("/", response_class=HTMLResponse)
+async def get_main():
+    fixed_results = []
+    tables, sim_matches, knockout, champ, goal_summary = full_tournament(fixed_results)
+    tables_html = render_tables_html(tables, sim_matches, knockout, champ, goal_summary)
+    groups_options = "".join(f'<option value="{g["name"]}">{g["name"]}</option>' for g in GROUPS)
+    teams_by_group_json = json.dumps({g["name"]: g["teams"] for g in GROUPS})
+    fixed_json = json.dumps([])
+    html = f"""
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>پیش‌بینی جام جهانی ۲۰۲۶ – Elo تطبیقی + مونت کارلو</title>
+    <style>
+        * {{ box-sizing: border-box; }}
+        body {{ font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #eef2f3; padding: 20px; }}
+        .container {{ max-width: 1400px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden; }}
+        .header {{ background: linear-gradient(135deg, #1a3c4c, #0e2a36); color: white; padding: 20px 30px; }}
+        .header h1 {{ margin: 0; font-size: 1.8rem; }}
+        .header p {{ margin: 8px 0 0; opacity: 0.9; }}
+        .content {{ padding: 25px; }}
+        .form-card {{ background: #f8fafc; border-radius: 16px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }}
+        .form-group {{ display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; margin-bottom: 15px; }}
+        .form-group label {{ font-weight: 600; margin-bottom: 4px; display: block; font-size: 0.85rem; color: #2c3e50; }}
+        .form-group select, .form-group input {{ padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: white; font-size: 0.9rem; }}
+        button {{ background: #2c5f8a; border: none; color: white; padding: 8px 18px; border-radius: 30px; cursor: pointer; margin: 5px; }}
+        button:hover {{ background: #1e4666; }}
+        .undo-reset {{ margin-top: 10px; }}
+        .results-list {{ background: #f1f5f9; padding: 12px; border-radius: 12px; max-height: 200px; overflow-y: auto; font-size: 0.85rem; }}
+        .group-card {{ background: white; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 30px; overflow: hidden; }}
+        .group-card h2 {{ background: #f1f5f9; margin: 0; padding: 12px 20px; font-size: 1.4rem; border-bottom: 2px solid #e2e8f0; }}
+        .standings-table {{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }}
+        .standings-table th, .standings-table td {{ padding: 10px 8px; text-align: center; border-bottom: 1px solid #e2e8f0; }}
+        .standings-table th {{ background: #eef2ff; font-weight: 600; }}
+        .team-name {{ font-weight: 600; }}
+        .points {{ font-weight: 700; color: #2563eb; }}
+        .goal-stats {{ background: #fef9e3; padding: 10px 15px; margin: 10px 15px; border-radius: 12px; font-size: 0.8rem; }}
+        .sim-matches {{ background: #e6f7ff; padding: 10px 15px; margin: 10px 15px 15px; border-radius: 12px; font-size: 0.8rem; }}
+        .round-card {{ background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }}
+        .round-card h3 {{ background: #f8fafc; padding: 12px 18px; margin: 0; border-bottom: 1px solid #e2e8f0; }}
+        .knockout-table {{ width: 100%; border-collapse: collapse; }}
+        .knockout-table td, .knockout-table th {{ padding: 8px 12px; border-bottom: 1px solid #e2e8f0; text-align: center; }}
+        .winner {{ font-weight: bold; color: #16a34a; }}
+        .champion {{ text-align: center; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e293b; padding: 20px; border-radius: 30px; margin-top: 20px; }}
+        .champion h2 {{ margin: 0; font-size: 1.8rem; }}
+        @media (max-width: 768px) {{ .standings-table th, .standings-table td {{ padding: 6px 4px; font-size: 0.7rem; }} .form-group {{ flex-direction: column; align-items: stretch; }} .form-group select, .form-group input {{ width: 100%; }} }}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🏆 جام جهانی ۲۰۲۶ – Elo تطبیقی + مونت کارلو</h1>
+        <p>نتایج واقعی Elo تیم‌ها را به‌روز می‌کنند – دقت بسیار بالاتر</p>
+    </div>
+    <div class="content">
+        <div class="form-card">
+            <form id="resultForm">
+                <div class="form-group">
+                    <div><label>گروه</label><select id="group">{groups_options}</select></div>
+                    <div><label>تیم میزبان</label><select id="home"></select></div>
+                    <div><label>تیم مهمان</label><select id="away"></select></div>
+                    <div><label>گل میزبان</label><input id="home_goals" type="number" value="0" min="0"></div>
+                    <div><label>گل مهمان</label><input id="away_goals" type="number" value="0" min="0"></div>
+                    <div><button type="submit">ثبت نتیجه</button></div>
+                </div>
+            </form>
+            <div class="undo-reset">
+                <button id="undoBtn" type="button">↩️ حذف آخرین نتیجه</button>
+                <button id="resetBtn" type="button">🗑️ حذف همه نتایج</button>
+            </div>
+            <div id="resultsList" class="results-list"></div>
+        </div>
+        <div id="tournamentResults">{tables_html}</div>
+    </div>
+</div>
+<script>
+    let fixedResults = {fixed_json};
+    const teamsByGroup = {teams_by_group_json};
+    function saveToLocal() {{ localStorage.setItem("wc2026_results", JSON.stringify(fixedResults)); }}
+    function loadFromLocal() {{
+        let stored = localStorage.getItem("wc2026_results");
+        if (stored) {{ fixedResults = JSON.parse(stored); updateDisplay(); submitToServer(); }}
+    }}
+    function updateDisplay() {{
+        let div = document.getElementById("resultsList");
+        if (fixedResults.length === 0) div.innerHTML = "<strong>نتایج ثبت شده:</strong> هیچ نتیجه‌ای ثبت نشده است.";
+        else {{
+            let html = "<strong>نتایج ثبت شده:</strong><br>";
+            fixedResults.forEach(r => {{ html += `${{r.group}}: ${{r.home}} ${{r.home_goals}} - ${{r.away_goals}} ${{r.away}}<br>`; }});
+            div.innerHTML = html;
+        }}
+    }}
+    function updateTeamDropdowns() {{
+        let group = document.getElementById("group").value;
+        let homeSel = document.getElementById("home");
+        let awaySel = document.getElementById("away");
+        let teams = teamsByGroup[group];
+        homeSel.innerHTML = ""; awaySel.innerHTML = "";
+        teams.forEach(t => {{
+            let opt1 = document.createElement("option"); opt1.value = t; opt1.text = t; homeSel.appendChild(opt1);
+            let opt2 = document.createElement("option"); opt2.value = t; opt2.text = t; awaySel.appendChild(opt2);
+        }});
+    }}
+    function resultExists(group, home, away) {{
+        return fixedResults.some(r => r.group === group && ((r.home === home && r.away === away) || (r.home === away && r.away === home)));
+    }}
+    async function submitToServer() {{
+        const resp = await fetch("/update_data", {{
+            method: "POST", headers: {{ "Content-Type": "application/json" }},
+            body: JSON.stringify({{ results: fixedResults }})
+        }});
+        const data = await resp.json();
+        document.getElementById("tournamentResults").innerHTML = data.html;
+    }}
+    function addResult(e) {{
+        e.preventDefault();
+        let group = document.getElementById("group").value;
+        let home = document.getElementById("home").value;
+        let away = document.getElementById("away").value;
+        let hg = parseInt(document.getElementById("home_goals").value);
+        let ag = parseInt(document.getElementById("away_goals").value);
+        if (home === away) {{ alert("تیم میزبان و مهمان یکسان است"); return; }}
+        if (hg < 0 || ag < 0) {{ alert("گل منفی مجاز نیست"); return; }}
+        if (resultExists(group, home, away)) {{
+            if (confirm("نتیجه قبلی برای این بازی وجود دارد. جایگزین شود؟")) {{
+                fixedResults = fixedResults.filter(r => !(r.group === group && ((r.home === home && r.away === away) || (r.home === away && r.away === home))));
+            }} else return;
+        }}
+        fixedResults.push({{ group, home, away, home_goals: hg, away_goals: ag }});
+        saveToLocal(); updateDisplay(); submitToServer();
+    }}
+    function undoLast() {{
+        if (fixedResults.length === 0) {{ alert("نتیجه‌ای برای حذف نیست"); return; }}
+        fixedResults.pop(); saveToLocal(); updateDisplay(); submitToServer();
+    }}
+    function resetAll() {{
+        if (fixedResults.length === 0) {{ alert("همه نتایج در حال حاضر پاک هستند"); return; }}
+        if (confirm("همه نتایج حذف شوند؟")) {{ fixedResults = []; saveToLocal(); updateDisplay(); submitToServer(); }}
+    }}
+    window.onload = function() {{
+        loadFromLocal();
+        updateTeamDropdowns();
+        document.getElementById("group").addEventListener("change", updateTeamDropdowns);
+        document.getElementById("resultForm").addEventListener("submit", addResult);
+        document.getElementById("undoBtn").addEventListener("click", undoLast);
+        document.getElementById("resetBtn").addEventListener("click", resetAll);
+    }};
+</script>
+</body>
+</html>
+"""
+    return HTMLResponse(content=html)
+
+@app.post("/update_data", response_class=JSONResponse)
+async def update_data(request: Request):
+    body = await request.json()
+    fixed_results = body.get("results", [])
+    tables, sim_matches, knockout, champ, goal_summary = full_tournament(fixed_results)
+    html = render_tables_html(tables, sim_matches, knockout, champ, goal_summary)
+    return {"html": html}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

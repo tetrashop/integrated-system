@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\2a961989f4603cefe51ed3ca0dd21bef\googletest-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\6db1c7ab86425695f60924087326c571\googletest-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\8ef6accae552aac0f5990a1a8c67cb5a\googletest-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Ramin\ChessEngine\_deps\googletest-subbuild\CMakeFiles\googletest-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{FC5BDA0E-051F-3B6F-94E7-DF0810DE010F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,163 @@
+
+    <!DOCTYPE html>
+    <html dir="rtl" lang="fa">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>هوشمند نویس</title>
+        <style>
+            body {
+                font-family: Tahoma, sans-serif;
+                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                color: white;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: rgba(255,255,255,0.1);
+                padding: 30px;
+                border-radius: 20px;
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            .input-group {
+                margin-bottom: 20px;
+            }
+            input, select, textarea {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid rgba(255,255,255,0.2);
+                background: rgba(255,255,255,0.1);
+                color: white;
+                border-radius: 10px;
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            textarea {
+                height: 200px;
+                resize: vertical;
+            }
+            .btn {
+                padding: 15px 30px;
+                background: #10b981;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 1.1rem;
+                margin: 10px 5px;
+                transition: all 0.3s ease;
+            }
+            .btn:hover {
+                background: #059669;
+                transform: translateY(-2px);
+            }
+            .output {
+                margin-top: 20px;
+                padding: 20px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                min-height: 100px;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📝 هوشمند نویس</h1>
+            <p>سیستم هوشمند تولید محتوای پیشرفته</p>
+            
+            <div class="input-group">
+                <input type="text" id="topic" placeholder="موضوع یا عنوان محتوا را وارد کنید...">
+                <select id="contentType">
+                    <option value="article">مقاله علمی</option>
+                    <option value="story">داستان و رمان</option>
+                    <option value="poem">شعر و ادبیات</option>
+                    <option value="technical">مستندات فنی</option>
+                    <option value="business">محتوا کسب و کار</option>
+                </select>
+                <textarea id="keywords" placeholder="کلمات کلیدی مرتبط (اختیاری)"></textarea>
+            </div>
+            
+            <button class="btn" onclick="generateContent()">✨ تولید محتوا</button>
+            <button class="btn" onclick="clearContent()">🗑️ پاک کردن</button>
+            <button class="btn" onclick="window.close()">بازگشت</button>
+            
+            <div class="output" id="output">
+                <p style="opacity: 0.7; text-align: center;">محتوای تولید شده اینجا نمایش داده می‌شود...</p>
+            </div>
+        </div>
+
+        <script>
+            function generateContent() {
+                const topic = document.getElementById('topic').value;
+                const contentType = document.getElementById('contentType').value;
+                const keywords = document.getElementById('keywords').value;
+                const output = document.getElementById('output');
+                
+                if (!topic) {
+                    output.innerHTML = '<p style="color: #ef4444;">⚠️ لطفاً موضوعی وارد کنید</p>';
+                    return;
+                }
+                
+                output.innerHTML = '<p style="opacity: 0.7;">🔄 در حال تولید محتوای هوشمند...</p>';
+                
+                setTimeout(() => {
+                    const contents = {
+                        article: `<h3>مقاله علمی: ${topic}</h3>
+                                 <p>این مقاله به بررسی جامع موضوع ${topic} می‌پردازد. مطالعات اخیر نشان داده‌اند که ${topic} impact قابل توجهی در حوزه‌های مختلف دارد.</p>
+                                 <p>در این پژوهش، ما به تحلیل جنبه‌های مختلف ${topic} پرداخته و نتایج قابل توجهی به دست آورده‌ایم.</p>
+                                 <p>${keywords ? '<strong>کلمات کلیدی:</strong> ' + keywords : ''}</p>`,
+                                 
+                        story: `<h3>داستان: ${topic}</h3>
+                                <p>روزی روزگاری در سرزمینی دور، ${topic} اتفاق افتاد. قهرمان داستان ما باید با چالش‌های متعددی روبرو شود...</p>
+                                <p>باد در میان شاخه‌های درختان زمزمه می‌کرد و ماه از پشت ابرها نمایان شد. این شروع ماجرای ${topic} بود.</p>`,
+                                
+                        poem: `<h3>شعر: ${topic}</h3>
+                               <p style="font-style: italic; text-align: center; line-height: 2;">
+                               ${topic} ای یار من<br>
+                               در دل دارم غمی به زخم کهن<br>
+                               آمد بلای تو به جانم<br>
+                               شد جان من فدای تو اکنون<br><br>
+                               
+                               ${topic} ای قصه‌ی شب‌های من<br>
+                               بی تو شده ام ز خود جدا<br>
+                               برگشتم از همه جهان<br>
+                               تنها به امید دیدار تو</p>`,
+                               
+                        technical: `<h3>مستندات فنی: ${topic}</h3>
+                                    <p>سیستم ${topic} دارای معماری سه لایه است:</p>
+                                    <ul>
+                                        <li>لایه Presentation: مسئول نمایش اطلاعات</li>
+                                        <li>لایه Business Logic: هسته پردازشی سیستم</li>
+                                        <li>لایه Data Access: مدیریت دسترسی به داده‌ها</li>
+                                    </ul>
+                                    <code>function ${topic.replace(/\s/g, '')}() { 
+    // پیاده سازی سیستم 
+    return "نتایج پردازش"; 
+}</code>`,
+                                    
+                        business: `<h3>محتوا کسب و کار: ${topic}</h3>
+                                  <p>در حوزه ${topic}، شاهد رشد قابل توجهی در سال‌های اخیر بوده‌ایم. این رشد ناشی از عوامل متعددی است:</p>
+                                  <ul>
+                                      <li>تقاضای روزافزون بازار</li>
+                                      <li>پیشرفت‌های تکنولوژیکی</li>
+                                      <li>تغییر در رفتار مصرف‌کنندگان</li>
+                                  </ul>
+                                  <p>برای موفقیت در این حوزه، نیازمند استراتژی‌های بازاریابی هوشمند و نوآوری مستمر هستیم.</p>`
+                    };
+                    
+                    output.innerHTML = contents[contentType] || '<p>نوع محتوا پشتیبانی نمی‌شود</p>';
+                }, 2000);
+            }
+            
+            function clearContent() {
+                document.getElementById('topic').value = '';
+                document.getElementById('keywords').value = '';
+                document.getElementById('output').innerHTML = '<p style="opacity: 0.7; text-align: center;">محتوای تولید شده اینجا نمایش داده می‌شود...</p>';
+            }
+        </script>
+    </body>
+    </html>
+    

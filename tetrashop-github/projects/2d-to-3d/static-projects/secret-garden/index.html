@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <title>باغ رازآلود | تتراشاپ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #1a512e 0%, #0c2d1a 100%);
+            color: #e8f4ea;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        .garden-header {
+            background: linear-gradient(to right, #2d5a27, #4a8c3a);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 3px 3px 0 #1a3c1a;
+            color: #c6f6c6;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #a3e4a3;
+        }
+        .garden-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+            padding: 30px;
+            min-height: 600px;
+        }
+        .garden-map {
+            background: #1a3c1a;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            border: 3px solid #3a6b3a;
+        }
+        .inventory {
+            background: rgba(42, 85, 42, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #5a9c5a;
+        }
+        .grid-cell {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #2a552a;
+            display: inline-block;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            background: #2a552a;
+        }
+        .grid-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #7fcc7f;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+        .item {
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .flower { color: #ff99cc; }
+        .key { color: #ffcc00; }
+        .gem { color: #66ccff; }
+        .book { color: #cc9966; }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+</head>
+<body>
+    <div class="container">
+        <div class="garden-header">
+            <h1>🌿 باغ رازآلود</h1>
+            <p class="subtitle">یک ماجراجویی تعاملی پر از رمز و راز و گنجینه‌های پنهان</p>
+            <div style="margin-top: 20px;">
+                <span id="playerStats">🔮 سطح: ۱ | 💰 طلا: ۱۰۰ | 🗝️ کلیدها: ۰</span>
+            </div>
+        </div>
+        
+        <div class="garden-container">
+            <div class="garden-map">
+                <h3>🗺️ نقشه باغ</h3>
+                <div id="gardenGrid" style="margin-top: 20px;"></div>
+                
+                <div id="gameMessage" style="margin-top: 30px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; min-height: 80px;">
+                    <h4>📜 داستان</h4>
+                    <p>به باغ رازآلود خوش آمدید! سلطنتی قدیمی اینجا گنجینه‌ای پنهان کرده است. برای پیدا کردن آن باید معماها را حل کنید و کلیدها را جمع‌آوری کنید.</p>
+                    <p>روی مربع‌های باغ کلیک کنید تا کشف کنید...</p>
+                </div>
+                
+                <div style="margin-top: 20px; display: flex; gap: 15px;">
+                    <button onclick="exploreGarden()" style="background: #4CAF50;">🔍 کاوش باغ</button>
+                    <button onclick="solveRiddle()" style="background: #2196F3;">🧩 حل معما</button>
+                    <button onclick="collectTreasure()" style="background: #FF9800;">💰 جمع‌آوری گنج</button>
+                    <button onclick="saveGame()" style="background: #9C27B0;">💾 ذخیره بازی</button>
+                </div>
+            </div>
+            
+            <div class="inventory">
+                <h3>🎒 موجودی شما</h3>
+                <div id="inventoryItems">
+                    <div class="item flower">🌹 گل جادویی (۳)</div>
+                    <div class="item key">🗝️ کلید برنزی (۱)</div>
+                    <div class="item gem">💎 کریستال آبی (۰)</div>
+                    <div class="item book">📖 دفترچه یادداشت</div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">👥 شخصیت‌ها</h3>
+                <div style="margin-top: 10px;">
+                    <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 10px;">
+                        <strong>👵 نگهبان باغ</strong><br>
+                        "سلام مسافر! مراقب مارهای سمی باش."
+                    </div>
+                    <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <strong>🧙 کیمیاگر</strong><br>
+                        "می‌توانم گل‌هایت را به طلا تبدیل کنم!"
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🏆 دستاوردها</h3>
+                <div id="achievements" style="margin-top: 10px;">
+                    <div>🥇 کاشف تازه‌کار (انجام شد)</div>
+                    <div>🥈 کلیدیاب (در حال انجام)</div>
+                    <div>🥇 گنجینه‌یاب (قفل است)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 30px;">
+            <a href="/" class="back-btn">← بازگشت به صفحه اصلی</a>
+        </div>
+    </div>
+    
+    <script>
+        const gardenGrid = document.getElementById('gardenGrid');
+        const gameMessage = document.getElementById('gameMessage');
+        const playerStats = document.getElementById('playerStats');
+        
+        const gardenSize = 8;
+        let player = {
+            level: 1,
+            gold: 100,
+            keys: 0,
+            x: 0,
+            y: 0
+        };
+        
+        const gardenItems = [
+            {type: 'flower', emoji: '🌹', name: 'گل جادویی'},
+            {type: 'key', emoji: '🗝️', name: 'کلید برنزی'},
+            {type: 'gem', emoji: '💎', name: 'کریستال آبی'},
+            {type: 'book', emoji: '📖', name: 'دفترچه یادداشت'},
+            {type: 'chest', emoji: '🎁', name: 'صندوقچه'},
+            {type: 'fountain', emoji: '⛲', name: 'فواره'},
+            {type: 'tree', emoji: '🌳', name: 'درخت قدیمی'},
+            {type: 'statue', emoji: '🗿', name: 'مجسمه'}
+        ];
+        
+        const riddles = [
+            {
+                question: "من شهر هستم اما دریا هم دارم، پرنده‌ام اما پرواز نمی‌کنم، من چیستم؟",
+                answer: "نقشه",
+                hint: "مسافران از من استفاده می‌کنند"
+            },
+            {
+                question: "همیشه در حال دویدن هستم اما هیچ جا نمی‌روم، همیشه حرف می‌زنم اما صدایی ندارم، من چیستم؟",
+                answer: "ساعت",
+                hint: "زمان را نشان می‌دهم"
+            },
+            {
+                question: "خانه‌ام از شیشه است اما نمی‌شکنم، ماهی‌ها را نگه می‌دارم اما ماهیگیر نیستم، من چیستم؟",
+                answer: "آکواریوم",
+                hint: "در خانه‌ها یافت می‌شوم"
+            }
+        ];
+        
+        function initGarden() {
+            gardenGrid.innerHTML = '';
+            
+            for(let row = 0; row < gardenSize; row++) {
+                for(let col = 0; col < gardenSize; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.id = \`cell-\${row}-\${col}\`;
+                    cell.innerHTML = '&nbsp;';
+                    
+                    // تصادفی کردن محتوای سلول‌ها
+                    if(Math.random() > 0.7) {
+                        const item = gardenItems[Math.floor(Math.random() * gardenItems.length)];
+                        cell.dataset.item = item.type;
+                        cell.dataset.emoji = item.emoji;
+                        cell.title = item.name;
+                    }
+                    
+                    cell.onclick = function() {
+                        exploreCell(row, col, this);
+                    };
+                    
+                    gardenGrid.appendChild(cell);
+                }
+                gardenGrid.appendChild(document.createElement('br'));
+            }
+            
+            // قرار دادن بازیکن در مرکز
+            player.x = Math.floor(gardenSize/2);
+            player.y = Math.floor(gardenSize/2);
+            updatePlayerPosition();
+            updateStats();
+        }
+        
+        function exploreCell(row, col, cell) {
+            if(cell.dataset.item) {
+                const item = gardenItems.find(i => i.type === cell.dataset.item);
+                const messages = [
+                    \`شما یک \${item.name} پیدا کردید! \${cell.dataset.emoji}\`,
+                    \`\${cell.dataset.emoji} \${item.name} به مجموعه شما اضافه شد\`,
+                    \`چه کشف جالبی! \${cell.dataset.emoji}\`
+                ];
+                
+                gameMessage.innerHTML = \`
+                    <h4>🎯 کشف جدید!</h4>
+                    <p>\${messages[Math.floor(Math.random() * messages.length)]}</p>
+                    <p>\${getDiscoveryEffect(item.type)}</p>
+                \`;
+                
+                // پاک کردن آیتم از سلول
+                cell.innerHTML = '';
+                delete cell.dataset.item;
+                delete cell.dataset.emoji;
+                
+                // افزودن به موجودی
+                if(item.type === 'key') {
+                    player.keys++;
+                } else if(item.type === 'gem') {
+                    player.gold += 50;
+                }
+                
+                updateStats();
+            } else {
+                const discoveries = [
+                    "اینجا چیزی نیست جز علف‌های بلند...",
+                    "یک پروانه زیبا از کنار شما پرواز کرد",
+                    "صدای جیرجیرک‌ها می‌آید",
+                    "باد برگ‌ها را تکان می‌دهد"
+                ];
+                
+                gameMessage.innerHTML = \`
+                    <h4>🔍 در حال کاوش...</h4>
+                    <p>\${discoveries[Math.floor(Math.random() * discoveries.length)]}</p>
+                \`;
+            }
+        }
+        
+        function getDiscoveryEffect(itemType) {
+            switch(itemType) {
+                case 'flower': return "این گل می‌تواند در معامله با کیمیاگر استفاده شود.";
+                case 'key': return "این کلید می‌تواند قفل‌های قدیمی را باز کند.";
+                case 'gem': return "۵۰ سکه طلا به کیف شما اضافه شد!";
+                case 'chest': return "صندوقچه حاوی یک گنجینه پنهان است!";
+                default: return "این آیتم مرموز به نظر می‌رسد...";
+            }
+        }
+        
+        function exploreGarden() {
+            const cells = document.querySelectorAll('.grid-cell');
+            const emptyCells = Array.from(cells).filter(cell => !cell.dataset.item && cell.innerHTML === '&nbsp;');
+            
+            if(emptyCells.length > 0) {
+                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                
+                // اضافه کردن یک آیتم تصادفی
+                const item = gardenItems[Math.floor(Math.random() * gardenItems.length)];
+                randomCell.dataset.item = item.type;
+                randomCell.dataset.emoji = item.emoji;
+                randomCell.title = item.name;
+                randomCell.innerHTML = item.emoji;
+                
+                gameMessage.innerHTML = \`
+                    <h4>🌄 کاوش باغ</h4>
+                    <p>در حین گشت‌وگذار، یک \${item.name} پیدا کردید! \${item.emoji}</p>
+                \`;
+            }
+        }
+        
+        function solveRiddle() {
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            const userAnswer = prompt(\`معما: \${riddle.question}\\n\\nراهنمایی: \${riddle.hint}\\n\\nپاسخ شما چیست؟\`);
+            
+            if(userAnswer && userAnswer.toLowerCase().includes(riddle.answer.toLowerCase())) {
+                player.gold += 75;
+                player.level++;
+                updateStats();
+                
+                gameMessage.innerHTML = \`
+                    <h4>🧩 معما حل شد!</h4>
+                    <p>آفرین! پاسخ صحیح بود: "\${riddle.answer}"</p>
+                    <p>🎉 ۷۵ سکه طلا دریافت کردید و به سطح \${player.level} ارتقا یافتید!</p>
+                \`;
+            } else {
+                gameMessage.innerHTML = \`
+                    <h4>😔 پاسخ نادرست</h4>
+                    <p>پاسخ صحیح: "\${riddle.answer}"</p>
+                    <p>دوباره تلاش کنید!</p>
+                \`;
+            }
+        }
+        
+        function collectTreasure() {
+            if(player.keys >= 3) {
+                const treasure = Math.floor(Math.random() * 500) + 200;
+                player.gold += treasure;
+                player.keys -= 3;
+                
+                gameMessage.innerHTML = \`
+                    <h4>🏆 گنجینه پیدا شد!</h4>
+                    <p>با استفاده از ۳ کلید، یک گنجینه باستانی باز کردید!</p>
+                    <p>💰 \${treasure} سکه طلا به دست آوردید!</p>
+                    <p>🎯 شما اکنون یک گنجینه‌یاب واقعی هستید!</p>
+                \`;
+                
+                // به‌روزرسانی دستاوردها
+                const achievements = document.getElementById('achievements');
+                achievements.innerHTML = \`
+                    <div>🥇 کاشف تازه‌کار (انجام شد)</div>
+                    <div>🥈 کلیدیاب (انجام شد)</div>
+                    <div>🏆 گنجینه‌یاب (انجام شد!)</div>
+                \`;
+                
+                updateStats();
+            } else {
+                gameMessage.innerHTML = \`
+                    <h4>🔒 قفل شده</h4>
+                    <p>برای باز کردن گنجینه به حداقل ۳ کلید نیاز دارید.</p>
+                    <p>شما \${player.keys} کلید دارید. به کاوش ادامه دهید!</p>
+                \`;
+            }
+        }
+        
+        function saveGame() {
+            localStorage.setItem('secretGardenSave', JSON.stringify(player));
+            gameMessage.innerHTML = \`
+                <h4>💾 بازی ذخیره شد</h4>
+                <p>پیشرفت شما در حافظه مرورگر ذخیره شد.</p>
+                <p>می‌توانید بعداً از همین نقطه ادامه دهید.</p>
+            \`;
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('secretGardenSave');
+            if(saved) {
+                player = JSON.parse(saved);
+                updateStats();
+                gameMessage.innerHTML += \`
+                    <p>🔄 بازی قبلی شما بارگذاری شد.</p>
+                \`;
+            }
+        }
+        
+        function updatePlayerPosition() {
+            // حذف بازیکن قبلی از همه سلول‌ها
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                if(cell.textContent === '🧍') {
+                    cell.textContent = '';
+                }
+            });
+            
+            // قرار دادن بازیکن در موقعیت جدید
+            const playerCell = document.getElementById(\`cell-\${player.y}-\${player.x}\`);
+            if(playerCell) {
+                playerCell.textContent = '🧍';
+                playerCell.style.background = '#3a6b3a';
+            }
+        }
+        
+        function updateStats() {
+            playerStats.textContent = \`🔮 سطح: \${player.level} | 💰 طلا: \${player.gold} | 🗝️ کلیدها: \${player.keys}\`;
+        }
+        
+        // کنترل‌های صفحه‌کلید
+        document.addEventListener('keydown', function(e) {
+            switch(e.key) {
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    if(player.y > 0) player.y--;
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    if(player.y < gardenSize - 1) player.y++;
+                    break;
+                case 'ArrowRight':
+                case 'a':
+                case 'A':
+                    if(player.x > 0) player.x--;
+                    break;
+                case 'ArrowLeft':
+                case 'd':
+                case 'D':
+                    if(player.x < gardenSize - 1) player.x++;
+                    break;
+            }
+            updatePlayerPosition();
+        });
+        
+        // راه‌اندازی اولیه
+        window.onload = function() {
+            initGarden();
+            loadGame();
+            
+            // اضافه کردن دستورات کنترل
+            gameMessage.innerHTML += \`
+                <p><strong>🎮 کنترل‌ها:</strong> از کلیدهای جهت‌دار یا WASD برای حرکت استفاده کنید.</p>
+            \`;
+        };
+    </script>
+</body>
+</html>

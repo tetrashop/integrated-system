@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد هوشمند Tetrashop</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .ai-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .ai-panel {
+            background: var(--light);
+            padding: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .ai-message {
+            background: #dbeafe;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .project-market {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(to right, #f0f9ff, #e0f2fe);
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .price-tag {
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-suggestion {
+            background: #fef3c7;
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0.3rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        
+        .btn:hover { opacity: 0.9; transform: scale(1.05); }
+        
+        .execution-log {
+            background: #1f2937;
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="ai-header">
+            <h1>🤖 داشبورد هوشمند Tetrashop</h1>
+            <p>سیستم خودآموز با قابلیت تحلیل و اجرای هوشمند پروژه‌ها</p>
+        </div>
+        
+        <div class="ai-panel">
+            <button class="btn btn-primary" onclick="learnFromProjects()">
+                🧠 یادگیری از پروژه‌ها
+            </button>
+            <button class="btn btn-success" onclick="analyzeAll()">
+                📊 تحلیل کامل
+            </button>
+            <button class="btn btn-warning" onclick="optimizePrices()">
+                💰 بهینه‌سازی قیمت
+            </button>
+            <span id="aiStatus">آماده به کار</span>
+        </div>
+        
+        <div id="aiMessages"></div>
+        
+        <div class="project-market" id="projectMarket">
+            <!-- پروژه‌ها اینجا نمایش داده می‌شوند -->
+        </div>
+        
+        <div class="execution-log" id="executionLog"></div>
+    </div>
+    
+    <script>
+        // داده‌های پروژه‌ها
+        let allProjects = [];
+        let aiKnowledge = {
+            projectPatterns: {},
+            executionMethods: {},
+            pricingModel: {}
+        };
+        
+        // بارگذاری پروژه‌ها
+        async function loadProjects() {
+            showAIMessage('🤖 در حال بارگذاری و تحلیل پروژه‌ها...', 'info');
+            
+            try {
+                const response = await fetch('projects_analysis.json');
+                const data = await response.json();
+                allProjects = data.projects || [];
+                
+                displayProjects();
+                learnFromProjects(); // یادگیری خودکار
+                
+                showAIMessage(`✅ ${allProjects.length} پروژه بارگذاری و تحلیل شد.`, 'success');
+            } catch (error) {
+                showAIMessage('❌ خطا در بارگذاری پروژه‌ها', 'error');
+                console.error(error);
+            }
+        }
+        
+        // نمایش پروژه‌ها
+        function displayProjects() {
+            const container = document.getElementById('projectMarket');
+            container.innerHTML = '';
+            
+            allProjects.forEach((project, index) => {
+                // تحلیل هوشمند پروژه
+                const analysis = analyzeProject(project);
+                const price = calculateIntelligentPrice(project, analysis);
+                const executionMethod = determineExecutionMethod(project);
+                
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="price-tag">${price.toLocaleString()} تومان</div>
+                        <h3>📁 ${project.name}</h3>
+                        <p>نوع: ${project.type} | ${project.files?.length || 0} فایل</p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem;">
+                        <div class="ai-suggestion">
+                            <strong>💡 پیشنهاد هوش مصنوعی:</strong><br>
+                            ${analysis.suggestion}
+                        </div>
+                        
+                        <div style="margin: 1rem 0;">
+                            <p><strong>فایل‌های اصلی:</strong></p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                ${(project.files || []).slice(0, 5).map(f => 
+                                    `<span style="background: #e5e7eb; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.9rem;">${f}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button class="btn btn-primary" onclick="executeProject(${index}, '${executionMethod}')">
+                                🚀 اجرا (${executionMethod})
+                            </button>
+                            <button class="btn btn-success" onclick="showProjectDetails(${index})">
+                                📖 جزئیات فنی
+                            </button>
+                            <button class="btn btn-warning" onclick="buyProject(${index}, ${price})">
+                                🛒 خرید آنلاین
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // تحلیل هوشمند پروژه
+        function analyzeProject(project) {
+            let complexity = 0;
+            let suggestion = '';
+            
+            // تحلیل بر اساس نوع و فایل‌ها
+            if (project.type === 'fullstack') {
+                complexity = 3;
+                suggestion = 'پروژه کامل با فرانت‌اند و بک‌اند. آماده اجرای کامل است.';
+            } else if (project.type === 'node') {
+                complexity = 2;
+                suggestion = 'سرور Node.js. نیاز به npm install و سپس node server.js دارد.';
+            } else if (project.type === 'web') {
+                complexity = 1;
+                suggestion = 'وب اپلیکیشن ساده. مستقیماً در مرورگر قابل اجراست.';
+            }
+            
+            // تحلیل بر اساس تعداد خطوط کد
+            if (project.lineCount > 200) complexity++;
+            if (project.lineCount > 500) complexity++;
+            
+            return { complexity, suggestion };
+        }
+        
+        // قیمت‌گذاری هوشمند
+        function calculateIntelligentPrice(project, analysis) {
+            let basePrice = 5000; // پایه
+            
+            // بر اساس نوع پروژه
+            if (project.type === 'fullstack') basePrice += 20000;
+            if (project.type === 'node') basePrice += 10000;
+            if (project.type === 'web') basePrice += 5000;
+            
+            // بر اساس پیچیدگی
+            basePrice += analysis.complexity * 3000;
+            
+            // بر اساس حجم
+            if (project.sizeKB > 10) basePrice += 2000;
+            if (project.sizeKB > 50) basePrice += 5000;
+            
+            return basePrice;
+        }
+        
+        // تعیین روش اجرا
+        function determineExecutionMethod(project) {
+            if (project.hasServerJs && project.hasPackageJson) return 'Node.js';
+            if (project.hasIndexHtml) return 'مرورگر وب';
+            if (project.files?.some(f => f.endsWith('.py'))) return 'Python';
+            return 'اسکریپت';
+        }
+        
+        // یادگیری از پروژه‌ها
+        function learnFromProjects() {
+            showAIMessage('🧠 در حال یادگیری از پروژه‌ها...', 'info');
+            
+            allProjects.forEach(project => {
+                // ذخیره الگوهای پروژه
+                if (!aiKnowledge.projectPatterns[project.type]) {
+                    aiKnowledge.projectPatterns[project.type] = [];
+                }
+                aiKnowledge.projectPatterns[project.type].push(project.name);
+                
+                // یادگیری روش‌های اجرا
+                const execMethod = determineExecutionMethod(project);
+                aiKnowledge.executionMethods[execMethod] = 
+                    (aiKnowledge.executionMethods[execMethod] || 0) + 1;
+            });
+            
+            showAIMessage('✅ یادگیری تکمیل شد. سیستم آماده تحلیل و اجراست.', 'success');
+            
+            // نمایش دانش کسب شده
+            setTimeout(() => {
+                showAIMessage(
+                    `📚 دانش سیستم:<br>` +
+                    `• انواع پروژه: ${Object.keys(aiKnowledge.projectPatterns).join(', ')}<br>` +
+                    `• روش‌های اجرا: ${Object.keys(aiKnowledge.executionMethods).join(', ')}`,
+                    'info'
+                );
+            }, 1000);
+        }
+        
+        // اجرای پروژه
+        function executeProject(index, method) {
+            const project = allProjects[index];
+            const log = document.getElementById('executionLog');
+            
+            log.style.display = 'block';
+            log.innerHTML = `🚀 اجرای پروژه: ${project.name}<br>`;
+            log.innerHTML += `📋 روش: ${method}<br>`;
+            log.innerHTML += `⏳ در حال اجرا...<br>`;
+            
+            // شبیه‌سازی اجرا
+            setTimeout(() => {
+                let command = '';
+                
+                if (method === 'Node.js') {
+                    command = `cd "${project.path}" && npm install && node server.js`;
+                } else if (method === 'مرورگر وب') {
+                    command = `باز کردن index.html در مرورگر`;
+                    window.open(`/projects/${project.name}/index.html`, '_blank');
+                }
+                
+                log.innerHTML += `💻 دستور: ${command}<br>`;
+                log.innerHTML += `✅ پروژه با موفقیت اجرا شد!`;
+                
+                showAIMessage(`پروژه "${project.name}" با روش ${method} اجرا شد.`, 'success');
+            }, 1500);
+        }
+        
+        // خرید پروژه
+        function buyProject(index, price) {
+            const project = allProjects[index];
+            
+            if (confirm(`آیا مایل به خرید پروژه "${project.name}" به مبلغ ${price.toLocaleString()} تومان هستید؟`)) {
+                showAIMessage(`در حال هدایت به درگاه پرداخت برای "${project.name}"...`, 'info');
+                
+                // شبیه‌سازی درگاه پرداخت
+                setTimeout(() => {
+                    const paymentWindow = window.open('', 'پرداخت', 'width=600,height=700');
+                    paymentWindow.document.write(`
+                        <html dir="rtl"><body style="padding: 20px; font-family: Tahoma;">
+                            <h2>💰 درگاه پرداخت Tetrashop</h2>
+                            <p>پروژه: ${project.name}</p>
+                            <p>مبلغ: ${price.toLocaleString()} تومان</p>
+                            <button onclick="alert('پرداخت موفق! لینک دانلود ارسال شد.')">💳 پرداخت</button>
+                        </body></html>
+                    `);
+                }, 500);
+            }
+        }
+        
+        // نمایش پیام‌های AI
+        function showAIMessage(message, type = 'info') {
+            const container = document.getElementById('aiMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'ai-message';
+            
+            const colors = {
+                info: '#dbeafe',
+                success: '#d1fae5',
+                error: '#fee2e2',
+                warning: '#fef3c7'
+            };
+            
+            msgDiv.style.background = colors[type] || colors.info;
+            msgDiv.innerHTML = message;
+            
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', loadProjects);
+        
+        // توابع کمکی
+        window.analyzeAll = () => {
+            showAIMessage('📊 در حال تحلیل عمیق همه پروژه‌ها...', 'info');
+            setTimeout(() => {
+                showAIMessage('✅ تحلیل کامل شد. می‌توانید پروژه‌ها را اجرا کنید.', 'success');
+            }, 2000);
+        };
+        
+        window.optimizePrices = () => {
+            showAIMessage('💰 در حال بهینه‌سازی قیمت‌ها بر اساس بازار...', 'info');
+            setTimeout(() => {
+                showAIMessage('✅ قیمت‌ها به روز شدند. بازدیدکنندگان بیشتری جذب خواهند شد.', 'success');
+            }, 2000);
+        };
+        
+        window.showProjectDetails = (index) => {
+            const project = allProjects[index];
+            alert(
+                `جزئیات فنی پروژه:\n\n` +
+                `نام: ${project.name}\n` +
+                `نوع: ${project.type}\n` +
+                `تعداد فایل: ${project.files?.length || 0}\n` +
+                `تعداد خطوط کد: ${project.lineCount || 0}\n` +
+                `حجم: ${project.sizeKB || 0} کیلوبایت\n` +
+                `مسیر: ${project.path}`
+            );
+        };
+    </script>
+</body>
+</html>

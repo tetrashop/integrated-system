@@ -1,0 +1,19 @@
+name = "tetrashop-api"
+compatibility_date = "2024-11-06"
+main = "src/index.js"
+
+[env.production]
+account_id = "YOUR_ACCOUNT_ID"
+workers_dev = true
+
+# متغیرهای محیطی
+[vars]
+JWT_SECRET = "{{YOUR_JWT_SECRET}}"
+DATABASE_URL = "{{YOUR_DATABASE_URL}}"
+QUANTUM_NLP_API = "https://quantum-nlp.tetrashop.workers.dev"
+
+# دیتابیس D1 (اختیاری)
+[[d1_databases]]
+binding = "DB"
+database_name = "tetrashop-db"
+database_id = "YOUR_DB_ID"

@@ -1,0 +1,62 @@
+/* رفع نوارهای سفید و زمینه سیاه */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+body {
+    min-height: 100vh;
+    width: 100%;
+    background: inherit;
+    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+}
+
+/* حذف هر گونه پس‌زمینه سیاه */
+.container, .app, .main-content, #app, #root {
+    background: transparent !important;
+}
+
+/* رفع نوارهای سفید در اطراف */
+.header, .footer, nav, .navbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* استایل‌های عمومی برای پروژه‌ها */
+.project-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+/* رفع مشکلات رنگ */
+a, button {
+    color: #667eea;
+}
+
+/* رفع خطوط سفید */
+hr {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* برای موبایل */
+@media (max-width: 768px) {
+    html, body {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    }
+}

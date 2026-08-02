@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد واقعی Tetrashop</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f0f2f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                 color: white; padding: 30px; border-radius: 10px; text-align: center; }
+        .file-list { background: white; padding: 20px; margin-top: 20px; border-radius: 10px; }
+        .file-item { padding: 15px; border-bottom: 1px solid #eee; }
+        .file-content { background: #1e1e1e; color: #fff; padding: 20px; margin: 10px 0; 
+                       border-radius: 5px; overflow-x: auto; font-family: monospace; }
+        .copy-btn { background: #28a745; color: white; border: none; padding: 5px 10px; 
+                   border-radius: 3px; cursor: pointer; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 داشبورد واقعی پروژه Tetrashop</h1>
+        <p>تعداد فایل‌ها: <span id="fileCount">$TOTAL_FILES</span></p>
+    </div>
+    
+    <div class="file-list">
+        <h2>📁 فایل‌های پروژه:</h2>
+        <div id="filesContainer">
+            <!-- فایل‌ها اینجا نمایش داده می‌شوند -->
+        </div>
+    </div>
+    
+    <div id="contentContainer"></div>
+    
+    <script>
+        // داده‌های واقعی فایل‌ها
+        const files = [

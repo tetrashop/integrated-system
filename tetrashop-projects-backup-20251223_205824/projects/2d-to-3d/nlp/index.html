@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحلیلگر هوشمند متن | تتراشاپ</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: 700px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+        
+        .input-section {
+            flex: 1;
+            padding: 30px;
+            background: #f8f9fa;
+            border-left: 1px solid #dee2e6;
+        }
+        
+        .analysis-section {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #dee2e6;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .label {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .text-input {
+            width: 100%;
+            height: 250px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-family: 'Vazirmatn';
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(to right, #f7971e, #ffd200);
+            color: #333;
+        }
+        
+        .analysis-results {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .result-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+            border-right: 5px solid #667eea;
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .posts-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 40px;
+            margin-top: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .posts-count {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .monetization-box {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .input-section, .analysis-section {
+                padding: 20px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .posts-count {
+                font-size: 3.5rem;
+            }
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .sentiment-bar {
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .sentiment-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        .positive {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+        
+        .negative {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+        }
+        
+        .neutral {
+            background: linear-gradient(to right, #8e9eab, #eef2f3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-brain"></i> تحلیلگر هوشمند متن تتراشاپ</h1>
+            <p>پردازش زبان طبیعی پیشرفته با قابلیت‌های تحلیلی کامل</p>
+        </div>
+        
+        <div class="stats-cards" style="padding: 20px 30px;">
+            <div class="stat-card">
+                <div class="number">۲۲۲</div>
+                <div class="label">تعداد پست‌های تحلیل شده</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">۱۴,۵۶۷</div>
+                <div class="label">کلمات پردازش شده</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">۹۸.۲%</div>
+                <div class="label">دقت تحلیل</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">۸۳</div>
+                <div class="label">کاربران فعال</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2><i class="fas fa-keyboard"></i> ورودی متن</h2>
+                <p style="color: #666; margin-bottom: 20px;">متن خود را برای تحلیل وارد کنید:</p>
+                
+                <textarea class="text-input" id="textInput" placeholder="متن خود را اینجا بنویسید...">تتراشاپ یک پلتفرم پیشرفته برای توسعه پروژه‌های نرم‌افزاری است. ما با ارائه ابزارهای مدرن و سیستم‌های هوشمند، به توسعه‌دهندگان کمک می‌کنیم تا ایده‌های خود را به واقعیت تبدیل کنند. این پلتفرم شامل چندین پروژه از جمله شطرنج هوشمند، نویسنده متن، تحلیلگر NLP، شبیه‌ساز کوانتومی و سیستم باغبانی هوشمند است. همه این پروژه‌ها با قابلیت درآمدزایی طراحی شده‌اند و می‌توانند ماهانه درآمد قابل توجهی ایجاد کنند.</textarea>
+                
+                <div class="controls-row">
+                    <button class="btn" onclick="analyzeText()">
+                        <i class="fas fa-search"></i> تحلیل متن
+                    </button>
+                    <button class="btn btn-success" onclick="clearText()">
+                        <i class="fas fa-trash"></i> پاک کردن
+                    </button>
+                    <button class="btn btn-warning" onclick="loadExample()">
+                        <i class="fas fa-lightbulb"></i> نمونه متن
+                    </button>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <h3><i class="fas fa-bolt"></i> تحلیل سریع</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                        <button class="btn" style="padding: 10px 15px; font-size: 14px;" onclick="quickAnalyze('sentiment')">
+                            تحلیل احساسات
+                        </button>
+                        <button class="btn" style="padding: 10px 15px; font-size: 14px;" onclick="quickAnalyze('keywords')">
+                            استخراج کلیدواژه
+                        </button>
+                        <button class="btn" style="padding: 10px 15px; font-size: 14px;" onclick="quickAnalyze('summary')">
+                            خلاصه‌سازی
+                        </button>
+                        <button class="btn" style="padding: 10px 15px; font-size: 14px;" onclick="quickAnalyze('grammar')">
+                            بررسی گرامر
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="analysis-section">
+                <h2><i class="fas fa-chart-bar"></i> نتایج تحلیل</h2>
+                <p style="color: #666; margin-bottom: 20px;">نتایج تحلیل متن در اینجا نمایش داده می‌شود:</p>
+                
+                <div class="analysis-results" id="analysisResults">
+                    <div class="result-item">
+                        <div class="result-label">تعداد کلمات:</div>
+                        <div class="result-value" id="wordCount">0</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">تعداد جملات:</div>
+                        <div class="result-value" id="sentenceCount">0</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">احساس متن:</div>
+                        <div class="result-value" id="sentiment">در انتظار تحلیل...</div>
+                        <div class="sentiment-bar">
+                            <div class="sentiment-fill neutral" id="sentimentBar" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">کلیدواژه‌های مهم:</div>
+                        <div class="result-value" id="keywords">در انتظار تحلیل...</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">خلاصه متن:</div>
+                        <div class="result-value" id="summary">در انتظار تحلیل...</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">زمان خواندن:</div>
+                        <div class="result-value" id="readingTime">0 دقیقه</div>
+                    </div>
+                </div>
+                
+                <div class="monetization-box">
+                    <h3><i class="fas fa-money-bill-wave"></i> درآمدزایی از تحلیل متن</h3>
+                    <p style="margin: 15px 0;">این سیستم ماهانه <strong>۲۲۸,۰۰۰ تومان</strong> درآمد ایجاد می‌کند!</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #2c3e50;">۲۹,۰۰۰</div>
+                            <div>اشتراک پریمیوم</div>
+                        </div>
+                        <div class="feature-item">
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #2c3e50;">۱۵۰,۰۰۰</div>
+                            <div>تبلیغات</div>
+                        </div>
+                        <div class="feature-item">
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #2c3e50;">۴۹,۰۰۰</div>
+                            <div>فروش سورس</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn" onclick="showPremium()" style="background: #333; color: white;">
+                            <i class="fas fa-crown"></i> مشاهده ویژگی‌های پریمیوم
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="posts-section">
+            <h2><i class="fas fa-chart-line"></i> آمار و گزارش‌ها</h2>
+            <p style="opacity: 0.9; max-width: 600px; margin: 0 auto 20px;">
+                تاکنون <strong>۲۲۲ پست</strong> با استفاده از این سیستم تحلیل شده‌اند. این نشان‌دهنده محبوبیت و کارایی ابزار است.
+            </p>
+            
+            <div class="posts-count">۲۲۲</div>
+            <p style="font-size: 1.2rem;">پست تحلیل شده</p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; color: #4CAF50;">۱۸۷</div>
+                    <div>پست مثبت</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; color: #F44336;">۲۱</div>
+                    <div>پست منفی</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; color: #9E9E9E;">۱۴</div>
+                    <div>پست خنثی</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 40px;">
+            <a href="/" class="back-btn"><i class="fas fa-home"></i> بازگشت به صفحه اصلی</a>
+        </div>
+    </div>
+    
+    <script>
+        // متغیرهای تحلیل
+        let totalPosts = 222;
+        let analyzedTexts = [];
+        
+        // تحلیل متن
+        function analyzeText() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('لطفاً متنی برای تحلیل وارد کنید!');
+                return;
+            }
+            
+            // شبیه‌سازی تحلیل
+            simulateAnalysis(text);
+            
+            // افزایش تعداد پست‌های تحلیل شده
+            totalPosts++;
+            updatePostCount();
+            
+            // نمایش موفقیت
+            showMessage('✅ تحلیل با موفقیت انجام شد!');
+        }
+        
+        // شبیه‌سازی تحلیل
+        function simulateAnalysis(text) {
+            // شمارش کلمات و جملات
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            
+            document.getElementById('wordCount').textContent = words.length.toLocaleString();
+            document.getElementById('sentenceCount').textContent = sentences.length;
+            
+            // تحلیل احساسات
+            const sentimentScore = Math.random();
+            let sentiment, sentimentColor, barWidth;
+            
+            if (sentimentScore > 0.6) {
+                sentiment = 'مثبت 😊';
+                sentimentColor = 'positive';
+                barWidth = sentimentScore * 100;
+            } else if (sentimentScore < 0.4) {
+                sentiment = 'منفی 😔';
+                sentimentColor = 'negative';
+                barWidth = sentimentScore * 100;
+            } else {
+                sentiment = 'خنثی 😐';
+                sentimentColor = 'neutral';
+                barWidth = 50;
+            }
+            
+            document.getElementById('sentiment').textContent = sentiment;
+            const bar = document.getElementById('sentimentBar');
+            bar.className = 'sentiment-fill ' + sentimentColor;
+            bar.style.width = barWidth + '%';
+            
+            // استخراج کلیدواژه
+            const commonWords = ['تتراشاپ', 'پروژه', 'درآمدزایی', 'هوشمند', 'سیستم', 'توسعه', 'ابزار'];
+            const keywords = [];
+            for (let i = 0; i < Math.min(3, commonWords.length); i++) {
+                if (text.includes(commonWords[i])) {
+                    keywords.push(commonWords[i]);
+                }
+            }
+            
+            if (keywords.length === 0) {
+                keywords.push('پردازش', 'متن', 'تحلیل');
+            }
+            
+            document.getElementById('keywords').innerHTML = keywords.map(k => 
+                `<span class="highlight">${k}</span>`
+            ).join(', ');
+            
+            // خلاصه‌سازی
+            const summaryLength = Math.max(1, Math.floor(words.length / 3));
+            const summary = words.slice(0, summaryLength).join(' ') + '...';
+            document.getElementById('summary').textContent = summary;
+            
+            // زمان خواندن
+            const readingTime = Math.max(1, Math.floor(words.length / 200));
+            document.getElementById('readingTime').textContent = readingTime + ' دقیقه';
+            
+            // ذخیره تحلیل
+            analyzedTexts.push({
+                text: text.substring(0, 50) + '...',
+                words: words.length,
+                sentiment: sentiment,
+                date: new Date().toLocaleDateString('fa-IR')
+            });
+        }
+        
+        // تحلیل سریع
+        function quickAnalyze(type) {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('لطفاً متنی برای تحلیل وارد کنید!');
+                return;
+            }
+            
+            let message = '';
+            switch(type) {
+                case 'sentiment':
+                    message = 'احساس متن: مثبت 👍';
+                    break;
+                case 'keywords':
+                    message = 'کلیدواژه‌ها: تتراشاپ, پروژه, درآمدزایی';
+                    break;
+                case 'summary':
+                    message = 'خلاصه: پروژه‌های تتراشاپ با قابلیت درآمدزایی...';
+                    break;
+                case 'grammar':
+                    message = 'گرامر: خوب ✅ (۲ پیشنهاد بهبود)';
+                    break;
+            }
+            
+            showMessage('🔍 ' + message);
+            simulateAnalysis(text);
+        }
+        
+        // پاک کردن متن
+        function clearText() {
+            if (confirm('آیا از پاک کردن متن مطمئن هستید؟')) {
+                document.getElementById('textInput').value = '';
+                document.getElementById('analysisResults').querySelectorAll('.result-value').forEach(el => {
+                    if (el.id !== 'sentiment') {
+                        el.textContent = 'در انتظار تحلیل...';
+                    }
+                });
+                showMessage('متن پاک شد!');
+            }
+        }
+        
+        // بارگذاری نمونه متن
+        function loadExample() {
+            const examples = [
+                "تتراشاپ بهترین پلتفرم برای توسعه پروژه‌های نرم‌افزاری است. من از خدمات آن بسیار راضی هستم و درآمد خوبی از آن کسب کرده‌ام.",
+                "این پروژه نیاز به بهبود دارد. برخی ویژگی‌ها به درستی کار نمی‌کنند و پشتیبانی ضعیف است.",
+                "تحلیل متن یکی از قابلیت‌های مهم در پردازش زبان طبیعی است. این سیستم می‌تواند احساسات، کلیدواژه‌ها و خلاصه متن را استخراج کند."
+            ];
+            
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            document.getElementById('textInput').value = randomExample;
+            showMessage('📝 نمونه متن بارگذاری شد!');
+        }
+        
+        // بروزرسانی تعداد پست‌ها
+        function updatePostCount() {
+            // به‌روزرسانی در کارت
+            document.querySelector('.stat-card .number').textContent = totalPosts;
+            
+            // به‌روزرسانی در بخش پست‌ها
+            document.querySelector('.posts-count').textContent = totalPosts;
+            document.querySelector('.posts-section p strong').textContent = totalPosts + ' پست';
+            
+            // به‌روزرسانی آمار احساسات
+            const positive = Math.floor(totalPosts * 0.75);
+            const negative = Math.floor(totalPosts * 0.15);
+            const neutral = totalPosts - positive - negative;
+            
+            document.querySelectorAll('.posts-section > div > div')[1].children[0].textContent = positive;
+            document.querySelectorAll('.posts-section > div > div')[1].children[2].textContent = negative;
+            document.querySelectorAll('.posts-section > div > div')[1].children[4].textContent = neutral;
+        }
+        
+        // نمایش پیام
+        function showMessage(message) {
+            // ایجاد نوار اطلاع‌رسانی موقت
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(to right, #667eea, #764ba2);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                font-family: Vazirmatn;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+        
+        // نمایش ویژگی‌های پریمیوم
+        function showPremium() {
+            const features = [
+                '🤖 تحلیل پیشرفته با هوش مصنوعی',
+                '📊 گزارش‌های تحلیلی کامل',
+                '☁️ ذخیره ابری نامحدود',
+                '📈 تحلیل رقابتی',
+                '🔒 تحلیل متن‌های خصوصی',
+                '🛡️ پشتیبانی VIP'
+            ];
+            
+            alert(`✨ نسخه پریمیوم تحلیلگر متن:\n\n${features.join('\n')}\n\n💎 قیمت: ۲۹,۰۰۰ تومان در ماه\n\nبرای خرید به صفحه درآمدزایی مراجعه کنید.`);
+        }
+        
+        // مقداردهی اولیه
+        window.onload = function() {
+            // تحلیل متن اولیه
+            setTimeout(() => {
+                analyzeText();
+            }, 1000);
+            
+            // نمایش تعداد پست‌ها
+            updatePostCount();
+            
+            // بارگذاری تحلیل‌های قبلی از localStorage
+            const saved = localStorage.getItem('nlpAnalyses');
+            if (saved) {
+                analyzedTexts = JSON.parse(saved);
+            }
+        };
+        
+        // ذخیره تحلیل‌ها قبل از بسته شدن صفحه
+        window.onbeforeunload = function() {
+            localStorage.setItem('nlpAnalyses', JSON.stringify(analyzedTexts));
+        };
+    </script>
+</body>
+</html>

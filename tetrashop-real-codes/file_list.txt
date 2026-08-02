@@ -1,0 +1,3 @@
+/data/data/com.termux/files/home/tetrashop-github/index.html
+/data/data/com.termux/files/home/tetrashop-github/package.json
+/data/data/com.termux/files/home/tetrashop-github/server.js

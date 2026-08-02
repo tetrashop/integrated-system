@@ -1,0 +1,17 @@
+{
+  "name": "@tetrashop/core",
+  "version": "3.0.0",
+  "description": "Tetrashop100 Core - معماری بهینه",
+  "type": "module",
+  "main": "tetrashop100.js",
+  "scripts": {
+    "start": "node tetrashop100.js",
+    "dev": "node simple-tetrashop.js",
+    "test": "node tests/performance.test.js",
+    "build": "echo 'No build step for Node.js'",
+    "deploy": "vercel --prod --cwd ."
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}

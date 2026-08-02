@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Tetrashop Resurrected</title>
+    <style>
+        body { font-family: Tahoma; padding: 20px; background: #f5f5f5; }
+        .project { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>پروژه‌های بازیابی شده Tetrashop</h1>
+    <div id="projects"></div>
+    <script>
+        // بارگذاری پروژه‌ها
+        const categories = ['CORE_ECOSYSTEM', 'SERVICES', 'SHARED_ASSETS', 'ARCHIVE_PROTOTYPES'];
+        categories.forEach(cat => {
+            fetch('./' + cat + '/')
+                .then(r => r.text())
+                .then(t => {
+                    const projects = t.match(/href="[^"]+\//g) || [];
+                    projects.forEach(p => {
+                        const name = p.replace('href="', '').replace('/', '');
+                        if (name && !name.startsWith('.')) {
+                            document.getElementById('projects').innerHTML += 
+                                `<div class="project"><strong>${cat}</strong>: ${name}</div>`;
+                        }
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

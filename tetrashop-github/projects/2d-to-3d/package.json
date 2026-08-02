@@ -1,0 +1,42 @@
+{
+  "name": "tetrashop-projects",
+  "version": "1.0.0",
+  "description": "پلتفرم پروژه‌های تتراشاپ شامل ۷ پروژه نرم‌افزاری پیشرفته",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server .",
+    "build": "echo 'Build complete!'",
+    "test": "echo 'No tests specified'",
+    "deploy": "gh-pages -d .",
+    "format": "prettier --write '**/*.{js,html,css,md}'"
+  },
+  "keywords": [
+    "tetrashop",
+    "projects",
+    "chess",
+    "nlp",
+    "3d",
+    "voice-recognition",
+    "quantum",
+    "gardening",
+    "writer"
+  ],
+  "author": "Tetrashop Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "three": "^0.128.0",
+    "vazirmatn": "^33.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3",
+    "live-server": "^1.2.1",
+    "prettier": "^2.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tetrashop/projects.git"
+  },
+  "homepage": "https://tetrashop.github.io/projects"
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتراشاپ - مستقر شده</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .success {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .project {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">✅ استقرار موفق</div>
+        <h1>🚀 تتراشاپ</h1>
+        <p>پروژه با موفقیت در Cloudflare Pages مستقر شد</p>
+        
+        <div class="projects">
+            <div class="project">
+                <h3>🧠 نگار کوانتوم</h3>
+                <p>NLP تشخیص و تصحیح خطا</p>
+                <a href="/quantum-calligraphy-advanced/quantum_nlp_fixed.py" class="btn">مشاهده</a>
+            </div>
+            <div class="project">
+                <h3>💪 نطق مصطلح</h3>
+                <p>موتور بیان قدرتمند</p>
+                <a href="/common-rhetoric-pro/powerful_rhetoric_fixed.cpp" class="btn">مشاهده</a>
+            </div>
+            <div class="project">
+                <h3>🔐 آمان راز</h3>
+                <p>سیستم خوشه‌ای امن</p>
+                <a href="/aman-secret-cluster/cluster_manager_fixed.py" class="btn">مشاهده</a>
+            </div>
+            <div class="project">
+                <h3>♟️ شطرنج کوانتومی</h3>
+                <p>موتور آموزشی هوشمند</p>
+                <a href="/chess-deepmind/stockfish_deep_learning_engine.cpp" class="btn">مشاهده</a>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: #e8f4fd; border-radius: 10px;">
+            <h3>🎯 اطلاعات استقرار</h3>
+            <p><strong>پلتفرم:</strong> Cloudflare Pages</p>
+            <p><strong>منبع:</strong> GitHub Repository</p>
+            <p><strong>وضعیت:</strong> فعال و عملیاتی</p>
+        </div>
+    </div>
+</body>
+</html>

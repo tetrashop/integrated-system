@@ -1,0 +1,6 @@
+[submodule "tetrashop-projects/chess/chess-core"]
+	path = tetrashop-projects/chess/chess-core
+	url = https://github.com/jhlywa/chess.js.git
+[submodule "tetrashop-projects/chess/chess-ui-2d"]
+	path = tetrashop-projects/chess/chess-ui-2d
+	url = https://github.com/ornicar/chessground.git

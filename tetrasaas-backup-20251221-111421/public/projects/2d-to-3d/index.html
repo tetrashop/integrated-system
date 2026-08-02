@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبدیل 2D به 3D - TetraShop</title>
+    <style>
+        :root {
+            --convert-blue: #3b82f6;
+            --convert-purple: #8b5cf6;
+            --convert-pink: #ec4899;
+            --convert-dark: #0f172a;
+            --convert-light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--convert-dark) 0%, #1e293b 100%);
+            color: var(--convert-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(236, 72, 153, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--convert-pink), var(--convert-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .converter-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1000px) {
+            .converter-interface {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section, .output-section {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .section-title {
+            color: var(--convert-pink);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .image-upload-area {
+            border: 3px dashed var(--convert-pink);
+            border-radius: 10px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+        
+        .image-upload-area:hover {
+            background: rgba(236, 72, 153, 0.1);
+            border-color: var(--convert-purple);
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 250px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .conversion-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .convert-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, var(--convert-pink), var(--convert-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .convert-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.4);
+        }
+        
+        .convert-btn.blue {
+            background: linear-gradient(45deg, var(--convert-blue), var(--convert-purple));
+        }
+        
+        .depth-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .depth-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .depth-card:hover {
+            background: rgba(236, 72, 153, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .depth-card.selected {
+            background: rgba(236, 72, 153, 0.2);
+            border: 2px solid var(--convert-pink);
+        }
+        
+        .converter-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .convert-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--convert-pink);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--convert-pink);
+        }
+        
+        .loading::after {
+            content: '';
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { content: '◜'; }
+            25% { content: '◝'; }
+            50% { content: '◞'; }
+            75% { content: '◟'; }
+            100% { content: '◜'; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--convert-pink), var(--convert-purple));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .output-3d {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cube {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 10s infinite linear;
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(236, 72, 153, 0.3);
+            border: 2px solid rgba(236, 72, 153, 0.6);
+        }
+        
+        .front { transform: translateZ(50px); }
+        .back { transform: rotateY(180deg) translateZ(50px); }
+        .right { transform: rotateY(90deg) translateZ(50px); }
+        .left { transform: rotateY(-90deg) translateZ(50px); }
+        .top { transform: rotateX(90deg) translateZ(50px); }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); }
+        
+        @keyframes rotate {
+            0% { transform: rotateX(0) rotateY(0); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">🏠 بازگشت</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ → 🎮 تبدیل 2D به 3D</h1>
+            <p>تبدیل هوشمند تصاویر دو بعدی به مدل‌های سه بعدی - با استفاده از هوش مصنوعی پیشرفته</p>
+        </div>
+        
+        <div class="converter-interface">
+            <div class="input-section">
+                <h3 class="section-title">
+                    <span>📤</span> تصویر ورودی
+                </h3>
+                
+                <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🖼️</div>
+                    <h3>تصویر خود را اینجا رها کنید</h3>
+                    <p style="color: #94a3b8; margin-top: 10px;">
+                        یا برای انتخاب تصویر کلیک کنید
+                    </p>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">
+                        فرمت‌های پشتیبانی: JPG, PNG, WebP, SVG
+                    </p>
+                </div>
+                
+                <input type="file" id="image-input" accept="image/*" style="display: none;">
+                
+                <div id="image-preview" class="image-preview">
+                    <div style="font-size: 3rem; color: #94a3b8;">🖼️</div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h4 style="color: var(--convert-pink); margin-bottom: 15px;">🎯 تنظیمات عمق:</h4>
+                    <div class="depth-options">
+                        <div class="depth-card" onclick="selectDepth('low')">
+                            <div style="font-size: 2rem;">📏</div>
+                            <div>عمق کم</div>
+                            <small>برای تصاویر ساده</small>
+                        </div>
+                        <div class="depth-card" onclick="selectDepth('medium')">
+                            <div style="font-size: 2rem;">📐</div>
+                            <div>عمق متوسط</div>
+                            <small>پیش‌فرض</small>
+                        </div>
+                        <div class="depth-card" onclick="selectDepth('high')">
+                            <div style="font-size: 2rem;">📊</div>
+                            <div>عمق زیاد</div>
+                            <small>برای تصاویر پیچیده</small>
+                        </div>
+                        <div class="depth-card" onclick="selectDepth('auto')">
+                            <div style="font-size: 2rem;">🤖</div>
+                            <div>تشخیص خودکار</div>
+                            <small>توسط هوش مصنوعی</small>
+                        </div>
+                        <div class="depth-card" onclick="selectDepth('custom')">
+                            <div style="font-size: 2rem;">🎛️</div>
+                            <div>دستی</div>
+                            <small>تنظیمات پیشرفته</small>
+                        </div>
+                        <div class="depth-card" onclick="selectDepth('vr')">
+                            <div style="font-size: 2rem;">🥽</div>
+                            <div>واقعیت مجازی</div>
+                            <small>برای VR/AR</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                
+                <div class="conversion-controls">
+                    <button class="convert-btn" onclick="convertTo3D()">
+                        <span>🔄</span> تبدیل به 3D
+                    </button>
+                    <button class="convert-btn blue" onclick="enhanceImage()">
+                        <span>✨</span> بهبود تصویر
+                    </button>
+                    <button class="convert-btn" onclick="detectObjects()">
+                        <span>🔍</span> تشخیص اشیاء
+                    </button>
+                    <button class="convert-btn" onclick="resetConverter()">
+                        <span>🗑️</span> پاک کردن
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h3 class="section-title">
+                    <span>🎮</span> مدل سه‌بعدی
+                </h3>
+                
+                <div class="output-3d" id="output-3d">
+                    <div class="cube" id="3d-cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                
+                <div id="conversion-result" style="display: none;">
+                    <h4 style="color: #10b981; margin-bottom: 15px;">✅ تبدیل موفقیت‌آمیز!</h4>
+                    <div id="result-details"></div>
+                    
+                    <div class="download-options">
+                        <button class="convert-btn" onclick="downloadSTL()" style="font-size: 0.9rem;">
+                            <span>🔺</span> دانلود STL
+                        </button>
+                        <button class="convert-btn blue" onclick="downloadOBJ()" style="font-size: 0.9rem;">
+                            <span>📦</span> دانلود OBJ
+                        </button>
+                        <button class="convert-btn" onclick="downloadGLB()" style="font-size: 0.9rem;">
+                            <span>🌐</span> دانلود GLB
+                        </button>
+                        <button class="convert-btn" onclick="share3D()" style="font-size: 0.9rem;">
+                            <span>📤</span> اشتراک‌گذاری
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="converter-stats">
+                    <div class="convert-stat">
+                        <div class="stat-value" id="images-converted">۰</div>
+                        <div>تصاویر تبدیل شده</div>
+                    </div>
+                    <div class="convert-stat">
+                        <div class="stat-value" id="conversion-accuracy">۹۵٪</div>
+                        <div>دقت تبدیل</div>
+                    </div>
+                    <div class="convert-stat">
+                        <div class="stat-value" id="polygon-count">۱۰K</div>
+                        <div>تعداد پلی‌گون</div>
+                    </div>
+                    <div class="convert-stat">
+                        <div class="stat-value" id="processing-time">۲٫۵s</div>
+                        <div>زمان پردازش</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: rgba(236, 72, 153, 0.1); border-radius: 10px;">
+                    <h4 style="color: var(--convert-pink); margin-bottom: 10px;">💡 کاربردهای مدل 3D:</h4>
+                    <div style="font-size: 0.9rem; line-height: 1.6;">
+                        • چاپ سه‌بعدی 🖨️<br>
+                        • بازی‌های ویدیویی 🎮<br>
+                        • واقعیت مجازی/افزوده 🥽<br>
+                        • انیمیشن و فیلم 🎥<br>
+                        • طراحی محصول 🏭<br>
+                        • معماری و دکور 🏠
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 15px;">
+            <h3 style="color: #f59e0b; margin-bottom: 20px;">🚀 تکنولوژی‌های پیشرفته</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 20px; background: rgba(236, 72, 153, 0.1); border-radius: 10px;">
+                    <h4>🧠 هوش مصنوعی عمیق</h4>
+                    <p>استفاده از شبکه‌های عصبی پیشرفته</p>
+                </div>
+                <div style="padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                    <h4>🔍 استخراج عمق</h4>
+                    <p>تشخیص عمق از تصاویر 2D</p>
+                </div>
+                <div style="padding: 20px; background: rgba(59, 130, 246, 0.1); border-radius: 10px;">
+                    <h4>🎯 بازسازی سه‌بعدی</h4>
+                    <p>ایجاد مدل 3D با جزئیات کامل</p>
+                </div>
+                <div style="padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 10px;">
+                    <h4>🔄 بهینه‌سازی خودکار</h4>
+                    <p>بهینه‌سازی مدل برای کاربردهای مختلف</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedImage = null;
+        let selectedDepth = 'medium';
+        let imagesConverted = 0;
+        
+        // مدیریت آپلود تصویر
+        document.getElementById('image-input').addEventListener('change', function(e) {
+            selectedImage = e.target.files[0];
+            if (selectedImage) {
+                previewImage(selectedImage);
+            }
+        });
+        
+        // درگ و دراپ
+        const uploadArea = document.querySelector('.image-upload-area');
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(236, 72, 153, 0.2)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = '';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '';
+            
+            if (e.dataTransfer.files.length) {
+                selectedImage = e.dataTransfer.files[0];
+                if (selectedImage.type.startsWith('image/')) {
+                    previewImage(selectedImage);
+                } else {
+                    alert('لطفاً فقط فایل تصویری آپلود کنید');
+                }
+            }
+        });
+        
+        function previewImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('image-preview');
+                preview.innerHTML = `<img src="${e.target.result}" alt="تصویر آپلود شده">`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function selectDepth(depth) {
+            selectedDepth = depth;
+            
+            // برجسته کردن کارت انتخاب شده
+            document.querySelectorAll('.depth-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.depth-card').classList.add('selected');
+            
+            const depthNames = {
+                'low': 'عمق کم',
+                'medium': 'عمق متوسط',
+                'high': 'عمق زیاد',
+                'auto': 'تشخیص خودکار',
+                'custom': 'دستی',
+                'vr': 'واقعیت مجازی'
+            };
+            
+            alert(`🎯 عمق به "${depthNames[depth]}" تغییر کرد`);
+        }
+        
+        function convertTo3D() {
+            if (!selectedImage) {
+                alert('لطفاً ابتدا یک تصویر آپلود کنید');
+                return;
+            }
+            
+            // نمایش نوار پیشرفت
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+            
+            // شبیه‌سازی فرآیند تبدیل
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showConversionResult();
+                        progressBar.style.display = 'none';
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        function showConversionResult() {
+            imagesConverted++;
+            document.getElementById('images-converted').textContent = imagesConverted;
+            
+            // ایجاد انیمیشن 3D
+            const cube = document.getElementById('3d-cube');
+            cube.style.animation = 'rotate 10s infinite linear';
+            
+            // نمایش جزئیات تبدیل
+            const resultDiv = document.getElementById('conversion-result');
+            const resultDetails = document.getElementById('result-details');
+            
+            const depthNames = {
+                'low': 'عمق کم',
+                'medium': 'عمق متوسط',
+                'high': 'عمق زیاد',
+                'auto': 'تشخیص خودکار',
+                'custom': 'دستی',
+                'vr': 'واقعیت مجازی'
+            };
+            
+            const polygonCount = {
+                'low': '۵,۰۰۰',
+                'medium': '۲۰,۰۰۰',
+                'high': '۵۰,۰۰۰',
+                'auto': '۱۵,۰۰۰',
+                'custom': '۲۵,۰۰۰',
+                'vr': '۱۰۰,۰۰۰'
+            };
+            
+            const accuracy = {
+                'low': '۷۵٪',
+                'medium': '۸۵٪',
+                'high': '۹۵٪',
+                'auto': '۹۰٪',
+                'custom': '۸۸٪',
+                'vr': '۹۸٪'
+            };
+            
+            resultDetails.innerHTML = `
+                <strong>عمق انتخاب شده:</strong> ${depthNames[selectedDepth]}<br>
+                <strong>تعداد پلی‌گون:</strong> ${polygonCount[selectedDepth]}<br>
+                <strong>دقت تبدیل:</strong> ${accuracy[selectedDepth]}<br>
+                <strong>نورپردازی:</strong> ${selectedDepth === 'vr' ? 'PBR کامل' : 'استاندارد'}<br>
+                <strong>بافت:</strong> ${selectedDepth === 'high' || selectedDepth === 'vr' ? 'با جزئیات' : 'پایه'}<br>
+                <strong>کاربرد پیشنهادی:</strong> ${getRecommendedUse(selectedDepth)}
+            `;
+            
+            resultDiv.style.display = 'block';
+            
+            // آپدیت آمار
+            document.getElementById('conversion-accuracy').textContent = accuracy[selectedDepth];
+            document.getElementById('polygon-count').textContent = polygonCount[selectedDepth];
+            
+            const processingTime = 1.5 + Math.random() * 3;
+            document.getElementById('processing-time').textContent = `${processingTime.toFixed(1)}s`;
+            
+            alert(`✅ تبدیل موفقیت‌آمیز!\n\nتصویر 2D با عمق ${depthNames[selectedDepth]} به مدل 3D تبدیل شد.`);
+        }
+        
+        function getRecommendedUse(depth) {
+            switch(depth) {
+                case 'low': return 'پیش‌نمایش سریع';
+                case 'medium': return 'چاپ سه‌بعدی عمومی';
+                case 'high': return 'انیمیشن و رندر';
+                case 'auto': return 'کاربردهای عمومی';
+                case 'custom': return 'پروژه‌های خاص';
+                case 'vr': return 'واقعیت مجازی/افزوده';
+                default: return 'کاربرد عمومی';
+            }
+        }
+        
+        function enhanceImage() {
+            if (!selectedImage) {
+                alert('لطفاً ابتدا یک تصویر آپلود کنید');
+                return;
+            }
+            
+            // شبیه‌سازی بهبود تصویر
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        alert(`✨ تصویر با موفقیت بهبود یافت!\n\n• وضوح افزایش یافت\n• رنگ‌ها بهبود یافتند\n• نویز کاهش یافت\n• کنتراست تنظیم شد`);
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        function detectObjects() {
+            if (!selectedImage) {
+                alert('لطفاً ابتدا یک تصویر آپلود کنید');
+                return;
+            }
+            
+            // شبیه‌سازی تشخیص اشیاء
+            const objects = ['انسان', 'حیوان', 'وسیله نقلیه', 'ساختمان', 'مبلمان', 'گیاه', 'وسیله الکترونیکی'];
+            const detected = [];
+            
+            for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) {
+                detected.push(objects[Math.floor(Math.random() * objects.length)]);
+            }
+            
+            const uniqueObjects = [...new Set(detected)];
+            alert(`🔍 اشیاء تشخیص داده شده:\n\n${uniqueObjects.join('\n')}\n\nاین اشیاء در مدل 3D به صورت جداگانه قابل ویرایش هستند.`);
+        }
+        
+        function resetConverter() {
+            if (confirm('آیا از پاک کردن همه اطلاعات اطمینان دارید؟')) {
+                selectedImage = null;
+                selectedDepth = 'medium';
+                
+                document.getElementById('image-input').value = '';
+                document.getElementById('image-preview').innerHTML = '<div style="font-size: 3rem; color: #94a3b8;">🖼️</div>';
+                document.getElementById('conversion-result').style.display = 'none';
+                
+                // ریست کارت‌های انتخاب شده
+                document.querySelectorAll('.depth-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // انتخاب مجدد پیش‌فرض
+                selectDepth('medium');
+                
+                // توقف انیمیشن
+                document.getElementById('3d-cube').style.animation = 'none';
+                
+                alert('🗑️ تمام اطلاعات با موفقیت پاک شدند');
+            }
+        }
+        
+        function downloadSTL() {
+            alert('🔺 فایل STL با موفقیت دانلود شد!\n\nمناسب برای چاپ سه‌بعدی');
+        }
+        
+        function downloadOBJ() {
+            alert('📦 فایل OBJ با موفقیت دانلود شد!\n\nمناسب برای رندر و انیمیشن');
+        }
+        
+        function downloadGLB() {
+            alert('🌐 فایل GLB با موفقیت دانلود شد!\n\nمناسب برای نمایش در وب و موبایل');
+        }
+        
+        function share3D() {
+            alert('📤 ویژگی اشتراک‌گذاری در حال توسعه است...');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            // انتخاب عمق پیش‌فرض
+            selectDepth('medium');
+            
+            // شبیه‌سازی آمار زنده
+            setInterval(() => {
+                const accuracy = 85 + Math.floor(Math.random() * 15);
+                document.getElementById('conversion-accuracy').textContent = `${accuracy}%`;
+                
+                const time = 1 + Math.random() * 4;
+                document.getElementById('processing-time').textContent = `${time.toFixed(1)}s`;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

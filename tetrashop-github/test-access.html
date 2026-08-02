@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <title>تست دسترسی پروژه‌ها</title>
+    <style>
+        body { font-family: system-ui; padding: 20px; background: #f5f5f5; }
+        .test-result { padding: 15px; margin: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .testing { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body style="margin:0;padding:0;min-height:100vh;">
+    <h1>🔧 تست دسترسی پروژه‌های تتراشاپ</h1>
+    <div id="results"></div>
+    
+    <script>
+        const projects = [
+            { name: 'شطرنج', path: '/chess/index.html' },
+            { name: 'نویسنده', path: '/writer/index.html' },
+            { name: 'تحلیلگر متن', path: '/nlp/index.html' },
+            { name: 'کوانتومی', path: '/quantum/index.html' },
+            { name: 'باغبانی', path: '/gardening/index.html' },
+            { name: 'تشخیص صوت', path: '/voice-recognition/index.html' },
+            { name: 'تبدیل ۳D', path: '/2d-to-3d/index.html' }
+        ];
+        
+        async function testProject(project) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'test-result testing';
+            resultDiv.innerHTML = `⏳ در حال تست ${project.name}...`;
+            document.getElementById('results').appendChild(resultDiv);
+            
+            try {
+                const response = await fetch(project.path, { method: 'HEAD' });
+                if (response.ok) {
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ ${project.name}: دسترسی دارد (<a href="${project.path}">باز کن</a>)`;
+                } else {
+                    resultDiv.className = 'test-result error';
+                    resultDiv.innerHTML = `❌ ${project.name}: خطا ${response.status}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ ${project.name}: ${error.message}`;
+            }
+        }
+        
+        // تست همه پروژه‌ها
+        projects.forEach(project => {
+            setTimeout(() => testProject(project), 500);
+        });
+    </script>
+</body>
+</html>

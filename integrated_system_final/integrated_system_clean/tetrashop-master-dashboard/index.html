@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد اصلی Tetrashop</title>
+    <style>
+        :root { --primary: #2563eb; --success: #10b981; }
+        body { font-family: Tahoma; background: #f8fafc; }
+        .project-card { 
+            background: white; border-radius: 12px; padding: 20px; 
+            margin: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--primary);
+        }
+        .price-tag { 
+            background: var(--success); color: white; padding: 5px 12px;
+            border-radius: 20px; font-weight: bold; float: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛒 بازار پروژه‌های Tetrashop</h1>
+    <div id="projects-market"></div>
+    
+    <script>
+        async function loadProjects() {
+            const res = await fetch('projects_analysis.json');
+            const projects = await res.json();
+            const container = document.getElementById('projects-market');
+            
+            projects.forEach(proj => {
+                const price = calculatePrice(proj);
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = \`
+                    <div class="price-tag">\${price} تومان</div>
+                    <h3>\${proj.name}</h3>
+                    <p>نوع: \${proj.type} | فایل اصلی: \${proj.mainFile || 'ندارد'}</p>
+                    <div>
+                        \${proj.hasIndex ? '<button onclick="runWeb(\'' + proj.name + '\')">🌐 اجرای وب</button>' : ''}
+                        \${proj.hasPackage ? '<button onclick="installProject(\'' + proj.name + '\')">📦 نصب</button>' : ''}
+                        <button onclick="showDetails('\${proj.name}')">📖 جزئیات</button>
+                        <button style="background: var(--success); color: white;" 
+                                onclick="buyProject('\${proj.name}', \${price})">
+                            🛒 خرید آنلاین
+                        </button>
+                    </div>
+                \`;
+                container.appendChild(card);
+            });
+        }
+        
+        function calculatePrice(project) {
+            let base = 5000;
+            if (project.type === 'fullstack') base += 15000;
+            if (project.type === 'node') base += 8000;
+            return base;
+        }
+        
+        // توابع اجرای پروژه
+        function runWeb(projectName) {
+            alert('اجرای پروژه ' + projectName + '\nدر مرورگر جدید باز می‌شود...');
+            window.open('/projects/' + projectName + '/index.html', '_blank');
+        }
+        
+        function buyProject(projectName, price) {
+            if (confirm(\`آیا مایل به خرید پروژه "\${projectName}" به مبلغ \${price} تومان هستید؟\`)) {
+                alert('به صفحه پرداخت هدایت می‌شوید...');
+                // در اینجا می‌توانید به درگاه پرداخت متصل شوید
+            }
+        }
+        
+        loadProjects();
+    </script>
+</body>
+</html>

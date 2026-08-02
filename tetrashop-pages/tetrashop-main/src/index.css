@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* بهبود hover effects */
+@media (hover: hover) {
+  [role="button"]:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-5px) !important;
+  }
+}
+
+/* بهبود برای موبایل */
+@media (max-width: 768px) {
+  .service-grid {
+    grid-template-columns: 1fr !important;
+    padding: 10px;
+  }
+}

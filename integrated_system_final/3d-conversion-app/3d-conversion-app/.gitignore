@@ -1,0 +1,10 @@
+node_modules/
+.env
+*.log
+uploads/
+cache/
+.DS_Store
+*.pyc
+__pycache__/
+.vercel
+.env.local

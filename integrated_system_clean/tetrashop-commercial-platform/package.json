@@ -1,0 +1,13 @@
+{
+  "name": "tetrashop-commercial-platform",
+  "version": "1.0.0",
+  "description": "پلتفرم هوشمند تتراشاپ با سیستم درآمدزایی",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server",
+    "deploy": "npx vercel --prod"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}

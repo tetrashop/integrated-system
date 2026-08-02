@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 TetraSaaS Dashboard - مدیریت ۲۳ سرویس</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- نوار بالایی -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-cubes"></i>
+            <h1>Tetra<span>SaaS</span></h1>
+            <span class="badge">v2.0</span>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-item">
+                <i class="fas fa-server"></i>
+                <span>۲۳ <small>سرویس</small></span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-bolt"></i>
+                <span>۱۰۰٪ <small>سلامت</small></span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clock"></i>
+                <span>۷۱<small>ms</small></span>
+            </div>
+        </div>
+        <div class="nav-user">
+            <button class="btn-refresh"><i class="fas fa-sync-alt"></i> بروزرسانی</button>
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ساختار اصلی -->
+    <div class="container">
+        <!-- سایدبار (دسته‌بندی‌ها) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-layer-group"></i> دسته‌بندی‌ها</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="category-list">
+                    <li class="active" data-category="all">
+                        <i class="fas fa-globe"></i>
+                        <span>همه سرویس‌ها</span>
+                        <span class="count">۲۳</span>
+                    </li>
+                    <li data-category="ai">
+                        <i class="fas fa-brain"></i>
+                        <span>هوش مصنوعی</span>
+                        <span class="count">۳</span>
+                    </li>
+                    <li data-category="graphics">
+                        <i class="fas fa-palette"></i>
+                        <span>گرافیک و رسانه</span>
+                        <span class="count">۶</span>
+                    </li>
+                    <li data-category="security">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>امنیت</span>
+                        <span class="count">۳</span>
+                    </li>
+                    <li data-category="system">
+                        <i class="fas fa-cogs"></i>
+                        <span>سیستم و بهینه‌سازی</span>
+                        <span class="count">۸</span>
+                    </li>
+                    <li data-category="productivity">
+                        <i class="fas fa-chart-line"></i>
+                        <span>بهره‌وری</span>
+                        <span class="count">۲</span>
+                    </li>
+                    <li data-category="development">
+                        <i class="fas fa-code"></i>
+                        <span>توسعه</span>
+                        <span class="count">۱</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-health">
+                    <h4><i class="fas fa-heartbeat"></i> سلامت سیستم</h4>
+                    <div class="health-bar">
+                        <div class="health-progress" style="width: 100%"></div>
+                    </div>
+                    <span class="health-percent">۱۰۰٪</span>
+                </div>
+                <div class="uptime">
+                    <h4><i class="fas fa-history"></i> زمان فعالیت</h4>
+                    <span class="uptime-value">۲۴/۷</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- محتوای اصلی -->
+        <main class="main-content">
+            <!-- کارت آمار کلی -->
+            <div class="stats-overview">
+                <div class="stat-card primary">
+                    <i class="fas fa-rocket"></i>
+                    <h3>کارایی کل</h3>
+                    <div class="stat-value">۱۰۰/۱۰۰</div>
+                    <div class="stat-grade">A+ 🏆</div>
+                </div>
+                <div class="stat-card success">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>سرویس‌های فعال</h3>
+                    <div class="stat-value">۲۳/۲۳</div>
+                    <div class="stat-sub">۱۰۰٪ آماده</div>
+                </div>
+                <div class="stat-card warning">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>میانگین پاسخ</h3>
+                    <div class="stat-value">۷۱ms</div>
+                    <div class="stat-sub">⚡ بسیار سریع</div>
+                </div>
+                <div class="stat-card info">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>پردازش امروز</h3>
+                    <div class="stat-value">۱,۲۴۷</div>
+                    <div class="stat-sub">درخواست</div>
+                </div>
+            </div>
+
+            <!-- بخش سرویس‌ها -->
+            <section class="services-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-sliders-h"></i> مدیریت سرویس‌ها</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary"><i class="fas fa-play"></i> راه‌اندازی همه</button>
+                        <button class="btn btn-secondary"><i class="fas fa-redo"></i> بارگذاری مجدد</button>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="جستجوی سرویس...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- شبکه سرویس‌ها (Parent-Child Structure) -->
+                <div class="services-grid" id="servicesContainer">
+                    <!-- سرویس‌ها با JavaScript لود می‌شوند -->
+                </div>
+            </section>
+
+            <!-- نمودارها و آمار -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <h3><i class="fas fa-chart-bar"></i> توزیع پردازش</h3>
+                    <div class="chart-placeholder" id="distributionChart">
+                        <canvas id="processingChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3><i class="fas fa-chart-line"></i> کارایی زمانی</h3>
+                    <div class="chart-placeholder" id="performanceChart">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- پنل جزئیات سمت چپ -->
+        <aside class="detail-panel" id="detailPanel">
+            <div class="detail-header">
+                <h3><i class="fas fa-info-circle"></i> جزئیات سرویس</h3>
+                <button class="btn-close" id="closeDetails">&times;</button>
+            </div>
+            <div class="detail-content" id="detailContent">
+                <div class="empty-state">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>یک سرویس را برای مشاهده جزئیات انتخاب کنید</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- فوتر -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-cube"></i>
+                <span>TetraSaaS Platform</span>
+            </div>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-book"></i> مستندات</a>
+                <a href="#"><i class="fas fa-code-branch"></i> API</a>
+                <a href="#"><i class="fas fa-chart-bar"></i> آمار</a>
+                <a href="#"><i class="fas fa-cog"></i> تنظیمات</a>
+            </div>
+            <div class="footer-status">
+                <span class="status-indicator active"></span>
+                <span>وضعیت: <strong>فعال</strong> • آخرین بروزرسانی: <span id="updateTime">همین الان</span></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- اسکریپت‌ها -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

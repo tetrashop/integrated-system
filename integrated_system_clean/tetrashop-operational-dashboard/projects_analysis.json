@@ -1,0 +1,40 @@
+[
+  {
+    "name": ".git",
+    "path": "/data/data/com.termux/files/home/tetrashop-projects/.git",
+    "has_index": false,
+    "has_package": false,
+    "has_server": false,
+    "files": [
+      "description",
+      "config",
+      "HEAD",
+      "COMMIT_EDITMSG",
+      "index",
+      "hooks/pre-merge-commit.sample",
+      "hooks/commit-msg.sample",
+      "hooks/pre-push.sample",
+      "hooks/pre-rebase.sample",
+      "hooks/prepare-commit-msg.sample",
+      "hooks/sendemail-validate.sample",
+      "hooks/update.sample",
+      "hooks/fsmonitor-watchman.sample",
+      "hooks/post-update.sample",
+      "hooks/pre-applypatch.sample",
+      "hooks/pre-commit.sample",
+      "hooks/push-to-checkout.sample",
+      "hooks/pre-receive.sample",
+      "hooks/applypatch-msg.sample",
+      "info/exclude",
+      "logs/HEAD",
+      "refs/heads/master",
+      "objects/bd/4ca6a78ece3384d6c686d16ed2faa8477296aa",
+      "objects/bf/0bb03520ce1223e8f28bd0952036e9373ccbe0",
+      "objects/06/37a088a01e8ddab3bf3fa98dbe804cbde1a0dc",
+      "objects/23/3aa1d1562a7e407b89cb05d553da5fea050e4f",
+      "objects/99/cd2f5dd21d2d56fadb6200ff7286550c0037ef",
+      "logs/refs/heads/master"
+    ],
+    "type": "utility"
+  }
+]

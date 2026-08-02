@@ -1,0 +1,180 @@
+<div class="content-analyzer-ui">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #60a5fa;">📊 تحلیلگر محتوا</h2>
+        <p style="color: #cbd5e1;">تحلیل و آنالیز پیشرفته محتوای متنی</p>
+    </div>
+    
+    <div style="background: rgba(59, 130, 246, 0.1); padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+        <h4 style="color: #60a5fa; margin-bottom: 15px;">📝 ورودی متن</h4>
+        <textarea id="contentInput" placeholder="متن خود را برای تحلیل وارد کنید..." 
+                  style="width: 100%; height: 200px; padding: 15px; border-radius: 8px; 
+                         background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); 
+                         color: white; font-family: inherit; font-size: 1rem; line-height: 1.6;"></textarea>
+        
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button onclick="analyzeContent()" style="flex: 1; padding: 12px; background: linear-gradient(90deg, #2563eb, #3b82f6); 
+                     color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                🔍 تحلیل محتوا
+            </button>
+            <button onclick="clearContent()" style="padding: 12px 25px; background: rgba(239, 68, 68, 0.2); 
+                     color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; cursor: pointer;">
+                پاک کردن
+            </button>
+        </div>
+    </div>
+    
+    <div id="analysisResults" style="display: none;">
+        <div style="background: rgba(0,0,0,0.3); padding: 25px; border-radius: 12px; border-left: 4px solid #3b82f6;">
+            <h4 style="color: #60a5fa; margin-bottom: 20px;">📈 نتایج تحلیل</h4>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 25px;">
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 10px;">
+                    <div style="color: #93c5fd; font-size: 0.9rem; margin-bottom: 5px;">تعداد کلمات</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #60a5fa;" id="wordCountResult">۰</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 10px;">
+                    <div style="color: #93c5fd; font-size: 0.9rem; margin-bottom: 5px;">تعداد جملات</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #60a5fa;" id="sentenceCountResult">۰</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 10px;">
+                    <div style="color: #93c5fd; font-size: 0.9rem; margin-bottom: 5px;">زمان خواندن</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #60a5fa;" id="readingTimeResult">۰</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 10px;">
+                    <div style="color: #93c5fd; font-size: 0.9rem; margin-bottom: 5px;">احساسات متن</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #60a5fa;" id="sentimentResult">😐</div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <h5 style="color: #93c5fd; margin-bottom: 15px;">🔑 کلمات کلیدی</h5>
+                <div id="keywordsContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <h5 style="color: #93c5fd; margin-bottom: 15px;">📊 نمودار احساسات</h5>
+                <div style="height: 40px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; 
+                          position: relative; margin-bottom: 10px;">
+                    <div id="sentimentBar" style="height: 100%; width: 50%; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; color: #cbd5e1; font-size: 0.9rem;">
+                    <span>منفی</span>
+                    <span>خنثی</span>
+                    <span>مثبت</span>
+                </div>
+            </div>
+            
+            <div>
+                <h5 style="color: #93c5fd; margin-bottom: 15px;">💡 پیشنهادات بهبود</h5>
+                <div id="suggestions" style="color: #cbd5e1; line-height: 1.6;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px;">
+        <h4 style="color: #cbd5e1; margin-bottom: 15px;">📋 نمونه تحلیل سریع</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            <button onclick="loadSample('news')" style="padding: 12px; background: rgba(59, 130, 246, 0.2); 
+                     border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #93c5fd; cursor: pointer;">
+                📰 متن خبری
+            </button>
+            <button onclick="loadSample('academic')" style="padding: 12px; background: rgba(59, 130, 246, 0.2); 
+                     border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #93c5fd; cursor: pointer;">
+                📚 متن علمی
+            </button>
+            <button onclick="loadSample('social')" style="padding: 12px; background: rgba(59, 130, 246, 0.2); 
+                     border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #93c5fd; cursor: pointer;">
+                💬 متن شبکه اجتماعی
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function analyzeContent() {
+    const text = document.getElementById('contentInput').value.trim();
+    if (!text) {
+        alert('لطفاً متنی برای تحلیل وارد کنید');
+        return;
+    }
+    
+    // شبیه‌سازی تحلیل
+    const words = text.split(/\s+/).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+    const readingTime = Math.ceil(words / 200); // 200 کلمه در دقیقه
+    const sentimentScore = Math.random() * 2 - 1; // بین -1 تا 1
+    
+    // کلمات کلیدی شبیه‌سازی
+    const keywords = [
+        'هوش مصنوعی', 'تکنولوژی', 'برنامه‌نویسی', 'داده', 'تحلیل',
+        'سیستم', 'محاسبات', 'الگوریتم', 'یادگیری', 'ماشین'
+    ].sort(() => Math.random() - 0.5).slice(0, 5);
+    
+    // نمایش نتایج
+    document.getElementById('wordCountResult').textContent = words.toLocaleString('fa-IR');
+    document.getElementById('sentenceCountResult').textContent = sentences.toLocaleString('fa-IR');
+    document.getElementById('readingTimeResult').textContent = readingTime + ' دقیقه';
+    
+    let sentimentEmoji = '😐';
+    let sentimentPercent = 50;
+    
+    if (sentimentScore > 0.3) {
+        sentimentEmoji = '😊';
+        sentimentPercent = 70;
+    } else if (sentimentScore < -0.3) {
+        sentimentEmoji = '😞';
+        sentimentPercent = 30;
+    }
+    
+    document.getElementById('sentimentResult').textContent = sentimentEmoji;
+    document.getElementById('sentimentBar').style.width = sentimentPercent + '%';
+    
+    // نمایش کلمات کلیدی
+    const keywordsContainer = document.getElementById('keywordsContainer');
+    keywordsContainer.innerHTML = '';
+    keywords.forEach(keyword => {
+        const span = document.createElement('span');
+        span.textContent = keyword;
+        span.style.background = 'rgba(59, 130, 246, 0.2)';
+        span.style.color = '#93c5fd';
+        span.style.padding = '8px 15px';
+        span.style.borderRadius = '20px';
+        span.style.fontSize = '0.9rem';
+        keywordsContainer.appendChild(span);
+    });
+    
+    // پیشنهادات
+    const suggestions = [
+        'استفاده از جملات کوتاه‌تر می‌تواند خوانایی متن را افزایش دهد.',
+        'تنوع بیشتر در ساختار جملات پیشنهاد می‌شود.',
+        'افزودن کلمات کلیدی مرتبط می‌تواند به SEO کمک کند.',
+        'متن از نظر احساسات در سطح متوسط قرار دارد.',
+        'طول متن برای یک مقاله متوسط مناسب است.'
+    ];
+    
+    const suggestionsList = suggestions.slice(0, 3);
+    const suggestionsDiv = document.getElementById('suggestions');
+    suggestionsDiv.innerHTML = suggestionsList.map(s => `<p style="margin-bottom: 10px;">✅ ${s}</p>`).join('');
+    
+    // نمایش نتایج
+    document.getElementById('analysisResults').style.display = 'block';
+    document.getElementById('analysisResults').scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearContent() {
+    document.getElementById('contentInput').value = '';
+    document.getElementById('analysisResults').style.display = 'none';
+}
+
+function loadSample(type) {
+    const samples = {
+        news: `وزیر ارتباطات در مراسم افتتاح پروژه ملی اینترنت اشیا اعلام کرد: این پروژه تحول عظیمی در صنعت ارتباطات کشور ایجاد خواهد کرد. با اجرای کامل این طرح، بیش از ۵ میلیون دستگاه هوشمند به شبکه ملی متصل خواهند شد. این اقدام گام بزرگی در راستای تحقق دولت الکترونیک و توسعه خدمات دیجیتال است.`,
+        
+        academic: `در پژوهش حاضر، تأثیر هوش مصنوعی بر بهره‌وری سازمانی مورد بررسی قرار گرفت. جامعه آماری این تحقیق شامل ۲۵۰ شرکت فعال در حوزه فناوری اطلاعات بود. نتایج تحلیل داده‌ها نشان داد که استفاده از سیستم‌های مبتنی بر AI موجب افزایش ۳۷ درصدی بهره‌وری نیروی انسانی شده است. همچنین، بهبود ۴۵ درصدی در دقت تصمیم‌گیری‌های مدیریتی مشاهده گردید.`,
+        
+        social: `واقعاً از دیروز که اپلیکیشن جدید رو نصب کردم، زندگی‌م خیلی راحت‌تر شده! دیگه لازم نیست کلی وقت صرف کارهای تکراری کنم. تیم توسعه‌دهنده واقعاً کارشون درسته. فقط یه مشکلی که داره اینه که بعضی وقتا کند کار می‌کنه، امیدوارم تو آپدیت بعدی درستش کنن.`
+    };
+    
+    document.getElementById('contentInput').value = samples[type];
+}
+</script>

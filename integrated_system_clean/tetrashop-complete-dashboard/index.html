@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد نهایی Tetrashop</title>
+    <style>
+        body { font-family: Tahoma; text-align: center; padding: 50px; background: #f5f5f5; }
+        .card { background: white; padding: 30px; margin: 20px auto; max-width: 600px; 
+               border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; padding: 12px 24px; margin: 10px; 
+              background: #4361ee; color: white; text-decoration: none; 
+              border-radius: 5px; font-size: 16px; }
+        .btn:hover { background: #3a0ca3; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚀 پروژه Tetrashop</h1>
+        <p>انتخاب روش مشاهده:</p>
+        
+        <a href="all_codes.html" class="btn">📖 مشاهده تمام کدها (HTML)</a><br>
+        <a href="simple_codes.txt" class="btn">📄 دانلود فایل متنی</a><br>
+        
+        <h3 style="margin-top: 40px;">📊 آمار پروژه</h3>
+        <p>تعداد فایل‌های کد: $(find "$PROJECT_DIR" -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.html" -o -name "*.css" ! -path "*/node_modules/*" ! -path "*/.git/*" | wc -l)</p>
+        <p>آخرین تغییرات: $(date -r "$PROJECT_DIR" '+%Y/%m/%d')</p>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            <h4>👨‍💻 توسعه‌دهنده</h4>
+            <p>Ramin Edjlal</p>
+            <p>📧 ramin.edjlal1359@gmail.com</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>TetraShop - تست ساده</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, sans-serif;
+        }
+        
+        body {
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #0ea5e9;
+            margin-bottom: 30px;
+        }
+        
+        .test-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #0ea5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #0ea5e9, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+            text-decoration: none;
+        }
+        
+        .test-btn:hover {
+            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            transform: scale(1.02);
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        .error {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+        
+        #log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            font-family: monospace;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 تست بارگذاری پروژه‌های TetraShop</h1>
+        
+        <div class="test-card">
+            <h3>تست ۱: لینک مستقیم</h3>
+            <a href="projects/quantum-writer/" class="test-btn" id="test1">
+                ۱. نویسنده کوانتومی (projects/quantum-writer/)
+            </a>
+            
+            <a href="projects/ai-writer/" class="test-btn" id="test2">
+                ۲. نویسنده هوشمند (projects/ai-writer/)
+            </a>
+            
+            <a href="projects/secret-garden/" class="test-btn" id="test3">
+                ۳. باغ راز آلود (projects/secret-garden/)
+            </a>
+        </div>
+        
+        <div class="test-card">
+            <h3>تست ۲: جاوااسکریپت</h3>
+            <button class="test-btn" onclick="goToProject('quantum-writer')">
+                برو به نویسنده کوانتومی (JavaScript)
+            </button>
+            
+            <button class="test-btn" onclick="goToProject('ai-writer')">
+                برو به نویسنده هوشمند (JavaScript)
+            </button>
+            
+            <button class="test-btn" onclick="goToProject('secret-garden')">
+                برو به باغ راز آلود (JavaScript)
+            </button>
+        </div>
+        
+        <div class="test-card">
+            <h3>تست ۳: بررسی فایل‌ها</h3>
+            <button class="test-btn" onclick="checkAllProjects()">
+                بررسی دسترسی همه پروژه‌ها
+            </button>
+            
+            <div id="check-results"></div>
+        </div>
+        
+        <div id="log">
+            <strong>لاگ تست:</strong><br>
+            <div id="log-content"></div>
+        </div>
+        
+        <div class="status" id="status">آماده تست...</div>
+    </div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log-content');
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ef4444' : 
+                         type === 'success' ? '#10b981' : '#0ea5e9';
+            
+            logEl.innerHTML += `<span style="color:${color}">[${time}] ${message}</span><br>`;
+            logEl.scrollTop = logEl.scrollHeight;
+            
+            console.log(`[${type}] ${message}`);
+        }
+        
+        function goToProject(projectName) {
+            const path = `projects/${projectName}/`;
+            log(`تلاش برای رفتن به: ${path}`);
+            
+            // تست وجود فایل اول
+            fetch(path)
+                .then(response => {
+                    if (response.ok) {
+                        log(`✅ ${projectName}: فایل پیدا شد`, 'success');
+                        window.location.href = path;
+                    } else {
+                        log(`❌ ${projectName}: خطا ${response.status}`, 'error');
+                        document.getElementById('status').innerHTML = 
+                            `<span class="error">پروژه ${projectName} پیدا نشد (${response.status})</span>`;
+                    }
+                })
+                .catch(error => {
+                    log(`❌ ${projectName}: خطای شبکه`, 'error');
+                    document.getElementById('status').innerHTML = 
+                        `<span class="error">خطای شبکه برای ${projectName}</span>`;
+                });
+        }
+        
+        function checkAllProjects() {
+            const projects = ['quantum-writer', 'ai-writer', 'secret-garden', 
+                             '3d-converter', '2d-to-3d', 'content-manager'];
+            const resultsEl = document.getElementById('check-results');
+            resultsEl.innerHTML = '<p>در حال بررسی...</p>';
+            
+            let allOk = true;
+            
+            projects.forEach(project => {
+                const path = `projects/${project}/`;
+                
+                fetch(path)
+                    .then(response => {
+                        const status = response.ok ? '✅' : '❌';
+                        const color = response.ok ? '#10b981' : '#ef4444';
+                        
+                        resultsEl.innerHTML += 
+                            `<div style="margin: 5px 0;">
+                                ${status} ${project}: 
+                                <span style="color:${color}">
+                                    ${response.ok ? 'موجود' : 'مفقود (خطا ' + response.status + ')'}
+                                </span>
+                            </div>`;
+                        
+                        if (!response.ok) allOk = false;
+                    })
+                    .catch(error => {
+                        resultsEl.innerHTML += 
+                            `<div style="margin: 5px 0;">
+                                ❌ ${project}: 
+                                <span style="color:#ef4444">خطای شبکه</span>
+                            </div>`;
+                        allOk = false;
+                    });
+            });
+            
+            setTimeout(() => {
+                document.getElementById('status').innerHTML = allOk ? 
+                    '<span class="success">✅ همه پروژه‌ها در دسترس هستند</span>' :
+                    '<span class="error">⚠ برخی پروژه‌ها مشکل دارند</span>';
+            }, 2000);
+        }
+        
+        // لاگ اطلاعات اولیه
+        log('صفحه تست بارگذاری شد');
+        log('آدرس فعلی: ' + window.location.href);
+        log('پوشه: ' + window.location.pathname);
+        
+        // اضافه کردن event listener به لینک‌ها
+        document.querySelectorAll('.test-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href) {
+                    log('کلیک روی لینک: ' + this.href);
+                }
+            });
+        });
+        
+        // تست اولیه
+        setTimeout(() => {
+            log('شروع تست اولیه دسترسی...');
+            checkAllProjects();
+        }, 1000);
+    </script>
+</body>
+</html>

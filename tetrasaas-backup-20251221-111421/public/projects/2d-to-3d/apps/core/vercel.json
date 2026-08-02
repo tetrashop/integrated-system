@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "name": "tetrashop-core",
+  "builds": [
+    {
+      "src": "tetrashop100.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/tetrashop100.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/tetrashop100.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

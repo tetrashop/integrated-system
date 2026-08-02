@@ -1,0 +1,49 @@
+{
+    "platform": {
+        "name": "TetraSaaS Platform",
+        "version": "1.0.0",
+        "description": "پلتفرم ابری 23 سرویس TetraShop"
+    },
+    "gateway": {
+        "port": 8080,
+        "host": "localhost",
+        "endpoints": {
+            "health": "/health",
+            "api_base": "/api/:service/*"
+        }
+    },
+    "services": {
+        "quantum-writer": { "port": 3001, "category": "ai" },
+        "ai-writer": { "port": 3002, "category": "ai" },
+        "secret-garden": { "port": 3003, "category": "security" },
+        "3d-converter": { "port": 3004, "category": "tools" },
+        "2d-to-3d": { "port": 3005, "category": "ai" },
+        "content-analyzer": { "port": 3006, "category": "ai" },
+        "anti-fragmentation": { "port": 3007, "category": "system" },
+        "formula-solver": { "port": 3008, "category": "tools" },
+        "code-cleaner": { "port": 3009, "category": "dev" },
+        "graphic-2d": { "port": 3010, "category": "tools" },
+        "anti-smoke": { "port": 3011, "category": "system" },
+        "telescope-design": { "port": 3012, "category": "science" },
+        "teleport-system": { "port": 3013, "category": "network" },
+        "image-processor": { "port": 3014, "category": "ai" },
+        "audio-converter": { "port": 3015, "category": "tools" },
+        "video-editor": { "port": 3016, "category": "tools" },
+        "data-encryptor": { "port": 3017, "category": "security" },
+        "network-scanner": { "port": 3018, "category": "network" },
+        "battery-optimizer": { "port": 3019, "category": "system" },
+        "file-organizer": { "port": 3020, "category": "tools" },
+        "password-generator": { "port": 3021, "category": "security" },
+        "system-monitor": { "port": 3022, "category": "system" },
+        "backup-manager": { "port": 3023, "category": "system" }
+    },
+    "categories": {
+        "ai": "هوش مصنوعی",
+        "tools": "ابزارها",
+        "security": "امنیت",
+        "system": "سیستم",
+        "network": "شبکه",
+        "dev": "توسعه",
+        "science": "علمی"
+    }
+}

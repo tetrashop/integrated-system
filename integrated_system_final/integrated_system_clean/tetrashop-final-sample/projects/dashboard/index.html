@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد کسب و کار</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f5f5f5; }
+        .dashboard-header {
+            background: linear-gradient(90deg, #1a237e, #311b92);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 10px 0;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .back-button {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            background: #1a237e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">⬅ بازگشت به صفحه اصلی</a>
+    
+    <div class="dashboard-header">
+        <h1>📊 داشبورد مدیریت کسب و کار</h1>
+        <p>آمار زنده و لحظه‌ای</p>
+    </div>
+    
+    <div class="stats-container">
+        <div class="stat-card">
+            <div>💰 درآمد امروز</div>
+            <div class="stat-value" id="revenue">۱۲,۵۴۰,۰۰۰</div>
+            <div>تومان</div>
+            <div class="live-badge">زنده</div>
+        </div>
+        
+        <div class="stat-card">
+            <div>📦 سفارشات جدید</div>
+            <div class="stat-value" id="orders">۲۴۷</div>
+            <div>عدد</div>
+            <div class="live-badge">زنده</div>
+        </div>
+        
+        <div class="stat-card">
+            <div>👥 مشتریان فعال</div>
+            <div class="stat-value" id="customers">۱,۸۹۲</div>
+            <div>نفر</div>
+            <div class="live-badge">زنده</div>
+        </div>
+        
+        <div class="stat-card">
+            <div>📈 رشد ماهانه</div>
+            <div class="stat-value" id="growth">۳۴٪</div>
+            <div>درصد</div>
+            <div class="live-badge">زنده</div>
+        </div>
+    </div>
+    
+    <script>
+        // شبیه‌سازی داده‌های زنده
+        function updateLiveData() {
+            // درآمد تصادفی
+            const revenue = 12540000 + Math.floor(Math.random() * 100000);
+            document.getElementById('revenue').textContent = revenue.toLocaleString('fa-IR');
+            
+            // سفارشات تصادفی
+            const orders = 247 + Math.floor(Math.random() * 20);
+            document.getElementById('orders').textContent = orders.toLocaleString('fa-IR');
+            
+            // مشتریان تصادفی
+            const customers = 1892 + Math.floor(Math.random() * 50);
+            document.getElementById('customers').textContent = customers.toLocaleString('fa-IR');
+            
+            // رشد تصادفی
+            const growth = 34 + Math.floor(Math.random() * 10) - 5;
+            document.getElementById('growth').textContent = growth + '%';
+        }
+        
+        // اجرای اولیه
+        updateLiveData();
+        
+        // به‌روزرسانی هر 3 ثانیه
+        setInterval(updateLiveData, 3000);
+    </script>
+</body>
+</html>

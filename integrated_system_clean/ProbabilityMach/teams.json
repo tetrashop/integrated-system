@@ -1,0 +1,44 @@
+{
+  "groups": [
+    {
+      "name": "Group A",
+      "teams": ["Germany", "USA", "Senegal", "Australia"],
+      "elo": [1850, 1750, 1650, 1550]
+    },
+    {
+      "name": "Group B",
+      "teams": ["Argentina", "Mexico", "Poland", "Saudi Arabia"],
+      "elo": [1900, 1700, 1680, 1500]
+    },
+    {
+      "name": "Group C",
+      "teams": ["France", "Denmark", "Tunisia", "Japan"],
+      "elo": [1880, 1780, 1620, 1600]
+    },
+    {
+      "name": "Group D",
+      "teams": ["England", "Croatia", "Morocco", "Canada"],
+      "elo": [1860, 1770, 1640, 1580]
+    },
+    {
+      "name": "Group E",
+      "teams": ["Spain", "Germany", "Costa Rica", "New Zealand"],
+      "elo": [1840, 1750, 1600, 1520]
+    },
+    {
+      "name": "Group F",
+      "teams": ["Belgium", "Croatia", "Morocco", "Canada"],
+      "elo": [1820, 1720, 1630, 1550]
+    },
+    {
+      "name": "Group G",
+      "teams": ["Brazil", "Switzerland", "Serbia", "Cameroon"],
+      "elo": [1920, 1760, 1660, 1580]
+    },
+    {
+      "name": "Group H",
+      "teams": ["Portugal", "Uruguay", "South Korea", "Ghana"],
+      "elo": [1810, 1740, 1650, 1600]
+    }
+  ]
+}

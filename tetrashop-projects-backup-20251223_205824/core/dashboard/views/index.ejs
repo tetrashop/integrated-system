@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- هدر -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-cloud"></i>
+                <h1>Tetrashop Colony Dashboard</h1>
+            </div>
+            <div class="status">
+                <span class="status-badge <%= gatewayStatus === 'connected' ? 'connected' : 'disconnected' %>">
+                    <i class="fas fa-<%= gatewayStatus === 'connected' ? 'check-circle' : 'times-circle' %>"></i>
+                    Gateway: <%= gatewayStatus === 'connected' ? 'متصل' : 'قطع' %>
+                </span>
+                <div class="time" id="current-time"></div>
+            </div>
+        </header>
+
+        <!-- آمار کلی -->
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>کل سرویس‌ها</h3>
+                    <p class="stat-number"><%= stats.totalServices || 23 %></p>
+                </div>
+            </div>
+            
+            <div class="stat-card active">
+                <div class="stat-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>سرویس‌های فعال</h3>
+                    <p class="stat-number"><%= stats.activeServices || 3 %></p>
+                </div>
+            </div>
+            
+            <div class="stat-card categories">
+                <div class="stat-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>دسته‌بندی‌ها</h3>
+                    <p class="stat-number">6</p>
+                </div>
+            </div>
+            
+            <div class="stat-card requests">
+                <div class="stat-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>درخواست‌ها (امروز)</h3>
+                    <p class="stat-number">24,430</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- نمودار و لیست سرویس‌ها -->
+        <div class="main-content">
+            <div class="chart-container">
+                <h2><i class="fas fa-chart-pie"></i> توزیع سرویس‌ها</h2>
+                <canvas id="servicesChart"></canvas>
+            </div>
+            
+            <div class="services-list">
+                <h2><i class="fas fa-list"></i> سرویس‌های فعال</h2>
+                <div class="services-grid">
+                    <% services.forEach(service => { %>
+                    <div class="service-card">
+                        <div class="service-header">
+                            <span class="service-category <%= service.category %>">
+                                <%= service.category %>
+                            </span>
+                            <span class="service-status <%= service.status === 'فعال' ? 'active' : 'inactive' %>">
+                                <%= service.status %>
+                            </span>
+                        </div>
+                        <div class="service-body">
+                            <h4><%= service.name %></h4>
+                            <p class="service-id">ID: <%= service.id %></p>
+                            <div class="service-metrics">
+                                <div class="metric">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Uptime: <%= service.uptime || '99.9%' %></span>
+                                </div>
+                                <div class="metric">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Requests: <%= service.requests || '0' %></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn btn-start" onclick="controlService('<%= service.id %>', 'start')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="btn btn-stop" onclick="controlService('<%= service.id %>', 'stop')">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button class="btn btn-restart" onclick="controlService('<%= service.id %>', 'restart')">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="btn btn-details" onclick="showDetails('<%= service.id %>')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <!-- دسته‌بندی‌ها -->
+        <div class="categories-section">
+            <h2><i class="fas fa-folder"></i> دسته‌بندی‌های سرویس</h2>
+            <div class="categories-grid">
+                <% const categories = [
+                    { name: 'هوش مصنوعی', count: 3, icon: 'fas fa-brain', color: '#4CAF50' },
+                    { name: 'گرافیک و رسانه', count: 6, icon: 'fas fa-palette', color: '#2196F3' },
+                    { name: 'امنیت', count: 3, icon: 'fas fa-shield-alt', color: '#F44336' },
+                    { name: 'سیستم و بهینه‌سازی', count: 8, icon: 'fas fa-cogs', color: '#FF9800' },
+                    { name: 'بهره‌وری', count: 2, icon: 'fas fa-chart-line', color: '#9C27B0' },
+                    { name: 'توسعه', count: 1, icon: 'fas fa-code', color: '#607D8B' }
+                ]; %>
+                
+                <% categories.forEach(cat => { %>
+                <div class="category-card" style="border-color: <%= cat.color %>;">
+                    <div class="category-icon" style="color: <%= cat.color %>;">
+                        <i class="<%= cat.icon %>"></i>
+                    </div>
+                    <div class="category-info">
+                        <h4><%= cat.name %></h4>
+                        <p><%= cat.count %> سرویس</p>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn btn-view" onclick="viewCategory('<%= cat.name %>')">
+                            مشاهده
+                        </button>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <!-- فوتر -->
+        <footer class="footer">
+            <p>Tetrashop Colony Dashboard v1.0.0 | مدیریت ۲۳ سرویس ابری</p>
+            <p>آخرین بروزرسانی: <span id="last-update">همین حالا</span></p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

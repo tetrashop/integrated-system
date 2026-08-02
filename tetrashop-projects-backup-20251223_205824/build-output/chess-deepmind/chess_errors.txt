@@ -1,0 +1,31 @@
+stockfish_deep_learning_engine.cpp:86:35: error: no member named 'make_unique' in namespace 'std'
+   86 |         evaluation_network = std::make_unique<QuantumNeuralNetwork>(768, 1024, 1);
+      |                              ~~~~~^
+stockfish_deep_learning_engine.cpp:86:47: error: 'QuantumNeuralNetwork' does not refer to a value
+   86 |         evaluation_network = std::make_unique<QuantumNeuralNetwork>(768, 1024, 1);
+      |                                               ^
+stockfish_deep_learning_engine.cpp:13:7: note: declared here
+   13 | class QuantumNeuralNetwork {
+      |       ^
+stockfish_deep_learning_engine.cpp:87:31: error: no member named 'make_unique' in namespace 'std'
+   87 |         policy_network = std::make_unique<QuantumNeuralNetwork>(768, 512, 4672); // All possible moves
+      |                          ~~~~~^
+stockfish_deep_learning_engine.cpp:87:43: error: 'QuantumNeuralNetwork' does not refer to a value
+   87 |         policy_network = std::make_unique<QuantumNeuralNetwork>(768, 512, 4672); // All possible moves
+      |                                           ^
+stockfish_deep_learning_engine.cpp:13:7: note: declared here
+   13 | class QuantumNeuralNetwork {
+      |       ^
+stockfish_deep_learning_engine.cpp:86:69: warning: left operand of comma operator has no effect [-Wunused-value]
+   86 |         evaluation_network = std::make_unique<QuantumNeuralNetwork>(768, 1024, 1);
+      |                                                                     ^~~
+stockfish_deep_learning_engine.cpp:86:74: warning: left operand of comma operator has no effect [-Wunused-value]
+   86 |         evaluation_network = std::make_unique<QuantumNeuralNetwork>(768, 1024, 1);
+      |                                                                          ^~~~
+stockfish_deep_learning_engine.cpp:87:65: warning: left operand of comma operator has no effect [-Wunused-value]
+   87 |         policy_network = std::make_unique<QuantumNeuralNetwork>(768, 512, 4672); // All possible moves
+      |                                                                 ^~~
+stockfish_deep_learning_engine.cpp:87:70: warning: left operand of comma operator has no effect [-Wunused-value]
+   87 |         policy_network = std::make_unique<QuantumNeuralNetwork>(768, 512, 4672); // All possible moves
+      |                                                                      ^~~
+4 warnings and 4 errors generated.

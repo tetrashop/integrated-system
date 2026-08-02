@@ -1,0 +1,14 @@
+{
+  "name": "tetrasaas-sdk",
+  "version": "1.0.0",
+  "description": "SDK رسمی برای استفاده از سرویس‌های TetraSaaS",
+  "main": "tetra-sdk.js",
+  "scripts": {
+    "test": "node examples/basic.js",
+    "example": "node examples/basic.js"
+  },
+  "keywords": ["tetrasaas", "api", "sdk", "saas"],
+  "author": "TetraSaaS Team",
+  "license": "MIT",
+  "dependencies": {}
+}

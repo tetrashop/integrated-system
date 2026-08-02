@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    image: node:18
+    ports: ["8080:8080"]
+    volumes: ["./api-gateway:/app"]
+    command: ["node", "server.js"]
+
+  shared-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: tetrasaas
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+
+  # میکروسرویس‌ها
+  quantum-writer:
+    image: python:3.11
+    volumes: ["./microservices/quantum-writer:/app"]
+    command: ["python", "app.py"]
+
+  formula-solver:
+    image: python:3.11
+    volumes: ["./microservices/formula-solver:/app"]
+    command: ["python", "app.py"]
+
+  # ... 21 سرویس دیگر با همین ساختار

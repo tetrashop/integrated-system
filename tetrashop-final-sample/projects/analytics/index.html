@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحلیل هوشمند</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #0d1b2a; color: white; }
+        .analytics-header {
+            background: linear-gradient(90deg, #6a1b9a, #4a148c);
+            padding: 50px 20px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+        .metrics-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .metric-box {
+            background: #1b263b;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #415a77;
+            transition: all 0.3s;
+        }
+        .metric-box:hover {
+            border-color: #9d4edd;
+            transform: scale(1.05);
+        }
+        .metric-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(90deg, #9d4edd, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sentiment-chart {
+            background: #1b263b;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            border: 1px solid #415a77;
+        }
+        .chart-bar {
+            height: 40px;
+            margin: 20px 0;
+            background: #415a77;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 1s ease;
+        }
+        .positive { background: linear-gradient(90deg, #4caf50, #2e7d32); }
+        .neutral { background: linear-gradient(90deg, #ff9800, #f57c00); }
+        .negative { background: linear-gradient(90deg, #f44336, #c62828); }
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #4caf50;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .back-button {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            background: #6a1b9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">⬅ بازگشت به صفحه اصلی</a>
+    
+    <div class="analytics-header">
+        <h1>🤖 تحلیل هوش اجتماعی Tetrashop</h1>
+        <p><span class="live-indicator"></span> سیستم در حال تحلیل لحظه‌ای</p>
+    </div>
+    
+    <div class="metrics-panel">
+        <div class="metric-box">
+            <div>📊 کل پست‌ها</div>
+            <div class="metric-value" id="total-posts">۱۲,۸۴۷</div>
+            <div>در ۲۴ ساعت گذشته</div>
+        </div>
+        
+        <div class="metric-box">
+            <div>😊 احساس مثبت</div>
+            <div class="metric-value" id="sentiment-positive">۶۸٪</div>
+            <div>نظرات کاربران</div>
+        </div>
+        
+        <div class="metric-box">
+            <div>🔥 ترند برتر</div>
+            <div class="metric-value">#تتراشاپ</div>
+            <div>هشتگ پرتکرار</div>
+        </div>
+        
+        <div class="metric-box">
+            <div>📈 نرخ تعامل</div>
+            <div class="metric-value" id="engagement-rate">۴۲٪</div>
+            <div>میانگین لایک و کامنت</div>
+        </div>
+    </div>
+    
+    <div class="sentiment-chart">
+        <h2 style="text-align: center; margin-bottom: 30px;">📈 نمودار تحلیل احساسات</h2>
+        
+        <div>
+            <div style="display: flex; justify-content: space-between; margin: 15px 0;">
+                <span>مثبت</span>
+                <span id="positive-percent">۶۸٪</span>
+            </div>
+            <div class="chart-bar">
+                <div class="bar-fill positive" id="positive-bar" style="width: 68%;"></div>
+            </div>
+        </div>
+        
+        <div>
+            <div style="display: flex; justify-content: space-between; margin: 15px 0;">
+                <span>خنثی</span>
+                <span id="neutral-percent">۲۵٪</span>
+            </div>
+            <div class="chart-bar">
+                <div class="bar-fill neutral" id="neutral-bar" style="width: 25%;"></div>
+            </div>
+        </div>
+        
+        <div>
+            <div style="display: flex; justify-content: space-between; margin: 15px 0;">
+                <span>منفی</span>
+                <span id="negative-percent">۷٪</span>
+            </div>
+            <div class="chart-bar">
+                <div class="bar-fill negative" id="negative-bar" style="width: 7%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // شبیه‌سازی داده‌های زنده
+        function updateAnalytics() {
+            // پست‌ها
+            const posts = 12847 + Math.floor(Math.random() * 200);
+            document.getElementById('total-posts').textContent = posts.toLocaleString('fa-IR');
+            
+            // احساسات
+            const positive = 65 + Math.floor(Math.random() * 8) - 4;
+            const neutral = 25 + Math.floor(Math.random() * 6) - 3;
+            const negative = 100 - positive - neutral;
+            
+            document.getElementById('sentiment-positive').textContent = positive + '%';
+            document.getElementById('positive-percent').textContent = positive + '%';
+            document.getElementById('neutral-percent').textContent = neutral + '%';
+            document.getElementById('negative-percent').textContent = negative + '%';
+            
+            document.getElementById('positive-bar').style.width = positive + '%';
+            document.getElementById('neutral-bar').style.width = neutral + '%';
+            document.getElementById('negative-bar').style.width = negative + '%';
+            
+            // نرخ تعامل
+            const engagement = 40 + Math.floor(Math.random() * 8) - 4;
+            document.getElementById('engagement-rate').textContent = engagement + '%';
+        }
+        
+        // اجرای اولیه
+        updateAnalytics();
+        
+        // به‌روزرسانی هر 5 ثانیه
+        setInterval(updateAnalytics, 5000);
+    </script>
+</body>
+</html>

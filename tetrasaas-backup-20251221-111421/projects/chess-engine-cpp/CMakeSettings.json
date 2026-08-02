@@ -1,0 +1,61 @@
+﻿{
+  "configurations": [
+    {
+      "name": "Linux-Debug",
+      "generator": "Unix Makefiles",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}/build/${name}",
+      "installRoot": "${projectDir}/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_C_COMPILER",
+          "value": "gcc",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_CXX_COMPILER",
+          "value": "g++",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "name": "Windows-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}/build/${name}",
+      "installRoot": "${projectDir}/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "${env.VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+          "type": "STRING"
+        }
+      ],
+      "environments": [
+        {
+          "VCPKG_ROOT": "C:/microsoft-vcpkg-6f29f12" // مسیر vcpkg را اصلاح کنید
+        }
+      ]
+    },
+    {
+      "name": "MacOS-Debug",
+      "generator": "Xcode",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}/build/${name}",
+      "installRoot": "${projectDir}/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "macos_x64" ]
+    }
+  ]
+}

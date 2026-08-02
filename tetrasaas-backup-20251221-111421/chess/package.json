@@ -1,0 +1,30 @@
+{
+  "name": "tetrashop-chess",
+  "version": "1.0.0",
+  "description": "موتور شطرجد پیشرفته TetraShop با هوش مصنوعی و رابط کاربری فارسی",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "dev": "nodemon server.js",
+    "test": "node test.js",
+    "test-engine": "node engine/test-engine.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.22.1"
+  },
+  "keywords": [
+    "chess",
+    "shahmat",
+    "ai",
+    "persian",
+    "tetrashop",
+    "minimax",
+    "alpha-beta"
+  ],
+  "author": "TetraShop Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

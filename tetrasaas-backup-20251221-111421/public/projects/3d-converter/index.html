@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبدیل فایل‌های سه‌بعدی - TetraShop</title>
+    <style>
+        :root {
+            --3d-blue: #0ea5e9;
+            --3d-purple: #8b5cf6;
+            --3d-cyan: #06b6d4;
+            --3d-dark: #0f172a;
+            --3d-light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--3d-dark) 0%, #1e293b 100%);
+            color: var(--3d-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--3d-blue), var(--3d-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .converter-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1000px) {
+            .converter-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .upload-section, .preview-section {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .section-title {
+            color: var(--3d-cyan);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-area {
+            border: 3px dashed var(--3d-blue);
+            border-radius: 10px;
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area:hover {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: var(--3d-cyan);
+        }
+        
+        .format-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .format-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .format-card:hover {
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .format-card.selected {
+            background: rgba(14, 165, 233, 0.2);
+            border: 2px solid var(--3d-blue);
+        }
+        
+        .converter-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .converter-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, var(--3d-blue), var(--3d-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .converter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .converter-btn.green {
+            background: linear-gradient(45deg, #10b981, var(--3d-blue));
+        }
+        
+        .preview-area {
+            width: 100%;
+            height: 300px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .file-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .converter-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .converter-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--3d-blue);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--3d-cyan);
+        }
+        
+        .loading::after {
+            content: '';
+            animation: rotate 2s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { content: '◐'; }
+            25% { content: '◓'; }
+            50% { content: '◑'; }
+            75% { content: '◒'; }
+            100% { content: '◐'; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--3d-blue), var(--3d-purple));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        #model-preview {
+            font-size: 5rem;
+            color: var(--3d-blue);
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">🏠 بازگشت</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔄 تبدیل فایل‌های سه‌بعدی</h1>
+            <p>سیستم پیشرفته تبدیل بین فرمت‌های مختلف فایل‌های سه‌بعدی - پشتیبانی از ۵۰+ فرمت</p>
+        </div>
+        
+        <div class="converter-dashboard">
+            <div class="upload-section">
+                <h3 class="section-title">
+                    <span>📤</span> آپلود و تنظیمات
+                </h3>
+                
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">📁</div>
+                    <h3>فایل ۳D خود را اینجا رها کنید</h3>
+                    <p style="color: #94a3b8; margin-top: 10px;">
+                        یا برای انتخاب فایل کلیک کنید
+                    </p>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">
+                        حداکثر حجم: ۵۰۰ مگابایت
+                    </p>
+                </div>
+                
+                <input type="file" id="file-input" accept=".obj,.stl,.fbx,.dae,.3ds,.ply,.gltf,.glb,.max,.blend,.ma,.mb,.step,.iges" style="display: none;">
+                
+                <div id="file-details" class="file-info" style="display: none;">
+                    <h4>📄 جزئیات فایل:</h4>
+                    <div id="file-detail-content"></div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h4 style="color: var(--3d-cyan); margin-bottom: 15px;">🎯 فرمت خروجی:</h4>
+                    <div class="format-selector">
+                        <div class="format-card" onclick="selectFormat('obj')">
+                            <div style="font-size: 2rem;">📦</div>
+                            <div>OBJ</div>
+                            <small>Wavefront</small>
+                        </div>
+                        <div class="format-card" onclick="selectFormat('stl')">
+                            <div style="font-size: 2rem;">🔺</div>
+                            <div>STL</div>
+                            <small>چاپ سه‌بعدی</small>
+                        </div>
+                        <div class="format-card" onclick="selectFormat('fbx')">
+                            <div style="font-size: 2rem;">🎮</div>
+                            <div>FBX</div>
+                            <small>Autodesk</small>
+                        </div>
+                        <div class="format-card" onclick="selectFormat('gltf')">
+                            <div style="font-size: 2rem;">🌐</div>
+                            <div>GLTF</div>
+                            <small>وب</small>
+                        </div>
+                        <div class="format-card" onclick="selectFormat('step')">
+                            <div style="font-size: 2rem;">⚙️</div>
+                            <div>STEP</div>
+                            <small>CAD</small>
+                        </div>
+                        <div class="format-card" onclick="selectFormat('dae')">
+                            <div style="font-size: 2rem;">🎨</div>
+                            <div>DAE</div>
+                            <small>Collada</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                
+                <div class="converter-controls">
+                    <button class="converter-btn" onclick="convertFile()">
+                        <span>🔄</span> تبدیل فایل
+                    </button>
+                    <button class="converter-btn green" onclick="optimizeModel()">
+                        <span>⚡</span> بهینه‌سازی
+                    </button>
+                    <button class="converter-btn" onclick="preview3D()">
+                        <span>👁️</span> پیش‌نمایش
+                    </button>
+                    <button class="converter-btn" onclick="resetConverter()">
+                        <span>🗑️</span> پاک کردن
+                    </button>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3 class="section-title">
+                    <span>👁️</span> پیش‌نمایش و خروجی
+                </h3>
+                
+                <div class="preview-area">
+                    <div id="model-preview">🔄</div>
+                </div>
+                
+                <div id="conversion-result" style="display: none;">
+                    <h4 style="color: #10b981; margin-bottom: 15px;">✅ تبدیل موفقیت‌آمیز!</h4>
+                    <div id="result-details"></div>
+                    
+                    <div class="converter-controls" style="margin-top: 20px;">
+                        <button class="converter-btn" onclick="downloadResult()">
+                            <span>💾</span> دانلود فایل
+                        </button>
+                        <button class="converter-btn" onclick="shareResult()">
+                            <span>📤</span> اشتراک‌گذاری
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="converter-stats">
+                    <div class="converter-stat">
+                        <div class="stat-value" id="files-converted">۰</div>
+                        <div>فایل‌های تبدیل شده</div>
+                    </div>
+                    <div class="converter-stat">
+                        <div class="stat-value" id="conversion-speed">۰ms</div>
+                        <div>سرعت تبدیل</div>
+                    </div>
+                    <div class="converter-stat">
+                        <div class="stat-value" id="quality-score">۱۰۰٪</div>
+                        <div>کیفیت خروجی</div>
+                    </div>
+                    <div class="converter-stat">
+                        <div class="stat-value" id="file-size">۰MB</div>
+                        <div>اندازه فایل</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 10px;">
+                    <h4 style="color: var(--3d-cyan); margin-bottom: 10px;">💡 فرمت‌های پشتیبانی شده:</h4>
+                    <div style="font-size: 0.9rem; line-height: 1.6;">
+                        <strong>ورودی:</strong> OBJ, STL, FBX, DAE, 3DS, PLY, GLTF, GLB, MAX, BLEND, MA, MB, STEP, IGES<br>
+                        <strong>خروجی:</strong> OBJ, STL, FBX, DAE, GLTF, GLB, STEP, IGES, USDZ, X3D, VRML
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 15px;">
+            <h3 style="color: #f59e0b; margin-bottom: 20px;">🚀 ویژگی‌های پیشرفته تبدیل</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 10px;">
+                    <h4>⚡ تبدیل سریع</h4>
+                    <p>تبدیل فایل‌های بزرگ در کمترین زمان</p>
+                </div>
+                <div style="padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                    <h4>🎯 حفظ کیفیت</h4>
+                    <p>حفظ جزئیات و بافت‌ها در تبدیل</p>
+                </div>
+                <div style="padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 10px;">
+                    <h4>🔧 بهینه‌سازی خودکار</h4>
+                    <p>کاهش حجم فایل بدون کاهش کیفیت</p>
+                </div>
+                <div style="padding: 20px; background: rgba(245, 158, 11, 0.1); border-radius: 10px;">
+                    <h4>🌐 پشتیبانی از فرمت‌ها</h4>
+                    <p>پشتیبانی از ۵۰+ فرمت مختلف</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedFile = null;
+        let selectedFormat = 'obj';
+        let filesConverted = 0;
+        
+        const formatInfo = {
+            'obj': { name: 'OBJ', description: 'فرمت استاندارد Wavefront - مناسب برای چاپ سه‌بعدی و رندر' },
+            'stl': { name: 'STL', description: 'فرمت استاندارد برای چاپ سه‌بعدی - فقط هندسه' },
+            'fbx': { name: 'FBX', description: 'فرمت Autodesk - مناسب برای انیمیشن و بازی' },
+            'gltf': { name: 'GLTF', description: 'فرمت استاندارد وب - مناسب برای نمایش در مرورگر' },
+            'step': { name: 'STEP', description: 'فرمت CAD - مناسب برای طراحی صنعتی' },
+            'dae': { name: 'DAE', description: 'فرمت Collada - مناسب برای تبادل بین نرم‌افزارها' }
+        };
+        
+        // مدیریت آپلود فایل
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            selectedFile = e.target.files[0];
+            if (selectedFile) {
+                showFileDetails(selectedFile);
+            }
+        });
+        
+        // درگ و دراپ
+        const uploadArea = document.querySelector('.upload-area');
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(14, 165, 233, 0.2)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = '';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '';
+            
+            if (e.dataTransfer.files.length) {
+                selectedFile = e.dataTransfer.files[0];
+                showFileDetails(selectedFile);
+            }
+        });
+        
+        function showFileDetails(file) {
+            const fileDetails = document.getElementById('file-details');
+            const fileDetailContent = document.getElementById('file-detail-content');
+            
+            const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+            const fileType = file.name.split('.').pop().toUpperCase();
+            
+            fileDetailContent.innerHTML = `
+                <strong>نام فایل:</strong> ${file.name}<br>
+                <strong>نوع فایل:</strong> ${fileType}<br>
+                <strong>حجم:</strong> ${fileSize} MB<br>
+                <strong>تاریخ تغییر:</strong> ${new Date(file.lastModified).toLocaleDateString('fa-IR')}
+            `;
+            
+            fileDetails.style.display = 'block';
+            
+            // آپدیت آمار
+            document.getElementById('file-size').textContent = `${fileSize}MB`;
+            
+            // نمایش آیکون مناسب
+            const modelPreview = document.getElementById('model-preview');
+            const icons = ['📦', '🔺', '🎮', '🌐', '⚙️', '🎨'];
+            modelPreview.textContent = icons[Math.floor(Math.random() * icons.length)];
+        }
+        
+        function selectFormat(format) {
+            selectedFormat = format;
+            
+            // برجسته کردن کارت انتخاب شده
+            document.querySelectorAll('.format-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.format-card').classList.add('selected');
+            
+            const info = formatInfo[format];
+            alert(`🎯 فرمت خروجی به ${info.name} تغییر کرد\n\n${info.description}`);
+        }
+        
+        function convertFile() {
+            if (!selectedFile) {
+                alert('لطفاً ابتدا یک فایل آپلود کنید');
+                return;
+            }
+            
+            if (!selectedFormat) {
+                alert('لطفاً فرمت خروجی را انتخاب کنید');
+                return;
+            }
+            
+            // نمایش نوار پیشرفت
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+            
+            // شبیه‌سازی فرآیند تبدیل
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showConversionResult();
+                        progressBar.style.display = 'none';
+                    }, 500);
+                }
+            }, 200);
+        }
+        
+        function showConversionResult() {
+            filesConverted++;
+            document.getElementById('files-converted').textContent = filesConverted;
+            
+            const inputFormat = selectedFile.name.split('.').pop().toUpperCase();
+            const outputFormat = selectedFormat.toUpperCase();
+            const originalSize = (selectedFile.size / (1024 * 1024)).toFixed(2);
+            const optimizedSize = (selectedFile.size * 0.7 / (1024 * 1024)).toFixed(2);
+            
+            const conversionTime = 500 + Math.floor(Math.random() * 1500);
+            const quality = 85 + Math.floor(Math.random() * 15);
+            
+            document.getElementById('conversion-speed').textContent = `${conversionTime}ms`;
+            document.getElementById('quality-score').textContent = `${quality}%`;
+            
+            const resultDiv = document.getElementById('conversion-result');
+            const resultDetails = document.getElementById('result-details');
+            
+            resultDetails.innerHTML = `
+                <strong>تبدیل از:</strong> ${inputFormat} → ${outputFormat}<br>
+                <strong>حجم اصلی:</strong> ${originalSize} MB<br>
+                <strong>حجم نهایی:</strong> ${optimizedSize} MB (کاهش ${(100 - (optimizedSize/originalSize*100)).toFixed(1)}%)<br>
+                <strong>زمان تبدیل:</strong> ${conversionTime}ms<br>
+                <strong>کیفیت حفظ شده:</strong> ${quality}%<br>
+                <strong>تعداد رئوس:</strong> ${Math.floor(Math.random() * 50000).toLocaleString('fa-IR')}<br>
+                <strong>تعداد مثلث‌ها:</strong> ${Math.floor(Math.random() * 100000).toLocaleString('fa-IR')}
+            `;
+            
+            resultDiv.style.display = 'block';
+            
+            // نمایش آیکون موفقیت
+            document.getElementById('model-preview').textContent = '✅';
+            
+            alert(`✅ تبدیل موفقیت‌آمیز!\n\nفایل ${inputFormat} به ${outputFormat} تبدیل شد.`);
+        }
+        
+        function optimizeModel() {
+            if (!selectedFile) {
+                alert('لطفاً ابتدا یک فایل آپلود کنید');
+                return;
+            }
+            
+            // شبیه‌سازی بهینه‌سازی
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        
+                        const originalSize = parseFloat(document.getElementById('file-size').textContent);
+                        const optimizedSize = (originalSize * 0.65).toFixed(2);
+                        document.getElementById('file-size').textContent = `${optimizedSize}MB`;
+                        
+                        alert(`⚡ بهینه‌سازی موفق!\n\nحجم فایل از ${originalSize}MB به ${optimizedSize}MB کاهش یافت.\nکیفیت حفظ شده: ۹۵%`);
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        function preview3D() {
+            if (!selectedFile) {
+                alert('لطفاً ابتدا یک فایل آپلود کنید');
+                return;
+            }
+            
+            // شبیه‌سازی پیش‌نمایش
+            const preview = document.getElementById('model-preview');
+            const models = ['🔺', '🔶', '🔷', '🟥', '🟩', '🟦', '⭐', '🎲', '🎯', '🧊'];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                preview.textContent = models[index];
+                index = (index + 1) % models.length;
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                preview.textContent = '🎮';
+                alert('👁️ پیش‌نمایش سه‌بعدی فعال شد!\n\nمدل در حالت چرخش نمایش داده می‌شود.');
+            }, 2000);
+        }
+        
+        function resetConverter() {
+            if (confirm('آیا از پاک کردن همه اطلاعات اطمینان دارید؟')) {
+                selectedFile = null;
+                selectedFormat = 'obj';
+                
+                document.getElementById('file-input').value = '';
+                document.getElementById('file-details').style.display = 'none';
+                document.getElementById('conversion-result').style.display = 'none';
+                document.getElementById('model-preview').textContent = '🔄';
+                
+                // ریست کارت‌های انتخاب شده
+                document.querySelectorAll('.format-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                alert('🗑️ تمام اطلاعات با موفقیت پاک شدند');
+            }
+        }
+        
+        function downloadResult() {
+            alert('💾 فایل تبدیل شده با موفقیت دانلود شد!\n\nفایل با فرمت ' + selectedFormat.toUpperCase() + ' ذخیره شد.');
+        }
+        
+        function shareResult() {
+            alert('📤 ویژگی اشتراک‌گذاری در حال توسعه است...');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            // انتخاب فرمت پیش‌فرض
+            selectFormat('obj');
+            
+            // شبیه‌سازی آمار زنده
+            setInterval(() => {
+                const speed = 500 + Math.floor(Math.random() * 2000);
+                document.getElementById('conversion-speed').textContent = `${speed}ms`;
+                
+                const quality = 85 + Math.floor(Math.random() * 15);
+                document.getElementById('quality-score').textContent = `${quality}%`;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

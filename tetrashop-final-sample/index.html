@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Tetrashop Projects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma; }
+        body { background: #f8f9fa; color: #333; }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 50px;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 2px solid transparent;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.2);
+        }
+        .project-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .project-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .project-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        .stats {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🧬 Tetrashop Projects</h1>
+        <p>مجموعه کامل سیستم‌های کسب و کار هوشمند</p>
+    </div>
+    
+    <div class="stats">
+        <h2>📊 ۳ پروژه کامل و اجراشدنی</h2>
+        <p>همه پروژه‌ها به صورت مستقل اجرا می‌شوند</p>
+    </div>
+    
+    <div class="projects">
+        <a href="/projects/dashboard/" class="project-card">
+            <div class="project-icon">📈</div>
+            <div class="project-title">داشبورد کسب و کار</div>
+            <div class="project-desc">مدیریت کامل کسب و کار با نمودارهای زنده و آمار لحظه‌ای</div>
+        </a>
+        
+        <a href="/projects/store/" class="project-card">
+            <div class="project-icon">🛍️</div>
+            <div class="project-title">فروشگاه آنلاین</div>
+            <div class="project-desc">فروشگاه ساده و کاربردی با سبد خرید و پرداخت</div>
+        </a>
+        
+        <a href="/projects/analytics/" class="project-card">
+            <div class="project-icon">🤖</div>
+            <div class="project-title">تحلیل هوشمند</div>
+            <div class="project-desc">تحلیل شبکه‌های اجتماعی و هوش مصنوعی</div>
+        </a>
+    </div>
+    
+    <footer>
+        <p>© 2024 Tetrashop - ساخته شده با ❤️ برای توسعه‌دهندگان ایرانی</p>
+        <p>آماده برای توسعه و گسترش</p>
+    </footer>
+</body>
+</html>

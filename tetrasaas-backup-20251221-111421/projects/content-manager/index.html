@@ -1,0 +1,607 @@
+
+                    <h3 class="section-title" style="margin-top: 40px;">
+                        <span>📈</span> آمار سریع
+                    </h3>
+                    
+                    <div class="stats-grid">
+                        <div class="cms-stat">
+                            <div class="stat-value">۱۲۷</div>
+                            <div>کل مطالب</div>
+                        </div>
+                        <div class="cms-stat">
+                            <div class="stat-value">۸۹</div>
+                            <div>منتشر شده</div>
+                        </div>
+                        <div class="cms-stat">
+                            <div class="stat-value">۲۳</div>
+                            <div>پیش‌نویس</div>
+                        </div>
+                        <div class="cms-stat">
+                            <div class="stat-value">۱۵</div>
+                            <div>زمان‌بندی شده</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cms-main">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h3 class="section-title">
+                            <span>📄</span> مدیریت مطالب
+                        </h3>
+                        
+                        <button class="cms-btn" onclick="openNewContentModal()">
+                            <span>➕</span> محتوای جدید
+                        </button>
+                    </div>
+                    
+                    <div class="cms-controls">
+                        <button class="cms-btn" onclick="filterContent('all')" style="font-size: 0.9rem;">
+                            <span>📄</span> همه
+                        </button>
+                        <button class="cms-btn" onclick="filterContent('published')" style="font-size: 0.9rem;">
+                            <span>✅</span> منتشر شده
+                        </button>
+                        <button class="cms-btn" onclick="filterContent('draft')" style="font-size: 0.9rem;">
+                            <span>📝</span> پیش‌نویس
+                        </button>
+                        <button class="cms-btn" onclick="filterContent('scheduled')" style="font-size: 0.9rem;">
+                            <span>⏰</span> زمان‌بندی
+                        </button>
+                        <button class="cms-btn purple" onclick="exportContent()" style="font-size: 0.9rem;">
+                            <span>📤</span> خروجی
+                        </button>
+                    </div>
+                    
+                    <table class="content-table">
+                        <thead>
+                            <tr>
+                                <th>عنوان</th>
+                                <th>نوع</th>
+                                <th>نویسنده</th>
+                                <th>تاریخ</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="content-list">
+                            <tr>
+                                <td>معرفی نویسنده کوانتومی</td>
+                                <td>مقاله</td>
+                                <td>مدیر سیستم</td>
+                                <td>۱۴۰۳/۱۰/۱۵</td>
+                                <td><span class="status-badge status-published">منتشر شده</span></td>
+                                <td class="action-buttons">
+                                    <button class="action-btn edit" onclick="editContent(1)">ویرایش</button>
+                                    <button class="action-btn delete" onclick="deleteContent(1)">حذف</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>راهنمای استفاده از باغ راز</td>
+                                <td>صفحه</td>
+                                <td>مدیر محتوا</td>
+                                <td>۱۴۰۳/۱۰/۱۴</td>
+                                <td><span class="status-badge status-published">منتشر شده</span></td>
+                                <td class="action-buttons">
+                                    <button class="action-btn edit" onclick="editContent(2)">ویرایش</button>
+                                    <button class="action-btn delete" onclick="deleteContent(2)">حذف</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>تبدیل تصاویر 2D به 3D</td>
+                                <td>آموزش</td>
+                                <td>کارشناس فنی</td>
+                                <td>۱۴۰۳/۱۰/۱۳</td>
+                                <td><span class="status-badge status-scheduled">زمان‌بندی</span></td>
+                                <td class="action-buttons">
+                                    <button class="action-btn edit" onclick="editContent(3)">ویرایش</button>
+                                    <button class="action-btn delete" onclick="deleteContent(3)">حذف</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>بهینه‌سازی فایل‌های 3D</td>
+                                <td>مقاله</td>
+                                <td>مدیر سیستم</td>
+                                <td>۱۴۰۳/۱۰/۱۲</td>
+                                <td><span class="status-badge status-draft">پیش‌نویس</span></td>
+                                <td class="action-buttons">
+                                    <button class="action-btn edit" onclick="editContent(4)">ویرایش</button>
+                                    <button class="action-btn delete" onclick="deleteContent(4)">حذف</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>سیستم درآمدزایی TetraShop</td>
+                                <td>صفحه</td>
+                                <td>مدیر مالی</td>
+                                <td>۱۴۰۳/۱۰/۱۱</td>
+                                <td><span class="status-badge status-published">منتشر شده</span></td>
+                                <td class="action-buttons">
+                                    <button class="action-btn edit" onclick="editContent(5)">ویرایش</button>
+                                    <button class="action-btn delete" onclick="deleteContent(5)">حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="editor-container" id="editor-container">
+                        <h3 class="section-title">
+                            <span>✍️</span> ویرایشگر محتوا
+                        </h3>
+                        
+                        <div class="editor-toolbar">
+                            <button class="action-btn" onclick="formatText('bold')"><b>B</b></button>
+                            <button class="action-btn" onclick="formatText('italic')"><i>I</i></button>
+                            <button class="action-btn" onclick="formatText('underline')"><u>U</u></button>
+                            <button class="action-btn" onclick="insertHeading()">عنوان</button>
+                            <button class="action-btn" onclick="insertLink()">🔗</button>
+                            <button class="action-btn" onclick="insertImage()">🖼️</button>
+                            <button class="action-btn" onclick="insertList()">📋</button>
+                        </div>
+                        
+                        <textarea class="editor-content" id="editor-content" placeholder="محتوای خود را اینجا بنویسید...">
+# سیستم مدیریت محتوای TetraShop
+
+سیستم مدیریت محتوای TetraShop یک پلتفرم جامع برای مدیریت تمام محتوای پروژه‌های مختلف است.
+
+## ویژگی‌های کلیدی:
+
+### ۱. مدیریت چند پروژه‌ای
+- پشتیبانی از همه پروژه‌های TetraShop
+- مدیریت محتوای یکپارچه
+- امکان انتقال محتوا بین پروژه‌ها
+
+### ۲. ویرایشگر پیشرفته
+- ویرایشگر WYSIWYG
+- پشتیبانی از Markdown
+- قالب‌بندی پیشرفته
+
+### ۳. سیستم انتشار هوشمند
+- زمان‌بندی خودکار انتشار
+- انتشار در چندین پلتفرم
+- تحلیل عملکرد محتوا
+
+### ۴. مدیریت کاربران
+- سطوح دسترسی مختلف
+- نظارت بر فعالیت‌ها
+- گزارش‌گیری جامع
+
+## درآمدزایی:
+
+این سیستم می‌تواند تا **۱۰,۰۰۰,۰۰۰ تومان در ماه** درآمد ایجاد کند از طریق:
+- فروش اشتراک به کسب‌وکارها
+- خدمات مدیریت محتوای سفارشی
+- آموزش و مشاوره
+- توسعه پلاگین‌های اضافی
+                        </textarea>
+                        
+                        <div class="cms-controls" style="margin-top: 20px;">
+                            <button class="cms-btn" onclick="saveEditedContent()">💾 ذخیره تغییرات</button>
+                            <button class="cms-btn" onclick="previewContent()">👁️ پیش‌نمایش</button>
+                            <button class="cms-btn" onclick="publishContent()">🚀 انتشار</button>
+                            <button class="cms-btn" onclick="cancelEdit()">لغو</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cms-rightbar">
+                    <h3 class="section-title">
+                        <span>⚡</span> اقدامات سریع
+                    </h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <button class="cms-btn" onclick="openNewContentModal()" style="font-size: 0.9rem;">
+                            <span>📝</span> مقاله جدید
+                        </button>
+                        <button class="cms-btn" onclick="openNewPageModal()" style="font-size: 0.9rem;">
+                            <span>📃</span> صفحه جدید
+                        </button>
+                        <button class="cms-btn" onclick="uploadMedia()" style="font-size: 0.9rem;">
+                            <span>🖼️</span> آپلود رسانه
+                        </button>
+                        <button class="cms-btn purple" onclick="runSEOAnalysis()" style="font-size: 0.9rem;">
+                            <span>🔍</span> تحلیل SEO
+                        </button>
+                    </div>
+                    
+                    <h3 class="section-title" style="margin-top: 40px;">
+                        <span>📊</span> تحلیل محتوا
+                    </h3>
+                    
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>بازدید امروز:</span>
+                            <span style="color: var(--cms-green); font-weight: bold;">۱,۲۴۷</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>کاربران فعال:</span>
+                            <span style="color: var(--cms-green); font-weight: bold;">۳۸۹</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>نرخ تبدیل:</span>
+                            <span style="color: var(--cms-green); font-weight: bold;">۴.۷٪</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>زمان ماندگاری:</span>
+                            <span style="color: var(--cms-green); font-weight: bold;">۳:۴۲</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">
+                        <span>🎯</span> محتوای برتر
+                    </h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                            <span>نویسنده کوانتومی</span>
+                            <span style="color: var(--cms-green);">۲,۴۵۶ 👁️</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                            <span>باغ راز آلود</span>
+                            <span style="color: var(--cms-green);">۱,۸۹۰ 👁️</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                            <span>تبدیل 2D به 3D</span>
+                            <span style="color: var(--cms-green);">۱,۵۶۷ 👁️</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                            <span>نویسنده هوشمند</span>
+                            <span style="color: var(--cms-green);">۱,۲۳۴ 👁️</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 10px;">
+                        <h4 style="color: var(--cms-blue); margin-bottom: 10px;">💰 سیستم درآمدزایی</h4>
+                        <p style="font-size: 0.9rem; color: #94a3b8;">
+                            سیستم مدیریت محتوا می‌تواند تا 
+                            <strong style="color: #10b981;">۱۰,۰۰۰,۰۰۰ تومان</strong> 
+                            در ماه درآمد ایجاد کند.
+                        </p>
+                        <button class="cms-btn" onclick="showRevenueModel()" style="width: 100%; margin-top: 15px; font-size: 0.9rem;">
+                            <span>💸</span> مدل درآمدی
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 15px;">
+                <h3 style="color: #f59e0b; margin-bottom: 20px;">🚀 ویژگی‌های سیستم مدیریت محتوا</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 10px;">
+                        <h4>📝 ویرایشگر پیشرفته</h4>
+                        <p>ویرایشگر WYSIWYG با قابلیت‌های کامل</p>
+                    </div>
+                    <div style="padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 10px;">
+                        <h4>📊 تحلیل‌گر هوشمند</h4>
+                        <p>تحلیل عملکرد محتوا و کاربران</p>
+                    </div>
+                    <div style="padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                        <h4>🤖 SEO خودکار</h4>
+                        <p>بهینه‌سازی خودکار برای موتورهای جستجو</p>
+                    </div>
+                    <div style="padding: 20px; background: rgba(245, 158, 11, 0.1); border-radius: 10px;">
+                        <h4>🔒 امنیت چندلایه</h4>
+                        <p>سیستم امنیتی پیشرفته و کنترل دسترسی</p>
+                    </div>
+                    <div style="padding: 20px; background: rgba(236, 72, 153, 0.1); border-radius: 10px;">
+                        <h4>🌐 چندزبانه</h4>
+                        <p>پشتیبانی از چندین زبان مختلف</p>
+                    </div>
+                    <div style="padding: 20px; background: rgba(6, 182, 212, 0.1); border-radius: 10px;">
+                        <h4>📱 واکنش‌گرا</h4>
+                        <p>نمایش عالی در همه دستگاه‌ها</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentSection = 'all-content';
+        let editingContentId = null;
+        
+        function showSection(section) {
+            currentSection = section;
+            
+            // برجسته کردن منوی فعال
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+            
+            const sections = {
+                'all-content': 'همه مطالب',
+                'articles': 'مقالات',
+                'pages': 'صفحات',
+                'media': 'رسانه‌ها',
+                'comments': 'نظرات',
+                'analytics': 'آمار و تحلیل',
+                'users': 'کاربرها',
+                'settings': 'تنظیمات'
+            };
+            
+            // در حالت واقعی، محتوای بخش‌ها تغییر می‌کند
+            // در این نمونه، فقط یک پیام نمایش می‌دهیم
+            document.querySelector('.section-title span:last-child').textContent = 
+                `📄 ${sections[section]}`;
+        }
+        
+        function filterContent(status) {
+            const statusNames = {
+                'all': 'همه',
+                'published': 'منتشر شده',
+                'draft': 'پیش‌نویس',
+                'scheduled': 'زمان‌بندی شده'
+            };
+            
+            alert(`فیلتر: ${statusNames[status]}\n\nدر حال نمایش مطالب با وضعیت "${statusNames[status]}"`);
+        }
+        
+        function openNewContentModal() {
+            document.getElementById('new-content-modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('new-content-modal').style.display = 'none';
+        }
+        
+        function saveContent() {
+            const title = document.getElementById('content-title').value;
+            const type = document.getElementById('content-type').value;
+            const status = document.getElementById('content-status').value;
+            
+            if (!title) {
+                alert('لطفاً عنوان محتوا را وارد کنید');
+                return;
+            }
+            
+            const typeNames = {
+                'article': 'مقاله',
+                'post': 'پست وبلاگ',
+                'page': 'صفحه',
+                'news': 'خبر',
+                'product': 'محصول'
+            };
+            
+            const statusNames = {
+                'draft': 'پیش‌نویس',
+                'published': 'منتشر شده',
+                'scheduled': 'زمان‌بندی شده'
+            };
+            
+            // اضافه کردن به جدول (در حالت واقعی به سرور ارسال می‌شود)
+            const table = document.getElementById('content-list');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td>${title}</td>
+                <td>${typeNames[type]}</td>
+                <td>مدیر سیستم</td>
+                <td>${new Date().toLocaleDateString('fa-IR')}</td>
+                <td><span class="status-badge status-${status}">${statusNames[status]}</span></td>
+                <td class="action-buttons">
+                    <button class="action-btn edit" onclick="editContent('new')">ویرایش</button>
+                    <button class="action-btn delete" onclick="deleteContent('new')">حذف</button>
+                </td>
+            `;
+            
+            table.prepend(newRow);
+            
+            closeModal();
+            alert(`✅ محتوای "${title}" با موفقیت ایجاد شد!`);
+            
+            // ریست فرم
+            document.getElementById('content-title').value = '';
+            document.getElementById('content-type').value = 'article';
+            document.getElementById('content-status').value = 'draft';
+        }
+        
+        function editContent(id) {
+            editingContentId = id;
+            document.getElementById('editor-container').style.display = 'block';
+            document.querySelector('.content-table').style.display = 'none';
+            
+            // در حالت واقعی، محتوای مربوطه از سرور بارگذاری می‌شود
+            alert(`✏️ در حال ویرایش محتوا با شناسه ${id}`);
+            
+            // اسکرول به ویرایشگر
+            document.getElementById('editor-container').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function deleteContent(id) {
+            if (confirm(`آیا از حذف این محتوا اطمینان دارید؟`)) {
+                // در حالت واقعی، درخواست حذف به سرور ارسال می‌شود
+                alert(`🗑️ محتوای ${id} با موفقیت حذف شد!`);
+            }
+        }
+        
+        function saveEditedContent() {
+            if (!editingContentId) {
+                alert('خطا: شناسه محتوا نامشخص است');
+                return;
+            }
+            
+            const content = document.getElementById('editor-content').value;
+            if (!content.trim()) {
+                alert('لطفاً محتوایی وارد کنید');
+                return;
+            }
+            
+            alert(`✅ تغییرات محتوای ${editingContentId} با موفقیت ذخیره شد!`);
+            cancelEdit();
+        }
+        
+        function previewContent() {
+            const content = document.getElementById('editor-content').value;
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <html dir="rtl" lang="fa">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>پیش‌نمایش محتوا</title>
+                    <style>
+                        body { font-family: 'Vazirmatn', sans-serif; padding: 20px; line-height: 1.8; }
+                        h1 { color: #0ea5e9; }
+                        h2 { color: #10b981; }
+                        pre { background: #f0f0f0; padding: 15px; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    ${content.replace(/\n/g, '<br>').replace(/# (.*?)\n/g, '<h1>$1</h1>').replace(/## (.*?)\n/g, '<h2>$1</h2>')}
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+        
+        function publishContent() {
+            if (!editingContentId) {
+                alert('خطا: شناسه محتوا نامشخص است');
+                return;
+            }
+            
+            if (confirm('آیا از انتشار این محتوا اطمینان دارید؟')) {
+                alert(`🚀 محتوای ${editingContentId} با موفقیت منتشر شد!`);
+                cancelEdit();
+            }
+        }
+        
+        function cancelEdit() {
+            editingContentId = null;
+            document.getElementById('editor-container').style.display = 'none';
+            document.querySelector('.content-table').style.display = 'table';
+        }
+        
+        function formatText(command) {
+            const editor = document.getElementById('editor-content');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selectedText = editor.value.substring(start, end);
+            
+            let formattedText = '';
+            switch(command) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    break;
+                case 'underline':
+                    formattedText = `<u>${selectedText}</u>`;
+                    break;
+                default:
+                    return;
+            }
+            
+            editor.value = editor.value.substring(0, start) + formattedText + editor.value.substring(end);
+            editor.focus();
+            editor.setSelectionRange(start + formattedText.length, start + formattedText.length);
+        }
+        
+        function insertHeading() {
+            const editor = document.getElementById('editor-content');
+            const start = editor.selectionStart;
+            const text = '\n## عنوان جدید\n';
+            editor.value = editor.value.substring(0, start) + text + editor.value.substring(start);
+            editor.focus();
+            editor.setSelectionRange(start + 1, start + text.length - 1);
+        }
+        
+        function insertLink() {
+            const url = prompt('لینک را وارد کنید:', 'https://');
+            if (url) {
+                const text = prompt('متن لینک را وارد کنید:', 'اینجا کلیک کنید');
+                const editor = document.getElementById('editor-content');
+                const start = editor.selectionStart;
+                const link = `[${text || 'اینجا کلیک کنید'}](${url})`;
+                editor.value = editor.value.substring(0, start) + link + editor.value.substring(start);
+            }
+        }
+        
+        function insertImage() {
+            const url = prompt('آدرس تصویر را وارد کنید:', 'https://');
+            if (url) {
+                const alt = prompt('متن جایگزین تصویر:', 'تصویر');
+                const editor = document.getElementById('editor-content');
+                const start = editor.selectionStart;
+                const image = `![${alt || 'تصویر'}](${url})`;
+                editor.value = editor.value.substring(0, start) + image + editor.value.substring(start);
+            }
+        }
+        
+        function insertList() {
+            const editor = document.getElementById('editor-content');
+            const start = editor.selectionStart;
+            const list = '\n- آیتم اول\n- آیتم دوم\n- آیتم سوم\n';
+            editor.value = editor.value.substring(0, start) + list + editor.value.substring(start);
+        }
+        
+        function exportContent() {
+            alert('📤 در حال آماده‌سازی فایل خروجی...\n\nفرمت‌های قابل خروجی:\n• PDF\n• Word\n• HTML\n• JSON\n• CSV');
+        }
+        
+        function openNewPageModal() {
+            alert('📃 باز کردن فرم ایجاد صفحه جدید...');
+        }
+        
+        function uploadMedia() {
+            alert('🖼️ باز کردن پنجره آپلود رسانه...');
+        }
+        
+        function runSEOAnalysis() {
+            const scores = {
+                'نویسنده کوانتومی': 92,
+                'باغ راز آلود': 88,
+                'تبدیل 2D به 3D': 85,
+                'نویسنده هوشمند': 90,
+                'سیستم مدیریت محتوا': 95
+            };
+            
+            let analysis = '🔍 نتایج تحلیل SEO:\n\n';
+            for (const [page, score] of Object.entries(scores)) {
+                analysis += `${page}: ${score}/100\n`;
+                analysis += `پیشنهادها: ${getSEOSuggestions(score)}\n\n`;
+            }
+            
+            alert(analysis);
+        }
+        
+        function getSEOSuggestions(score) {
+            if (score >= 90) return 'عالی!';
+            if (score >= 80) return 'بهتر کردن کلمات کلیدی';
+            if (score >= 70) return 'افزایش طول محتوا';
+            return 'نیاز به بازنویسی کامل';
+        }
+        
+        function showRevenueModel() {
+            alert('💸 مدل درآمدزایی سیستم مدیریت محتوا:\n\n' +
+                  '🎯 اشتراک ماهانه:\n' +
+                  '• پایه: ۱۰۰,۰۰۰ تومان\n' +
+                  '• حرفه‌ای: ۳۰۰,۰۰۰ تومان\n' +
+                  '• سازمانی: ۱,۰۰۰,۰۰۰ تومان\n\n' +
+                  '🛠️ خدمات اضافی:\n' +
+                  '• طراحی قالب: ۵۰۰,۰۰۰ تومان\n' +
+                  '• توسعه پلاگین: ۲۰۰,۰۰۰ تومان\n' +
+                  '• آموزش: ۱۵۰,۰۰۰ تومان\n' +
+                  '• پشتیبانی: ۱۰۰,۰۰۰ تومان\n\n' +
+                  '💰 درآمد ماهانه تخمینی: ۱۰,۰۰۰,۰۰۰ تومان');
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌سازی آمار زنده
+            setInterval(() => {
+                const stats = document.querySelectorAll('.stat-value');
+                stats.forEach(stat => {
+                    if (!stat.textContent.includes('تومان') && !stat.textContent.includes('٪')) {
+                        const current = parseInt(stat.textContent);
+                        if (!isNaN(current)) {
+                            const change = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+                            const newValue = Math.max(0, current + change);
+                            stat.textContent = newValue;
+                        }
+                    }
+                });
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

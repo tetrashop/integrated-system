@@ -1,0 +1,22 @@
+[
+  {
+    "id": "chess_tx_001",
+    "username": "test_user",
+    "type": "coin_purchase",
+    "product": "100 سکه",
+    "amount": 10000,
+    "coins": 100,
+    "timestamp": "2024-01-15T12:30:00.000Z",
+    "status": "completed"
+  },
+  {
+    "id": "chess_tx_002",
+    "username": "admin",
+    "type": "coin_purchase",
+    "product": "500 سکه",
+    "amount": 45000,
+    "coins": 500,
+    "timestamp": "2024-01-16T09:15:00.000Z",
+    "status": "completed"
+  }
+]

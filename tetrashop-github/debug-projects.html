@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/projects-override.css">
+    <title>Debug پروژه‌ها</title>
+    <script>
+        window.addEventListener('load', function() {
+            console.log('🔧 شروع دیباگ پروژه‌ها...');
+            
+            // تست کلیک روی هر پروژه
+            const projects = ['chess', 'writer', 'nlp', 'quantum', 'gardening', 'voice-recognition', '2d-to-3d'];
+            
+            projects.forEach(project => {
+                console.log(`🔍 تست پروژه ${project}...`);
+                
+                // تست لود صفحه
+                fetch(`/${project}/index.html`)
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`✅ ${project}: صفحه موجود است (${response.status})`);
+                        } else {
+                            console.error(`❌ ${project}: خطا ${response.status}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`❌ ${project}: ${error.message}`);
+                    });
+            });
+            
+            // تست navigation
+            console.log('🧭 تست navigation...');
+            const navLinks = document.querySelectorAll('a[href*="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    console.log(`🎯 کلیک روی: ${this.href}`);
+                    console.log(`📍 hash: ${window.location.hash}`);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Debug پروژه‌های تتراشاپ</h1>
+    <div id="output"></div>
+    
+    <script>
+        // مانیتور کردن hash changes
+        window.addEventListener('hashchange', function() {
+            console.log('🔄 hash تغییر کرد:', window.location.hash);
+        });
+        
+        // مانیتور کردن popstate
+        window.addEventListener('popstate', function() {
+            console.log('📜 popstate:', window.location.pathname);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+#!/bin/bash
+
+echo "🧪 تست سلامت سرویس‌های TetraSaaS"
+echo "================================"
+
+SERVICES=(
+    "3001:quantum-writer"
+    "3002:ai-writer"
+    "3003:secret-garden"
+    "3004:3d-converter"
+    "3005:2d-to-3d"
+    "3006:content-analyzer"
+    "3007:anti-fragmentation"
+    "3008:formula-solver"
+    "3009:code-cleaner"
+    "3010:graphic-2d"
+    "3011:anti-smoke"
+    "3012:telescope-design"
+    "3013:teleport-system"
+    "3014:image-processor"
+    "3015:audio-converter"
+    "3016:video-editor"
+    "3017:data-encryptor"
+    "3018:network-scanner"
+    "3019:battery-optimizer"
+    "3020:file-organizer"
+    "3021:password-generator"
+    "3022:system-monitor"
+    "3023:backup-manager"
+)
+
+echo "🔍 بررسی پورت‌ها و سلامت سرویس‌ها..."
+active_count=0
+for service in "${SERVICES[@]}"; do
+    port=$(echo $service | cut -d: -f1)
+    name=$(echo $service | cut -d: -f2)
+    
+    # اول بررسی کن آیا پورت در حال گوش دادن است
+    if netstat -tuln 2>/dev/null | grep ":$port " >/dev/null; then
+        # سپس تست سلامت بزن
+        if timeout 2 curl -s http://localhost:$port/health 2>/dev/null | grep -q "healthy"; then
+            echo "  ✅ $name (پورت $port) - فعال و سالم"
+            ((active_count++))
+        else
+            echo "  ⚠️  $name (پورت $port) - در حال اجرا اما پاسخ نمی‌دهد"
+        fi
+    else
+        echo "  ❌ $name (پورت $port) - غیرفعال"
+    fi
+done
+
+echo ""
+echo "🌐 تست API Gateway..."
+if timeout 2 curl -s http://localhost:8080/health 2>/dev/null | grep -q "ok"; then
+    echo "  ✅ API Gateway فعال و سالم است"
+    ((active_count++))  # Gateway را هم حساب کن
+elif netstat -tuln 2>/dev/null | grep ":8080 " >/dev/null; then
+    echo "  ⚠️  API Gateway در حال اجراست اما پاسخ نمی‌دهد"
+else
+    echo "  ❌ API Gateway غیرفعال است"
+fi
+
+echo ""
+echo "📊 نتیجه تست:"
+echo "   $active_count از 24 (23 سرویس + Gateway) فعال هستند"
+echo ""
+echo "📋 سرویس‌های فعال:"
+for service in "${SERVICES[@]}"; do
+    port=$(echo $service | cut -d: -f1)
+    name=$(echo $service | cut -d: -f2)
+    if netstat -tuln 2>/dev/null | grep ":$port " >/dev/null; then
+        echo "   • $name (پورت $port)"
+    fi
+done
