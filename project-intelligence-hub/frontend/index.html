@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 هوش مدیریت پروژه</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 داشبورد هوشمند پروژه‌ها</h1>
+            <p class="subtitle">مدیریت یکپارچه و تحلیل داده‌های پروژه‌های شما</p>
+        </header>
+
+        <section class="analytics">
+            <div class="stat-card">
+                <h3>📊 تعداد کل پروژه‌ها</h3>
+                <span id="totalProjects">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>📈 میانگین پیشرفت</h3>
+                <span id="avgProgress">0%</span>
+            </div>
+            <div class="stat-card">
+                <h3>⏳ وضعیت‌ها</h3>
+                <div id="statusSummary"></div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="priorityChart"></canvas>
+            </div>
+        </section>
+
+        <section class="projects">
+            <h2>📋 لیست پروژه‌ها</h2>
+            <button id="addProjectBtn" class="btn">➕ افزودن پروژه جدید</button>
+            <table id="projectsTable">
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>وضعیت</th>
+                        <th>پیشرفت</th>
+                        <th>تیم</th>
+                        <th>اولویت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsBody"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- مودال افزودن پروژه -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>➕ پروژه جدید</h2>
+            <form id="projectForm">
+                <input type="text" id="projectName" placeholder="نام پروژه" required>
+                <select id="projectStatus" required>
+                    <option value="در حال انجام">در حال انجام</option>
+                    <option value="تکمیل شده">تکمیل شده</option>
+                    <option value="در انتظار">در انتظار</option>
+                    <option value="در حال توسعه">در حال توسعه</option>
+                </select>
+                <input type="number" id="projectProgress" placeholder="پیشرفت (۰-۱۰۰)" min="0" max="100" required>
+                <input type="text" id="projectTeam" placeholder="نام تیم" required>
+                <select id="projectPriority" required>
+                    <option value="بالا">بالا</option>
+                    <option value="متوسط">متوسط</option>
+                    <option value="پایین">پایین</option>
+                </select>
+                <input type="date" id="projectDeadline" required>
+                <button type="submit" class="btn">ذخیره</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
