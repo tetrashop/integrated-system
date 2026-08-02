@@ -1,0 +1,31 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f0e17; color: #fffffe; padding: 30px 20px; }
+.container { max-width: 1400px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 40px; }
+h1 { font-size: 2.8rem; color: #ff8906; }
+.subtitle { color: #a7a9be; font-size: 1.1rem; }
+.analytics { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 30px; }
+.stat-card { background: #232946; padding: 20px; border-radius: 16px; min-width: 180px; text-align: center; border: 1px solid #2d3a5e; }
+.stat-card h3 { color: #b8c1ec; font-size: 0.9rem; margin-bottom: 8px; }
+.stat-card span { font-size: 2rem; font-weight: bold; color: #ff8906; }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+.chart-container { background: #232946; padding: 20px; border-radius: 16px; border: 1px solid #2d3a5e; }
+canvas { max-height: 250px; max-width: 100%; }
+.projects { margin-top: 20px; }
+.projects h2 { color: #ff8906; margin-bottom: 15px; }
+.btn { background: #ff8906; color: #0f0e17; border: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+.btn:hover { transform: scale(1.02); }
+table { width: 100%; border-collapse: collapse; background: #1a1a2e; border-radius: 12px; overflow: hidden; }
+th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #2d3a5e; }
+th { background: #232946; color: #ff8906; }
+td { color: #fffffe; }
+.actions button { background: none; border: none; color: #ff8906; cursor: pointer; margin: 0 5px; }
+.actions button:hover { color: #e16162; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+.modal-content { background: #1a1a2e; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; border: 1px solid #2d3a5e; }
+.modal-content h2 { color: #ff8906; margin-bottom: 15px; }
+.close { float: left; font-size: 1.8rem; color: #a7a9be; cursor: pointer; }
+.close:hover { color: #e16162; }
+form input, form select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #2d3a5e; background: #232946; color: #fffffe; }
+form button { width: 100%; margin-top: 10px; }
+@media (max-width: 700px) { .charts { grid-template-columns: 1fr; } .analytics { flex-direction: column; align-items: center; } }
