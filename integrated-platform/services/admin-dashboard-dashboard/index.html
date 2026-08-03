@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 داشبورد پروژه Tetrashop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--light);
+            padding: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1rem 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+        
+        .stat-label {
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: 800px;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: var(--light);
+            border-right: 1px solid #dee2e6;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .file-tree {
+            list-style: none;
+        }
+        
+        .file-tree li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .file-tree a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .file-tree a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .file-icon {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .code-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .file-path {
+            font-family: monospace;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #3aa8d8;
+            transform: translateY(-2px);
+        }
+        
+        .copy-btn.copied {
+            background: var(--warning);
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: '📋 کد قابل کپی';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .number { color: #b5cea8; }
+        .function { color: #dcdcaa; }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark);
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+    
+    <!-- آیکون‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- هایلایت سینتکس -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-project-diagram"></i> داشبورد پروژه Tetrashop</h1>
+            <p class="subtitle">نمایش کامل و سازمان‌یافته تمام کدها، الگوریتم‌ها و ساختار پروژه</p>
+        </header>
+        
+        <div class="stats-bar" id="statsBar">
+            <!-- آمار به صورت داینامیک پر می‌شود -->
+        </div>
+        
+        <div class="main-content">
+            <nav class="sidebar">
+                <h3><i class="fas fa-folder-tree"></i> ساختار پروژه</h3>
+                <ul class="file-tree" id="fileTree">
+                    <!-- لیست فایل‌ها به صورت داینامیک پر می‌شود -->
+                </ul>
+            </nav>
+            
+            <main class="content-area" id="contentArea">
+                <!-- محتوای فایل‌ها اینجا نمایش داده می‌شود -->
+                <div class="welcome-section">
+                    <h2>👋 به داشبورد Tetrashop خوش آمدید</h2>
+                    <p>از منوی سمت راست یک فایل را انتخاب کنید تا محتوای آن اینجا نمایش داده شود.</p>
+                    <p>همه کدها قابل کپی‌برداری هستند و می‌توانید مستقیماً استفاده کنید.</p>
+                </div>
+            </main>
+        </div>
+        
+        <footer>
+            <p>📅 تولید شده در: <span id="currentDate"></span></p>
+            <p>👨‍💻 توسعه‌دهنده: Ramin Edjlal | 📧 ramin.edjlal1359@gmail.com</p>
+            <p>⚡ تمام حقوق برای پروژه Tetrashop محفوظ است</p>
+        </footer>
+    </div>
+    
+    <script>
+        // نمایش تاریخ فعلی
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('fa-IR');
+        
+        // داده‌های نمونه (در نسخه واقعی از سرور لود می‌شود)
+        const projectData = {
+        ];
+        
+        // نمایش فایل‌ها
+        const container = document.getElementById('filesContainer');
+        files.forEach(file => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `
+                <strong>${file.path}</strong>
+                <button class="copy-btn" onclick="showFile(${file.id})">نمایش</button>
+                <button class="copy-btn" onclick="copyContent(${file.id})">📋 کپی</button>
+            `;
+            container.appendChild(div);
+        });
+        
+        function showFile(id) {
+            const file = files[id];
+            const contentDiv = document.getElementById('contentContainer');
+            contentDiv.innerHTML = `
+                <div class="file-content">
+                    <h3>${file.path}</h3>
+                    <pre>${escapeHtml(file.content)}</pre>
+                    <button class="copy-btn" onclick="copyContent(${id})">📋 کپی کل محتوا</button>
+                </div>
+            `;
+        }
+        
+        function copyContent(id) {
+            const file = files[id];
+            navigator.clipboard.writeText(file.content).then(() => {
+                alert('✅ کد کپی شد!');
+            });
+        }
+        
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/\n/g, '<br>')
+                .replace(/ /g, '&nbsp;');
+        }
+        
+        // نمایش اولین فایل به صورت پیش‌فرض
+        if (files.length > 0) showFile(0);
+    </script>
+</body>
+</html>
+        ];
+        
+        // نمایش فایل‌ها
+        const container = document.getElementById('filesContainer');
+        files.forEach(file => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `
+                <strong>${file.path}</strong>
+                <button class="copy-btn" onclick="showFile(${file.id})">نمایش</button>
+                <button class="copy-btn" onclick="copyContent(${file.id})">📋 کپی</button>
+            `;
+            container.appendChild(div);
+        });
+        
+        function showFile(id) {
+            const file = files[id];
+            const contentDiv = document.getElementById('contentContainer');
+            contentDiv.innerHTML = `
+                <div class="file-content">
+                    <h3>${file.path}</h3>
+                    <pre>${escapeHtml(file.content)}</pre>
+                    <button class="copy-btn" onclick="copyContent(${id})">📋 کپی کل محتوا</button>
+                </div>
+            `;
+        }
+        
+        function copyContent(id) {
+            const file = files[id];
+            navigator.clipboard.writeText(file.content).then(() => {
+                alert('✅ کد کپی شد!');
+            });
+        }
+        
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/\n/g, '<br>')
+                .replace(/ /g, '&nbsp;');
+        }
+        
+        // نمایش اولین فایل به صورت پیش‌فرض
+        if (files.length > 0) showFile(0);
+    </script>
+</body>
+</html>
