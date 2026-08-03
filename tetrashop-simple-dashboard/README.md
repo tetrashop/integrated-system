@@ -1,20 +1,25 @@
-# داشبورد Tetrashop
+# 📊 داشبورد مدیریتی (Admin Dashboard)
 
-## اطلاعات
-- تاریخ ایجاد: 2025/12/17 10:19
-- تعداد فایل‌ها: 35
-- پوشه پروژه‌ها: /data/data/com.termux/files/home/tetrashop-complete-dashboard /data/data/com.termux/files/home/tetrashop-complete-dashboard.zip /data/data/com.termux/files/home/tetrashop-dashboard /data/data/com.termux/files/home/tetrashop-dashboard-public.tar.gz /data/data/com.termux/files/home/tetrashop-final-dashboard /data/data/com.termux/files/home/tetrashop-final-sample /data/data/com.termux/files/home/tetrashop-github /data/data/com.termux/files/home/tetrashop-projects /data/data/com.termux/files/home/tetrashop-real-dashboard /data/data/com.termux/files/home/tetrashop-real-projects /data/data/com.termux/files/home/tetrashop-resurrected-20251216_213822 /data/data/com.termux/files/home/tetrashop-resurrected-20251216_214113 /data/data/com.termux/files/home/tetrashop-resurrected-20251216_225312 /data/data/com.termux/files/home/tetrashop-resurrected-immediate-1765910024 /data/data/com.termux/files/home/tetrashop-simple-dashboard /data/data/com.termux/files/home/tetrashop-unified /data/data/com.termux/files/home/tetrashop-unified-system
+## 🧠 تئوری و معماری
+این پروژه یک **داشبورد مدیریتی** برای نظارت بر عملکرد سیستم، مدیریت کاربران و تحلیل داده‌ها است. معماری آن بر پایه‌ی **مؤلفه‌های مجزا** (Widgets) و **اتصال به API** برای دریافت داده‌های لحظه‌ای طراحی شده است.
 
-## نحوه استفاده
-1. فایل `index.html` را در مرورگر باز کنید
-2. روی دکمه "📋 کپی کد" کلیک کنید
-3. کدها مستقیماً قابل استفاده هستند
+## 🏆 دستاوردها
+- نمایش آمار و نمودارهای تحلیلی
+- مدیریت کاربران و نقش‌ها
+- پنل پیگیری وضعیت سرویس‌ها
 
-## فایل‌ها
-- `index.html` - داشبورد وب
-- `codes.txt` - تمام کدها در یک فایل متنی
-- `README.md` - این فایل
+## 🧩 مشکلات حل‌شده
+- بهینه‌سازی بارگذاری داده‌های حجیم
+- پیاده‌سازی فیلترهای پیشرفته برای جستجو
 
-## توسعه‌دهنده
-Ramin Edjlal
-ramin.edjlal1359@gmail.com
+## 🏗️ معماری و منطق مدار نرم‌افزاری
+- **فرانت‌اند**: React/Vue با کتابخانه‌های نمودار (Chart.js)
+- **بک‌اند**: Node.js/Python با پایگاه داده
+- **اتصال**: RESTful API
+
+## 🔧 مهندسی نرم‌افزار
+- استفاده از **Redux** یا **Context API** برای مدیریت حالت
+- رعایت اصول **Single Responsibility**
+
+## 📚 مستندات بیشتر
+برای اطلاعات بیشتر به [مخزن اصلی](https://github.com/tetrashop/integrated-system) مراجعه کنید.
