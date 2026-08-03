@@ -1,39 +1,9 @@
-# مجوز پروژه (MIT License)
+# مجوز MIT
 
-Copyright (c) 2025 تیم تحقیقاتی هوش مصنوعی، ایران
+حقوق کپی‌رایت (c) 2026 [نام شما یا سازمان]
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+با این مجوز، به هر شخصی که نسخه‌ای از این نرم‌افزار و فایل‌های مستندات مرتبط (مجموعاً "نرم‌افزار") را دریافت کند، اجازه داده می‌شود که بدون هزینه و بدون محدودیت، از نرم‌افزار استفاده، کپی، تغییر، ادغام، انتشار، توزیع، زیرمجوز و/یا فروش نسخه‌هایی از نرم‌افزار استفاده کند، مشروط به شرایط زیر:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+- در تمام نسخه‌ها یا بخش‌های مهم نرم‌افزار، اطلاعیه‌ی کپی‌رایت فوق و این مجوز درج شود.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
----
-
-## توضیح فارسی
-
-این نرم‌افزار تحت مجوز MIT منتشر شده است. یعنی:
-
-- ✅ استفاده‌ی تجاری و غیرتجاری آزاد است
-- ✅ کپی، تغییر، ادغام، انتشار و توزیع مجاز است
-- ✅ فقط کافی است که کپی‌رایت و این مجوز در تمام نسخه‌ها حفظ شود
-- ❌ هیچ گونه ضمانتی برای کارایی یا صحت نرم‌افزار وجود ندارد
-- ❌ نویسندگان مسئول هیچ خسارتی ناشی از استفاده از نرم‌افزار نیستند
-
----
-
-**ساخت ایران** 🇮🇷  
-تاریخ: تیر ۱۴۰۴
-
+این نرم‌افزار "همان‌گونه که هست" و بدون هرگونه ضمانت، اعم از صریح یا ضمنی، از جمله اما نه محدود به ضمانت‌های قابلیت فروش، تناسب برای یک هدف خاص و عدم نقض حقوق دیگران ارائه می‌شود. در هیچ حالتی نویسندگان یا دارندگان کپی‌رایت مسئول هیچگونه ادعا، خسارت یا سایر مسئولیت‌ها، چه در یک اقدام قراردادی، چه در یک اقدام قانونی یا غیره، ناشی از، ناشی از یا مرتبط با نرم‌افزار یا استفاده یا سایر معاملات در نرم‌افزار نخواهند بود.
