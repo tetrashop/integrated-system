@@ -1,16 +1,13 @@
 {
-  "name": "integrated-project",
+  "name": "integrated-platform",
   "version": "1.0.0",
-  "description": "پروژه یکپارچه برای استقرار در Vercel",
-  "main": "index.js",
+  "description": "پلتفرم یکپارچه با معماری میکروسرویس",
   "scripts": {
-    "start": "node server.js"
+    "start": "node gateway/server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
-  },
-  "devDependencies": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "cors": "^2.8.5"
+  }
 }
