@@ -1,0 +1,60 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0f0e17;
+    color: #fffffe;
+    padding: 30px 20px;
+    min-height: 100vh;
+}
+.container { max-width: 1400px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 40px; }
+h1 { font-size: 2.8rem; color: #ff8906; }
+.subtitle { color: #a7a9be; font-size: 1.1rem; margin-top: 8px; }
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+.service-card {
+    background: #232946;
+    padding: 25px 20px;
+    border-radius: 18px;
+    border: 1px solid #2d3a5e;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+}
+.service-card:hover {
+    transform: translateY(-8px);
+    border-color: #ff8906;
+    box-shadow: 0 10px 30px rgba(255,137,6,0.15);
+}
+.service-card .icon { font-size: 3rem; margin-bottom: 10px; }
+.service-card h3 { color: #ff8906; font-size: 1.3rem; }
+.service-card p { color: #b8c1ec; font-size: 0.9rem; margin: 8px 0; }
+.service-card .status {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.status.online { background: #00b894; color: #fff; }
+.status.offline { background: #e16162; color: #fff; }
+.status.pending { background: #ff8906; color: #0f0e17; }
+
+.status-bar {
+    text-align: center;
+    padding: 15px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    border: 1px solid #2d3a5e;
+    color: #a7a9be;
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 1.8rem; }
+    .services-grid { grid-template-columns: 1fr; }
+}

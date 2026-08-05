@@ -1,5 +1,10 @@
 {
   "version": 2,
-  "cleanUrls": false,
-  "trailingSlash": false
+  "builds": [
+    { "src": "frontend/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "frontend/index.html" },
+    { "src": "/(.*)", "dest": "frontend/$1" }
+  ]
 }
