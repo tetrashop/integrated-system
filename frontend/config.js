@@ -22,7 +22,7 @@ const SERVICES_CONFIG = [
         id: 'tetrashop-projects',
         name: '🛍️ فروشگاه',
         desc: 'مدیریت محصولات و پرداخت',
-        url: 'https://tetrashop-projects-o87nr6tnt-ramin-edjlal-s-projects.vercel.app',
+        url: 'https://tetrashop-projects-rose.vercel.app/dashboard.html',
         status: 'online'
     }
 ];
