@@ -25,5 +25,4 @@ const SERVICES_CONFIG = [
         url: 'https://tetrashop-projects-o87nr6tnt-ramin-edjlal-s-projects.vercel.app',
         status: 'online'
     }
-    // در صورت داشتن سرویس‌های دیگر، آنها را به همین شکل اضافه کنید
 ];

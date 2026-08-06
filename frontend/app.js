@@ -1,38 +1,39 @@
-function loadServices() {
+async function loadServices() {
     const grid = document.getElementById('servicesGrid');
     const statusText = document.getElementById('statusText');
-
-    if (!SERVICES_CONFIG || SERVICES_CONFIG.length === 0) {
-        grid.innerHTML = '<p style="color:#e16162;text-align:center;padding:40px;">❌ هیچ سرویسی تعریف نشده است.</p>';
+    const serviceCount = document.getElementById('serviceCount');
+    const activeCount = document.getElementById('activeCount');
+    const lastUpdate = document.getElementById('lastUpdate');
+    try {
+        const services = SERVICES_CONFIG;
+        if (!services || services.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#a7a9be;"><p style="font-size:1.5rem;">📋 هیچ سرویسی تعریف نشده است</p></div>';
+            statusText.textContent = '⚠️ هیچ سرویسی یافت نشد';
+            return;
+        }
+        let online = 0, html = '';
+        services.forEach(service => {
+            if (service.status === 'online') online++;
+            const statusClass = service.status === 'online' ? 'online' : 'offline';
+            const statusLabel = service.status === 'online' ? '✅ فعال' : '⛔ غیرفعال';
+            html += `
+                <div class="service-card" onclick="window.open('${service.url}', '_blank')">
+                    <div class="icon">${service.name.split(' ')[0]}</div>
+                    <h3>${service.name}</h3>
+                    <p>${service.desc || ''}</p>
+                    <span class="status ${statusClass}">${statusLabel}</span>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
+        serviceCount.textContent = services.length;
+        activeCount.textContent = online;
+        lastUpdate.textContent = new Date().toLocaleString('fa-IR');
+        statusText.textContent = `✅ ${online} از ${services.length} سرویس فعال هستند`;
+    } catch (error) {
+        console.error('خطا:', error);
         statusText.textContent = '❌ خطا در بارگذاری';
-        return;
+        grid.innerHTML = `<p style="color:#e16162;text-align:center;padding:40px;">❌ خطا: ${error.message}</p>`;
     }
-
-    let html = '';
-    let onlineCount = 0;
-
-    SERVICES_CONFIG.forEach(service => {
-        const isOnline = service.status === 'online';
-        const statusClass = isOnline ? 'online' : service.status === 'pending' ? 'pending' : 'offline';
-        const statusTextLabel = isOnline ? '✅ فعال' :
-                               service.status === 'pending' ? '⏳ در انتظار' : '⛔ غیرفعال';
-        const link = service.url && service.url !== '#' ? service.url : '#';
-
-        if (isOnline) onlineCount++;
-
-        html += `
-            <div class="service-card" onclick="if('${link}' !== '#') window.open('${link}', '_blank')">
-                <div class="icon">${service.name.split(' ')[0]}</div>
-                <h3>${service.name}</h3>
-                <p>${service.desc}</p>
-                <span class="status ${statusClass}">${statusTextLabel}</span>
-                ${link !== '#' ? `<small style="display:block;color:#6c7086;font-size:0.7rem;margin-top:8px;direction:ltr;">${link}</small>` : ''}
-            </div>
-        `;
-    });
-
-    grid.innerHTML = html;
-    statusText.textContent = `✅ ${onlineCount} از ${SERVICES_CONFIG.length} سرویس فعال هستند.`;
 }
-
 document.addEventListener('DOMContentLoaded', loadServices);

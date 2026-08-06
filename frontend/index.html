@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 پلتفرم یکپارچه</title>
+    <title>📦 داشبورد یکپارچه</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🚀 پلتفرم جامع هوش مصنوعی و خدمات دیجیتال</h1>
-            <p class="subtitle">همه‌ی سرویس‌ها در یک جا — لینک‌ها را در فایل `config.js` تنظیم کنید</p>
+            <h1>📦 داشبورد یکپارچه</h1>
+            <p class="subtitle">همه سرویس‌های فعال در یک نگاه</p>
+            <div class="status-bar"><span id="statusText">⏳ در حال بارگذاری...</span></div>
         </header>
-
-        <section class="services-grid" id="servicesGrid">
-            <!-- سرویس‌ها به‌صورت داینامیک لود می‌شوند -->
+        <section class="analytics">
+            <div class="stat-card"><h3>📊 تعداد سرویس‌ها</h3><span id="serviceCount">0</span></div>
+            <div class="stat-card"><h3>✅ سرویس‌های فعال</h3><span id="activeCount">0</span></div>
+            <div class="stat-card"><h3>⏱️ آخرین به‌روزرسانی</h3><span id="lastUpdate">---</span></div>
         </section>
-
-        <section class="status-bar">
-            <span id="statusText">⏳ در حال بارگذاری...</span>
-        </section>
+        <section class="services-grid" id="servicesGrid"></section>
     </div>
-
     <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
